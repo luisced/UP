@@ -21,17 +21,3 @@ namespace User
     }
 }
 
-namespace Rectangle
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Enter the height of the rectangle: ");
-            float height = float.Parse(Console.ReadLine());
-            Console.WriteLine("Enter the width of the rectangle: ");
-            float width = float.Parse(Console.ReadLine());
-            Console.WriteLine($"The area of the rectangle is {height * width}");
-        }
-    }
-}
