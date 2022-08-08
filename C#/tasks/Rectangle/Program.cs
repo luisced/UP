@@ -6,12 +6,13 @@ namespace Rectangle
     {
         static void Main(string[] args)
         {
-            float height, width;
+            decimal height, width;
             Console.Write("Enter the height of the rectangle: ");
-            height = float.Parse(Console.ReadLine());
+            height = decimal.Parse(Console.ReadLine());
             Console.Write("Enter the width of the rectangle: ");
-            width = float.Parse(Console.ReadLine());
-            Console.WriteLine($"The area of the rectangle is {height * width}");
+            width = decimal.Parse(Console.ReadLine());
+            var area = height * width;
+            Console.WriteLine($"The area of the rectangle is {area}");
         }
     }
 }
