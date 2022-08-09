@@ -23,7 +23,15 @@ namespace Months
             };
             Console.WriteLine("Enter a number between 1 and 12: ");
             var number = int.Parse(Console.ReadLine());
-            Console.WriteLine($"{number} is {months[number]}.");
+
+            if (months.ContainsKey(number))
+            {
+                Console.WriteLine(months[number]);
+            }
+            else
+            {
+                Console.WriteLine("Not a valid number");
+            }
 
         }
     }
