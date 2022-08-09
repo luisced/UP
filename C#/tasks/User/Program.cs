@@ -6,17 +6,24 @@ namespace User
     {
         static void Main(string[] args)
         {
-            // Asking for user name
-            Console.Write("Ingrese su nombre: ");
-            string name = Console.ReadLine();
-            // Asking for user age
-            Console.Write("Ingrese su edad: ");
-            int age = int.Parse(Console.ReadLine());
-            // Asking for user id
-            Console.Write("Ingrese su IDs: ");
-            string id = Console.ReadLine();
-            Console.Write($"Hello your name is {name}, you are {age} years old and your id is {id}");
+            // Se solicitan los datos al usuario separados por un espacio
+            Console.WriteLine("Ingrese su nombre, edad y id separados por un espacio");
 
+            // Se leen los datos ingresados y se asignan a las variables correspondientes 
+            string[] datos = Console.ReadLine().Split(' ');
+
+            // La variable nombre almacena el valor de la posición 0 de la variable datos
+            string nombre = datos[0];
+
+            // La variable edad almacena el valor de la posición 1 de la variable datos
+            int edad = int.Parse(datos[1]);
+
+            // La variable id almacena el valor de la posición 2 de la variable datos
+            string ID = datos[2];
+
+
+            // Asking for user name
+            Console.Write($"Hola {nombre}, Tienes {edad} años y tu ID es {ID}");
         }
     }
 }
