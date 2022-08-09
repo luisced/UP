@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace User
+﻿namespace User
 {
     class Program
     {
