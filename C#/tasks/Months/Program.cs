@@ -8,20 +8,20 @@ namespace Months
         {
             var months = new Dictionary<int, string>()
             {
-                {1, "January"},
-                {2, "February"},
-                {3, "March"},
-                {4, "April"},
-                {5, "May"},
-                {6, "June"},
-                {7, "July"},
-                {8, "August"},
-                {9, "September"},
-                {10, "October"},
-                {11, "November"},
-                {12, "December"}
+                {1, "Enero"},
+                {2, "Febrero"},
+                {3, "Marzo"},
+                {4, "Abril"},
+                {5, "Mayo"},
+                {6, "Junio"},
+                {7, "Julio"},
+                {8, "Agosto"},
+                {9, "Septiembre"},
+                {10, "Octubre"},
+                {11, "Noviembre"},
+                {12, "Diciembre"}
             };
-            Console.WriteLine("Enter a number between 1 and 12: ");
+            Console.WriteLine("Escriba un número entre el 1 y 12: ");
             var number = int.Parse(Console.ReadLine());
 
             if (months.ContainsKey(number))
@@ -30,7 +30,7 @@ namespace Months
             }
             else
             {
-                Console.WriteLine("Not a valid number");
+                Console.WriteLine($"El número {number} no es un mes válido");
             }
 
         }
