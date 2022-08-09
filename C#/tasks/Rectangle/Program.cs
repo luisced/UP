@@ -7,12 +7,13 @@ namespace Rectangle
         static void Main(string[] args)
         {
             decimal height, width;
-            Console.Write("Enter the height of the rectangle: ");
+            Console.Write("Ingrese el valor de la altura del rectángulo: ");
             height = decimal.Parse(Console.ReadLine());
-            Console.Write("Enter the width of the rectangle: ");
+            Console.Write("Ingrese el valor de la base del rectánuglo: ");
             width = decimal.Parse(Console.ReadLine());
             var area = height * width;
-            Console.WriteLine($"The area of the rectangle is {area}");
+            Console.WriteLine($"El área del rectángulo es {area}");
         }
     }
+
 }
