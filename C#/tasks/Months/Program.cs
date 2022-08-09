@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Months
+﻿namespace Months
 {
     class Program
     {
@@ -26,7 +24,7 @@ namespace Months
 
             if (months.ContainsKey(number))
             {
-                Console.WriteLine(months[number]);
+                Console.WriteLine($"{number}:{months[number]}");
             }
             else
             {
