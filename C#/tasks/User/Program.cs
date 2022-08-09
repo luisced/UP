@@ -13,7 +13,7 @@ namespace User
             Console.Write("Ingrese su edad: ");
             int age = int.Parse(Console.ReadLine());
             // Asking for user id
-            Console.Write("Ingrese su ID: ");
+            Console.Write("Ingrese su IDs: ");
             string id = Console.ReadLine();
             Console.Write($"Hello your name is {name}, you are {age} years old and your id is {id}");
 
