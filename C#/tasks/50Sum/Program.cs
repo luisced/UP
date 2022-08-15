@@ -9,7 +9,7 @@
             {
                 sum += number;
             }
-            Console.WriteLine($"La suma de los primeros 50 números es {sum} y su promedio es: {n / 50}");
+            Console.WriteLine($"La suma de los primeros 50 números es {sum} y su promedio es: {sum / 50}");
         }
     }
 }
