@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-            char fila = '-';
+            char fila = '*';
             Console.WriteLine("Introduzca el número de filas que quiera imprimir: ");
             int n = Convert.ToInt32(Console.ReadLine());
             if (n > 0)
@@ -26,7 +26,7 @@
                         for (int j = 1; j <= n - i; j++)
                             Console.Write(" ");
                         for (int j = 1; j <= 2 * i - 1; j++)
-                            Console.Write("-");
+                            Console.Write("*");
                         Console.Write("\n");
                     }
                 }
