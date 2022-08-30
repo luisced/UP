@@ -45,7 +45,7 @@
                             Console.Write(" " + "*");
 
                         }
-                        // 7. Por cada iteracion se imprime una linea
+                        // 7. Por cada iteracion se imprime un salto de linea
                         Console.WriteLine();
                     }
                 }
