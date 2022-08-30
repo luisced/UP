@@ -19,21 +19,23 @@
 
                 }
                 if (n % 2 != 0)
-                {
+                { //altura
                     for (int i = 0; i <= n; i++)
                     /*
                     1. Empezar desde i = 0 hasta n (número de filas) para imprimir la primer fila
                     2. Se itera hasta n y se incrementa i en 1 para imprimir la linea siguiente
                     */
                     {
+                        //forma de piramide
                         for (int x = n; x > i; x--)
                         /*
                         3. Se itera desde n hasta i y se decrementa x en 1 para dar un espaciado
-                        4. Se imprime un espacio, conforme se decrementa x en 1
+                        4. Se imprime un espacio antes de cada asterisco, conforme se decrementa x en 1
                         */
                         {
                             Console.Write(" ");
                         }
+                        //ancho
                         for (int j = 1; j <= i; j++)
                         /*
                         5. Se itera desde 1 hasta i y se incrementa j en 1 para imprimir la fila
