@@ -15,11 +15,9 @@
         // Se obtiene la suma de los números elevados a la cantidad de digitos del número mientras sea mayor a 0
         while (temp > 0)
         {
-            // Se obtiene el residuo de la división entre 10
-            temp1 = temp % 10;
-            // Se eleva el residuo a la cantidad de digitos del número, se suma a la variable sum y se castea a entero 
-            sum += (int)Math.Pow(temp1, digitos);
-            // Se divide el número entre 10
+            // Se obtiene el residuo de la división entre 10, se eleva el residuo a la cantidad de digitos del número, se suma a la variable sum y se castea a entero 
+            sum += (int)Math.Pow((temp1 = temp % 10), digitos);
+            // Se divide el número entre 10 para saber el siguiente número
             temp /= 10;
             // Se imprime el resultado de la suma
             Console.WriteLine($"+ {temp1}^{digitos}");
