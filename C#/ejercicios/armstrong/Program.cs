@@ -10,11 +10,7 @@
         Console.WriteLine($"Los suma de los números de {num} son: ");
 
         // Se obtiene la cantidad de digitos del número dividido entre 10 hasta que sea menor a 1
-        for (temp1 = num; temp1 > 0; temp1 /= 10)
-        {
-            // Se autoincrementa la variable digitos
-            digitos++;
-        }
+        for (temp1 = num; temp1 > 0; temp1 /= 10, digitos++) ;
 
         // Se obtiene la suma de los números elevados a la cantidad de digitos del número mientras sea mayor a 0
         while (temp > 0)
