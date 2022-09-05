@@ -4,7 +4,7 @@
     {
         // obtain the numbers between an armostrong number
         int num, temp, temp1, sum = 0, digitos = 0;
-        Console.Write("Enter the number: ");
+        Console.Write("Ingrese un número: ");
         num = Convert.ToInt32(Console.ReadLine());
         temp = num;
         Console.WriteLine($"Los suma de los números de {num} son: ");
