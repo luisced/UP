@@ -9,17 +9,14 @@
             n1 = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Ingrese otro numero: ");
             n2 = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine($"Los números armstrong entre: {n1} y {n2} son: ");
             // print the all the numbers between n1 and n2
             for (int i = n1; i <= n2; i++)
             {
                 //   know if the number is armstrong or not
                 if (isArmstrong(i))
                 {
-                    Console.WriteLine($"{i}");
-                }
-                else
-                {
-                    Console.WriteLine($"no hay números armstrong entre {n1} y {n2}");
+                    Console.Write($"{i}, ");
                 }
 
             }
@@ -29,22 +26,16 @@
         static bool isArmstrong(int n)
         {
             int sum = 0, temp = n, digits = 0;
+            // count the number of digits
+            for (int i = n; i > 0; i /= 10, digits++) ;
 
             while (temp > 0)
             {
-                int lastDigit = temp % 10;
-                digits++;
-                sum += (int)Math.Pow(lastDigit, digits);
+                sum += (int)Math.Pow((temp % 10), digits);
                 temp /= 10;
+
             }
-            if (sum == n)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return sum == n ? true : false;
         }
     }
 
