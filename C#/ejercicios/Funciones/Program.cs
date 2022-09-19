@@ -49,7 +49,8 @@
                         // 6. Sacar tabla de multiplicar hasta el 10 de un número
                         Console.Write("\nIngrese el número entero a multiplicar: ");
                         int numero = Convert.ToInt32(Console.ReadLine());
-                        Console.WriteLine($"Las tabla de multiplicar del {numero} son: {TablaNumero(numero)}");
+                        Console.WriteLine($"La tabla de multiplicar del {numero} es: ");
+                        TablaNumero(numero);
                         break;
                     case 8:
                         // 8. Salir
@@ -143,16 +144,11 @@
 
             }
             return resultado;
-
-
         }
         // Funcion de tabla de multiplicar
-        static int TablaNumero(int numero)
+        static void TablaNumero(int numero)
         {
-            int resultado = 0;
-            for (int i = 1; i <= 10; resultado = numero * i++, Console.WriteLine($"\n{numero} x {i - 1} = {resultado}")) ;
-            return resultado;
-
+            for (int i = 1; i <= 10; Console.WriteLine($"{numero} x {i} = {numero * i++}")) ;
         }
 
     }
