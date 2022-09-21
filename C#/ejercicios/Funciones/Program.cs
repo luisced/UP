@@ -52,6 +52,16 @@
                         Console.WriteLine($"La tabla de multiplicar del {numero} es: ");
                         TablaNumero(numero);
                         break;
+                    case 7:
+                        // 7. P, T, R Sacar el interés compuesto
+                        Console.Write("Ingrese el valor de P: ");
+                        double p = Convert.ToDouble(Console.ReadLine());
+                        Console.Write("Ingrese el valor de R: ");
+                        double r = Convert.ToDouble(Console.ReadLine());
+                        Console.Write("Ingrese el valor de T: ");
+                        double t = Convert.ToDouble(Console.ReadLine());
+                        Console.WriteLine($"El interés compuesto es: {InteresCompuesto(p, r, t)}");
+                        break;
                     case 8:
                         // 8. Salir
                         Console.WriteLine("Gracias por usar el programa");
@@ -149,6 +159,11 @@
         static void TablaNumero(int numero)
         {
             for (int i = 1; i <= 10; Console.WriteLine($"{numero} x {i} = {numero * i++}")) ;
+        }
+        static double InteresCompuesto(double P, double R, double T)
+        {
+            double I = P * Math.Pow((1 + R), T);
+            return I;
         }
 
     }
