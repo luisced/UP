@@ -15,12 +15,22 @@
             public bool disponible;
 
         }
+        // Se define una lista de tipo Auto para almacenar los autos que se van a registrar
+        static List<Auto> autos = new List<Auto>
+        {
+            new Auto { marca = "Chevrolet", modelo = "Spark", ano = 2017, color = "Azul", placa = "EFG456", disponible = true },
+            new Auto { marca = "Toyota", modelo = "Corolla", ano = 2015, color = "Blanco", placa = "ABC-123", disponible = true },
+            new Auto { marca = "Nissan", modelo = "Versa", ano = 2016, color = "Rojo", placa = "XYZ-789", disponible = true },
+            new Auto { marca = "Mazda", modelo = "3", ano = 2018, color = "Negro", placa = "ACD-345", disponible= false },
+        };
         static void Main(string[] args)
         {
+
             Console.WriteLine("Bienvenido al programa de alquiler de autos");
-            Console.Write("\n\nIngrese una opcion:\n1. Dar de alta un auto\n2. Dar de baja un auto\n3. Alquilar un auto\n4. Devolver un auto\n5. Consultar disponibilidad de un auto\n6. Salir\n\nOpcion: ");
+            Console.Write("\n\nIngrese una opcion:\n1. Dar de alta un auto\n2. Dar de baja un auto\n3. Rentar un auto\n4. Devolver un auto\n5. Consultar disponibilidad de un auto\n6. Editar un auto\n7. Salir\n\nOpcion: ");
+
             int opcion = Convert.ToInt32(Console.ReadLine());
-            while (opcion != 6)
+            while (opcion != 7)
             {
                 switch (opcion)
                 {
@@ -30,7 +40,7 @@
                         break;
                     case 2:
                         Console.WriteLine("Dar de baja un auto:\n");
-
+                        bajaAuto();
                         break;
                     case 3:
                         Console.WriteLine("Rentar un auto:\n");
@@ -44,18 +54,18 @@
                         Console.WriteLine("Consultar disponibilidad de un auto:\n");
                         verAuto();
                         break;
+                    case 6:
+                        Console.WriteLine("Editar un auto:\n");
+                        editarAuto();
+                        break;
                     default:
                         Console.WriteLine("Opcion invalida");
                         break;
                 }
-                Console.Write("\n\nIngrese una opcion:\n1. Dar de alta un auto\n2. Dar de baja un auto\n3. Alquilar un auto\n4. Devolver un auto\n5. Consultar disponibilidad de un auto\n6. Editar un auto\nSalir\n\nOpcion: ");
+                Console.Write("\n\nIngrese una opcion:\n1. Dar de alta un auto\n2. Dar de baja un auto\n3. Alquilar un auto\n4. Devolver un auto\n5. Consultar disponibilidad de un auto\n6. Editar un auto\n7. Salir\n\nOpcion: ");
                 opcion = Convert.ToInt32(Console.ReadLine());
             }
         }
-
-        // Se define una lista de tipo Auto para almacenar los autos que se van a registrar
-        static List<Auto> autos = new List<Auto>();
-
         // Se define un método para dar de alta un auto
         static void altaAuto()
         {
@@ -144,46 +154,130 @@
 
             }
         }
+
+
+        static void rentarAuto()
+        {
+            Console.Write("\nIngrese la placa del auto que desea rentar: ");
+            string placa = Console.ReadLine();
+            // lista temporal
+            List<Auto> autosTemp = new List<Auto>();
+            for (int i = 0; i < autos.Count; i++)
+            {
+                if (autos[i].placa == placa)
+                {
+                    Auto car = autos[i];
+                    car.disponible = false;
+                    autosTemp.Add(car);
+                    Console.WriteLine("El auto ha sido rentado");
+                    autos.RemoveAt(i);
+                }
+            }
+            autos.AddRange(autosTemp);
+        }
         static void devolverAuto()
         {
             Console.Write("\nIngrese la placa del auto: ");
             string placa = Console.ReadLine();
-
+            List<Auto> autosTemp = new List<Auto>();
             for (int i = 0; i < autos.Count; i++)
             {
                 if (autos[i].placa == placa)
                 {
                     Auto car = autos[i];
                     car.disponible = true;
-                    Console.WriteLine("El auto ha sido regresado");
+                    autosTemp.Add(car);
+                    Console.WriteLine("El auto ha sido devuelto");
+                    autos.RemoveAt(i);
                 }
             }
+            autos.AddRange(autosTemp);
         }
 
-        static void rentarAuto()
+        static void bajaAuto()
         {
-            Console.Write("\nIngrese la placa del auto que desea rentar: ");
+            Console.Write("\nIngrese la placa del auto que desea dar de baja: ");
             string placa = Console.ReadLine();
-            foreach (Auto car in autos)
+            for (int i = 0; i < autos.Count; i++)
             {
-                if (car.placa == placa)
+                if (autos[i].placa == placa)
                 {
-                    if (car.disponible == true)
+                    autos.RemoveAt(i);
+                    Console.WriteLine("El auto ha sido dado de baja");
+                }
+            }
+
+        }
+
+        static void editarAuto()
+        {
+            Console.Write("\nIngrese la placa del auto que desea editar: ");
+            string placa = Console.ReadLine();
+            List<Auto> autosTemp = new List<Auto>();
+            for (int i = 0; i < autos.Count; i++)
+            {
+                if (autos[i].placa == placa)
+                {
+                    Auto car = autos[i];
+                    Console.Write("Ingrese la marca del auto: ");
+                    if (Console.ReadLine() != "")
                     {
-                        Auto car2 = car;
-                        car2.disponible = false;
-                        Console.WriteLine("El auto ha sido rentado");
+                        car.marca = Console.ReadLine();
                     }
                     else
                     {
-                        Console.WriteLine("El auto no está disponible");
+                        car.marca = autos[i].marca;
                     }
+                    Console.Write("Ingrese el modelo del auto: ");
+                    if (Console.ReadLine() != "")
+                    {
+                        car.modelo = Console.ReadLine();
+                    }
+                    else
+                    {
+                        car.modelo = autos[i].modelo;
+                    }
+                    Console.Write("Ingrese el año del auto: ");
+                    if (Console.ReadLine() != "")
+                    {
+                        car.ano = Convert.ToInt32(Console.ReadLine());
+                    }
+                    else
+                    {
+                        car.ano = autos[i].ano;
+                    }
+                    Console.Write("Ingrese el color del auto: ");
+                    if (Console.ReadLine() != "")
+                    {
+                        car.color = Console.ReadLine();
+                    }
+                    else
+                    {
+                        car.color = autos[i].color;
+                    }
+                    Console.Write("Ingrese la placa del auto: ");
+                    if (Console.ReadLine() != "")
+                    {
+                        car.placa = Console.ReadLine();
+                    }
+                    else
+                    {
+                        car.placa = autos[i].placa;
+                    }
+                    Console.Write("Ingrese si el auto esta disponible: ");
+                    if (Console.ReadLine() != "")
+                    {
+                        car.disponible = Convert.ToBoolean(Console.ReadLine());
+                    }
+                    else
+                    {
+                        car.disponible = autos[i].disponible;
+                    }
+                    autosTemp.Add(car);
+                    autos.RemoveAt(i);
                 }
+                autos.AddRange(autosTemp);
             }
         }
-
-
-
-
     }
 }
