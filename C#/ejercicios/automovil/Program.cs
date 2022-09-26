@@ -264,10 +264,17 @@
                     {
                         car.placa = autos[i].placa;
                     }
-                    Console.Write("Ingrese si el auto esta disponible: ");
+                    Console.Write("Ingrese si el auto esta disponible si/no: ");
                     if (Console.ReadLine() != "")
                     {
-                        car.disponible = Convert.ToBoolean(Console.ReadLine());
+                        if (Console.ReadLine() == "si")
+                        {
+                            car.disponible = true;
+                        }
+                        else
+                        {
+                            car.disponible = false;
+                        }
                     }
                     else
                     {
