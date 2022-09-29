@@ -23,6 +23,8 @@
             new Auto { marca = "Nissan", modelo = "Versa", ano = 2016, color = "Rojo", placa = "XYZ-789", disponible = true },
             new Auto { marca = "Mazda", modelo = "3", ano = 2018, color = "Negro", placa = "ACD-345", disponible= false },
         };
+
+
         static void Main(string[] args)
         {
 
@@ -219,66 +221,44 @@
                 if (autos[i].placa == placa)
                 {
                     Auto car = autos[i];
-                    Console.Write("Ingrese la marca del auto: ");
-                    if (Console.ReadLine() != "")
+                    Console.Write("Ingrese una opción de edición: \n1. Marca\n2. Modelo\n3. Año\n4. Color\n5. Placa\n6. Disponibilidad\nOpcion: ");
+                    int opcion = Convert.ToInt32(Console.ReadLine());
+                    switch (opcion)
                     {
-                        car.marca = Console.ReadLine();
-                    }
-                    else
-                    {
-                        car.marca = autos[i].marca;
-                    }
-                    Console.Write("Ingrese el modelo del auto: ");
-                    if (Console.ReadLine() != "")
-                    {
-                        car.modelo = Console.ReadLine();
-                    }
-                    else
-                    {
-                        car.modelo = autos[i].modelo;
-                    }
-                    Console.Write("Ingrese el año del auto: ");
-                    if (Console.ReadLine() != "")
-                    {
-                        car.ano = Convert.ToInt32(Console.ReadLine());
-                    }
-                    else
-                    {
-                        car.ano = autos[i].ano;
-                    }
-                    Console.Write("Ingrese el color del auto: ");
-                    if (Console.ReadLine() != "")
-                    {
-                        car.color = Console.ReadLine();
-                    }
-                    else
-                    {
-                        car.color = autos[i].color;
-                    }
-                    Console.Write("Ingrese la placa del auto: ");
-                    if (Console.ReadLine() != "")
-                    {
-                        car.placa = Console.ReadLine();
-                    }
-                    else
-                    {
-                        car.placa = autos[i].placa;
-                    }
-                    Console.Write("Ingrese si el auto esta disponible si/no: ");
-                    if (Console.ReadLine() != "")
-                    {
-                        if (Console.ReadLine() == "si")
-                        {
-                            car.disponible = true;
-                        }
-                        else
-                        {
-                            car.disponible = false;
-                        }
-                    }
-                    else
-                    {
-                        car.disponible = autos[i].disponible;
+                        case 1:
+                            Console.Write("Ingrese la marca del auto: ");
+                            car.marca = Console.ReadLine();
+                            break;
+                        case 2:
+                            Console.Write("Ingrese el modelo del auto: ");
+                            car.modelo = Console.ReadLine();
+                            break;
+                        case 3:
+                            Console.Write("Ingrese el año del auto: ");
+                            car.ano = Convert.ToInt32(Console.ReadLine());
+                            break;
+                        case 4:
+                            Console.Write("Ingrese el color del auto: ");
+                            car.color = Console.ReadLine();
+                            break;
+                        case 5:
+                            Console.Write("Ingrese la placa del auto: ");
+                            car.placa = Console.ReadLine();
+                            break;
+                        case 6:
+                            Console.Write("Ingrese la disponibilidad del auto si/no: ");
+                            if (Console.ReadLine() == "si")
+                            {
+                                car.disponible = true;
+                            }
+                            else
+                            {
+                                car.disponible = false;
+                            }
+                            break;
+                        default:
+                            Console.WriteLine("Opción no válida");
+                            break;
                     }
                     autosTemp.Add(car);
                     autos.RemoveAt(i);
