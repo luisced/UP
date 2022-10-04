@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-            string correo, password, nombre, apellido_paterno, apellido_materno, mes, dia, año, shuffled_password = "";
+            string password, nombre, apellido_paterno, apellido_materno, mes, dia, año, shuffled_password = "";
             Console.Write("Ingrese su nombre: ");
             nombre = Console.ReadLine().ToLower();
             Console.Write("Ingrese su apellido Paterno: ");
