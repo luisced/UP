@@ -10,26 +10,19 @@
             Sucesion(numero);
             Console.WriteLine();
             Fibonacci(numero);
-
-
-
         }
         static void Sucesion(int num)
         {
             int suma = 0;
             for (int i = 1; i <= num; i++)
             {
-                suma += i;
-
                 for (int j = 1; j <= i; j++)
                 {
                     Console.Write($"{j}");
                     Console.Write(j < i ? " + " : " = ");
                 }
-
-                Console.WriteLine($"{suma}");
+                Console.WriteLine($"{suma += i}");
             }
-
         }
         static double Fn(int num)
         {
