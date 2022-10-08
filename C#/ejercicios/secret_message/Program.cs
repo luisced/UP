@@ -1,30 +1,34 @@
-﻿// Cifrado Cesar
-string abc = "abcdefghijklmnopqrstuvwxyz0123456789";
-int llave;
-string mensaje;
-string mensajeCIF = "";
-
-// Pedir info al usuario
-Console.WriteLine("Hello, introduce tu mensaje de texto");
-mensaje = Console.ReadLine().ToLower();
-Console.WriteLine("Ahora introduce tu llave con un valor de 0 a 26");
-
-// Hacer que el usuario introduzca un valor adecuado
-while (int.TryParse(Console.ReadLine(), out llave) == false)
+﻿namespace Secretmessage
 {
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string ruta = "/home/luisced/Code/Escuela/UP/C#/ejercicios/secret_message/Mensaje_secreto_1", texto, archivo_nombre = "", margen1 = "╔═══════════════════════════════════════╗", margen2 = "╚═══════════════════════════════════════╝", margen3 = "║═══════════════════════════════════════║", abc = "abcdefghijklmnopqrstuvwxyz", mensaje = "";
+            string[] archivos = Directory.GetFiles(ruta);
+            string[] archivos_name = Directory.GetFiles(ruta, "*.txt");
 
-    Console.WriteLine("Por favor ingresa un valor adecuado...");
-    Console.WriteLine("introduce tu llave con un valor de 0 a 26: ");
+            Array.Sort(archivos_name);
+            archivos_name.ToList().ForEach(i => Console.WriteLine(i));
+            foreach (string archivo in archivos)
+            {
+                archivo_nombre = Path.GetFileName(archivo);
 
+                texto = File.ReadAllText(archivo);
+                // encuentra una letra en cada archivo
+                for (int i = 0; i < texto.Length; i++)
+                {
+                    if (abc.Contains(texto[i]))
+                    {
+                        mensaje += texto[i];
+                        // Console.WriteLine($"El archivo {archivo_nombre} contiene la letra {texto[i]}");
+                        break;
+                    }
+                    // ordenar la lista de archivos por nombre
+                }
+            }
+            Console.WriteLine($"{margen1}\n║  Bienvenido al programa de mensajes   ║ \n{margen3}\n║  1. Enviar mensaje                    ║\n║  2. Leer mensaje                      ║\n║  3. Salir                             ║\n{margen2}");
+
+        }
+    }
 }
-Console.WriteLine();
-
-for (int i = 0; i < mensaje.Length; i++)
-{
-    int posicion = abc.IndexOf(mensaje[i]);
-    int posicionEncriptada = (llave + posicion) % abc.Length; //Hace un ciclo para repetir el abecedario
-    mensajeCIF += abc[posicionEncriptada];
-}
-
-
-Console.WriteLine("Este es tu mensaje cifrado: " + mensajeCIF);
