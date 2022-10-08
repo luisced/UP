@@ -6,7 +6,8 @@
         {
             Console.Write("Ingrese una palabra: ");
             string palabra = Console.ReadLine();
-            Console.Write($"{Palindromo(palabra)}");
+
+            Console.Write($"{Palindromo(palabra.ToLower())}");
         }
         static bool Palindromo(string palabra)
         {
