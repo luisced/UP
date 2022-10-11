@@ -1,10 +1,4 @@
-﻿// estructura cuenta: nombre, no. cuenta, nip, monto
-// alta de usuario
-// realizar un retiro, depósito
-// entra al sistema, salir del sistema
-// ver, abonar, retirar saldo, ingresar su nip (validación)
-
-namespace Banco
+﻿namespace Banco
 {
     class Program
     {
@@ -205,42 +199,108 @@ namespace Banco
             string margen2 = "╚═══════════════════════════════════════╝";
             string margen3 = "║═══════════════════════════════════════║";
             string margen4 = "║                                       ║";
-            Console.Clear();
-            Console.WriteLine($"{margen1}\n║\t\tSistema\t\t\t║ \n║\t   ¿Qué desea hacer?\t\t║");
-            Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Ver saldo\t\t\t║\n{margen4}\n║\t2. Abonar cuenta\t\t║\n{margen4}\n║\t3. Retirar dinero\t\t║\n{margen4}\n║\t4. Transferir dinero\t\t║\n{margen4}\n║\t5. Ver movimientos\t\t║\n{margen4}\n║\t6. Salir\t\t\t║\n{margen2}");
-            Console.Write("Ingrese una opción: ");
-            int opcion = Convert.ToInt32(Console.ReadLine());
-            while (opcion != 6)
-            {
-                switch (opcion)
-                {
-                    case 1:
-                        // VerSaldo();
-                        break;
-                    case 2:
-                        // AbonarCuenta();
-                        break;
-                    case 3:
-                        // RetirarDinero();
-                        break;
-                    case 4:
-                        // TransferirDinero();
-                        break;
-                    case 5:
-                        // VerMovimientos();
-                        break;
-                    default:
-                        Console.WriteLine("Opción no válida");
-                        break;
-                }
-                Console.Clear();
+            string password = "", nip = "";
+            ConsoleKeyInfo key2;
 
-                Console.WriteLine($"{margen1}\n║\t\tSistema\t\t\t║ \n║\t   ¿Qué desea hacer?\t\t║");
-                Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Ver saldo\t\t\t║\n{margen4}\n║\t2. Abonar cuenta\t\t║\n{margen4}\n║\t3. Retirar dinero\t\t║\n{margen4}\n║\t4. Transferir dinero\t\t║\n{margen4}\n║\t5. Ver movimientos\t\t║\n{margen4}\n║\t6. Salir\t\t\t║\n{margen2}");
-                Console.Write("Ingrese una opción: ");
-                opcion = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Ingrese su numero de cuenta: ");
+            int NoCuenta = Convert.ToInt32(Console.ReadLine());
+            // find no. cuenta
+            Cuenta numero_cuenta = cuentas.Find(x => x.NoCuenta == NoCuenta);
+            while (true)
+            {
+                // if no. cuenta is contained in the list of accounts and matches the one entered
+                if (cuentas.Contains(numero_cuenta))
+                {
+                    while (true)
+                    {
+
+                        Console.Write("Ingrese su nip: ");
+                        ConsoleKeyInfo key;
+
+                        do
+                        {
+                            key = Console.ReadKey(true);
+                            if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+                            {
+                                if (char.IsNumber(key.KeyChar) && password.Length < 4)
+                                {
+                                    password += key.KeyChar;
+                                    Console.Write("*");
+
+
+                                }
+                            }
+                            else
+                            {
+                                if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                                {
+                                    password = password.Substring(1, (password.Length - 1));
+                                    Console.Write("\b \b");
+                                }
+                            }
+
+                        } while (key.Key != ConsoleKey.Enter);
+                        // if nip is correct
+                        if (password == numero_cuenta.nip)
+                        {
+
+                            Console.Clear();
+                            Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Lui\t║ \n║\t   ¿Qué desea hacer?\t\t║");
+                            Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
+                            Console.Write("Ingrese una opción: ");
+                            int opcion = Convert.ToInt32(Console.ReadLine());
+                            while (opcion != 4)
+                            {
+                                switch (opcion)
+                                {
+                                    case 1:
+                                        Console.Write("Ingrese el monto a depositar: ");
+                                        double monto = Convert.ToDouble(Console.ReadLine());
+                                        // cuenta.Depositar(monto);
+                                        break;
+                                    case 2:
+                                        Console.Write("Ingrese el monto a retirar: ");
+                                        monto = Convert.ToDouble(Console.ReadLine());
+                                        // cuenta.Retirar(monto);
+                                        break;
+                                    case 3:
+                                        // cuenta.ConsultarSaldo();
+                                        break;
+                                    default:
+                                        Console.WriteLine("Opción no válida");
+                                        break;
+                                }
+                                Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Lui\t║ \n║\t   ¿Qué desea hacer?\t\t║");
+                                Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
+                                Console.Write("Ingrese una opción: ");
+                                opcion = Convert.ToInt32(Console.ReadLine());
+                                Console.Clear();
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nNip incorrecto");
+                            password = "";
+                            continue;
+                        }
+                    }
+                    break;
+                }
+
+                else
+                {
+                    Console.WriteLine("Cuenta no encontrada");
+                    Console.Write("Ingrese su numero de cuenta: ");
+                    NoCuenta = Convert.ToInt32(Console.ReadLine());
+
+                }
             }
-            Console.Clear();
+
+
         }
+
+
+
     }
 }
