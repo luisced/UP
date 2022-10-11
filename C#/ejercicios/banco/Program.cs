@@ -165,7 +165,7 @@
             string margen3 = "║═══════════════════════════════════════║";
             string margen4 = "║                                       ║";
             Console.Clear();
-            Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Lui\t║ \n║\t   ¿Qué desea hacer?\t\t║");
+            Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Luis\t║ \n║\t   ¿Qué desea hacer?\t\t║");
             Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Alta de usuario\t\t║\n{margen4}\n║\t2. Ingresar al sistema\t\t║\n{margen4}\n║\t3. Ver Usuarios\t\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
 
             Console.Write("Ingrese una opción: ");
@@ -185,7 +185,7 @@
                         Console.WriteLine("Opción no válida");
                         break;
                 }
-                Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Lui\t║ \n║\t   ¿Qué desea hacer?\t\t║");
+                Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Luis\t║ \n║\t   ¿Qué desea hacer?\t\t║");
                 Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Alta de usuario\t\t║\n{margen4}\n║\t2. Ingresar al sistema\t\t║\n{margen4}\n║\t3. Ver Usuarios\t\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
                 Console.Write("Ingrese una opción: ");
                 opcion = Convert.ToInt32(Console.ReadLine());
@@ -245,7 +245,7 @@
                         {
 
                             Console.Clear();
-                            Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Lui\t║ \n║\t   ¿Qué desea hacer?\t\t║");
+                            Console.WriteLine($"{margen1}\n║\tBienvenido {numero_cuenta.nombre}  \t\t║ \n║\t   ¿Qué desea hacer?\t\t║");
                             Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
                             Console.Write("Ingrese una opción: ");
                             int opcion = Convert.ToInt32(Console.ReadLine());
@@ -270,7 +270,7 @@
                                         Console.WriteLine("Opción no válida");
                                         break;
                                 }
-                                Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Lui\t║ \n║\t   ¿Qué desea hacer?\t\t║");
+                                Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Luis\t║ \n║\t   ¿Qué desea hacer?\t\t║");
                                 Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
                                 Console.Write("Ingrese una opción: ");
                                 opcion = Convert.ToInt32(Console.ReadLine());
