@@ -26,7 +26,10 @@
         static void AltaCuenta()
         {
             Cuenta cuenta = new Cuenta();
-
+            Random random = new Random();
+            int cvv = random.Next(1000, 9999);
+            string exp = DateTime.Now.AddYears(4).ToString("MM/yy");
+            string card = string.Join(" ", Enumerable.Range(0, 16).Select(x => random.Next(0, 10)).Select(x => x.ToString()).ToArray()).Substring(0, 19);
             do
             {
 
@@ -130,9 +133,29 @@
                 }
 
                 cuentas.Add(cuenta);
-                Console.WriteLine("Cuenta creada con exito");
-                Console.WriteLine($"Saludos {cuenta.nombre}, su numero de cuenta es: {cuenta.NoCuenta} y su nip es: {cuenta.nip} su monto es: ${cuenta.monto}, gracias por preferirnos");
-                Console.WriteLine("Presione Enter para continuar");
+                Console.WriteLine("Cuenta creada con exito, tome su tarjeta");
+
+                int no = cuenta.NoCuenta;
+                // Color the console text green
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(@$"
+                ||====================================================================||
+                ||//$\\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\//$\\||
+                ||(LUIS)=================|       LUIS BANK      |===============(LUIS)||
+                ||\\$//                  '------========--------'                \\$//||
+                ||<< /     /========\          // ____ \\                         \ >>||
+                ||>>|      |  |  |  |         // ///..) \\           ))) {cvv}      |<<||
+                ||<<|      |  |  |  |        || <||  >\  ||                        |>>||
+                ||>>|      \========/        ||  $$ --/  ||    Exp.Date: {exp}     |<<||
+                ||<<|        40000            *\\  |\_/  //*                       |>>||
+                ||>>|                         *\\/___\_//*                         |<<||
+                ||<<\     No.Cuenta: {no}   ______/PLATINUM\________                  />>||
+                ||//$\                 ~|         {cuenta.nombre}          |~               /$\\||
+                ||(LUIS)=================  {card} =================(LUIS)||
+                ||\\$//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\$//||
+                ||====================================================================||");
+                Console.ResetColor();
+                Console.WriteLine("\n\nPresione Enter para continuar");
             } while (Console.ReadKey().Key != ConsoleKey.Enter);
             Console.Clear();
         }
@@ -165,6 +188,7 @@
             string margen3 = "║═══════════════════════════════════════║";
             string margen4 = "║                                       ║";
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Luis\t║ \n║\t   ¿Qué desea hacer?\t\t║");
             Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Alta de usuario\t\t║\n{margen4}\n║\t2. Ingresar al sistema\t\t║\n{margen4}\n║\t3. Ver Usuarios\t\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
 
@@ -185,21 +209,20 @@
                         Console.WriteLine("Opción no válida");
                         break;
                 }
+                Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Luis\t║ \n║\t   ¿Qué desea hacer?\t\t║");
                 Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Alta de usuario\t\t║\n{margen4}\n║\t2. Ingresar al sistema\t\t║\n{margen4}\n║\t3. Ver Usuarios\t\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
                 Console.Write("Ingrese una opción: ");
                 opcion = Convert.ToInt32(Console.ReadLine());
                 Console.Clear();
+                Console.ResetColor();
 
             }
         }
         static void IngresarSistema()
         {
-            string margen1 = "╔═══════════════════════════════════════╗";
-            string margen2 = "╚═══════════════════════════════════════╝";
-            string margen3 = "║═══════════════════════════════════════║";
-            string margen4 = "║                                       ║";
-            string password = "", nip = "";
+            string margen1 = "╔═══════════════════════════════════════╗", margen2 = "╚═══════════════════════════════════════╝", margen3 = "║═══════════════════════════════════════║", margen4 = "║                                       ║";
+            string password = "";
             ConsoleKeyInfo key2;
 
             Console.Write("Ingrese su numero de cuenta: ");
@@ -245,6 +268,7 @@
                         {
 
                             Console.Clear();
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine($"{margen1}\n║\tBienvenido {numero_cuenta.nombre}  \t\t║ \n║\t   ¿Qué desea hacer?\t\t║");
                             Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
                             Console.Write("Ingrese una opción: ");
@@ -270,6 +294,7 @@
                                         Console.WriteLine("Opción no válida");
                                         break;
                                 }
+                                Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Luis\t║ \n║\t   ¿Qué desea hacer?\t\t║");
                                 Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
                                 Console.Write("Ingrese una opción: ");
