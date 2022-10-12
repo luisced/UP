@@ -2,27 +2,35 @@
 {
     class Program
     {
+        struct Movimientos
+        {
+            public string accion;
+            public double monto;
+            public string fecha;
+            public int id;
+        }
         struct Cuenta
         {
             public string nombre;
             public int NoCuenta;
             public string nip;
             public double monto;
+            // add a Movimientos list to the Cuenta struct
+            public List<Movimientos> movimientos;
+
+
+
         }
-        struct Movimientos
-        {
-            public string accion;
-            public double monto;
-            public string fecha;
-            public string id;
-        }
-        static List<Cuenta> cuentas = new List<Cuenta>();
-        static List<Movimientos> movimientos = new List<Movimientos>();
+        static List<Cuenta> cuentas = new List<Cuenta>{
+            new Cuenta { nombre = "Juan", NoCuenta = 1, nip = "1234", monto = 1000, movimientos = new List<Movimientos>{ new Movimientos { accion = "Deposito", monto = 1000, fecha = "01/01/2019", id = 1 } } },
+            new Cuenta { nombre = "Pedro", NoCuenta = 2, nip = "4321", monto = 2000, movimientos = new List<Movimientos>{ new Movimientos { accion = "Deposito", monto = 1000, fecha = "01/01/2019", id = 2 } } }
+        };
         static void Main(string[] args) { Menu(); }
 
         static void AltaCuenta()
         {
             Cuenta cuenta = new Cuenta();
+            cuenta.movimientos = new List<Movimientos>();
             Random random = new Random();
             int cvv = random.Next(1000, 9999);
             string exp = DateTime.Now.AddYears(4).ToString("MM/yy");
@@ -125,8 +133,9 @@
                         Console.Write("Ingrese un monto valido: ");
                     }
                 }
-
+                // cuenta.movimientos.Add(new Movimientos { accion = "Creacion Cuenta", monto = cuenta.monto, fecha = DateTime.Now, id = 1 });
                 cuentas.Add(cuenta);
+                GenerarMovimiento("Creación de cuenta", cuenta.monto, cuenta.NoCuenta);
                 Console.WriteLine("Cuenta creada con exito, tome su tarjeta");
 
                 int no = cuenta.NoCuenta;
@@ -175,58 +184,66 @@
         static void Depositar(double cantidad, int NoCuenta)
         {
             List<Cuenta> cuentas_temporal = new List<Cuenta>();
-            if (cantidad > 0)
+            do
             {
-                for (int i = 0; i < cuentas.Count; i++)
+                if (cantidad > 0)
                 {
-                    if (cuentas[i].NoCuenta == NoCuenta)
+                    for (int i = 0; i < cuentas.Count; i++)
                     {
-                        Cuenta cuenta = cuentas[i];
-                        cuenta.monto += cantidad;
-                        cuentas_temporal.Add(cuenta);
-                        Console.WriteLine($"Se ha depositado {cantidad} a su cuenta");
-                        cuentas.RemoveAt(i);
+                        if (cuentas[i].NoCuenta == NoCuenta)
+                        {
+                            Cuenta cuenta = cuentas[i];
+                            cuenta.monto += cantidad;
+                            cuentas_temporal.Add(cuenta);
+                            Console.WriteLine($"Se ha depositado {cantidad} a su cuenta\nPresione Enter para continuar");
+                            cuentas.RemoveAt(i);
+                        }
+                        else
+                        {
+                            cuentas_temporal.Add(cuentas[i]);
+                        }
                     }
-                    else
-                    {
-                        cuentas_temporal.Add(cuentas[i]);
-                    }
+                    cuentas.AddRange(cuentas_temporal);
                 }
-                cuentas.AddRange(cuentas_temporal);
-            }
-            else
-            {
-                Console.WriteLine("No se puede depositar una cantidad negativa");
-            }
+                else
+                {
+                    Console.WriteLine("No se puede depositar una cantidad negativa");
+                }
+            } while (Console.ReadKey().Key != ConsoleKey.Enter);
+            Console.Clear();
+
         }
 
         static void Retirar(double cantidad, int NoCuenta)
         {
             List<Cuenta> cuentas_temporal = new List<Cuenta>();
-            // cantidad no puede ser negativa ni mayor al monto de la cuenta
-            if (cantidad > 0 && cantidad <= cuentas.Find(x => x.NoCuenta == NoCuenta).monto)
+            do
             {
-                for (int i = 0; i < cuentas.Count; i++)
+                if (cantidad > 0 && cantidad <= cuentas.Find(x => x.NoCuenta == NoCuenta).monto)
                 {
-                    if (cuentas[i].NoCuenta == NoCuenta)
+                    for (int i = 0; i < cuentas.Count; i++)
                     {
-                        Cuenta cuenta = cuentas[i];
-                        cuenta.monto -= cantidad;
-                        cuentas_temporal.Add(cuenta);
-                        Console.WriteLine($"Se ha retirado {cantidad} de su cuenta");
-                        cuentas.RemoveAt(i);
+                        if (cuentas[i].NoCuenta == NoCuenta)
+                        {
+                            Cuenta cuenta = cuentas[i];
+                            cuenta.monto -= cantidad;
+                            cuentas_temporal.Add(cuenta);
+                            Console.WriteLine($"Se ha retirado {cantidad} de su cuenta\n Presione Enter para continuar");
+                            cuentas.RemoveAt(i);
+                        }
+                        else
+                        {
+                            cuentas_temporal.Add(cuentas[i]);
+                        }
                     }
-                    else
-                    {
-                        cuentas_temporal.Add(cuentas[i]);
-                    }
+                    cuentas.AddRange(cuentas_temporal);
                 }
-                cuentas.AddRange(cuentas_temporal);
-            }
-            else
-            {
-                Console.WriteLine("No se puede retirar una cantidad negativa o mayor al monto de la cuenta");
-            }
+                else
+                {
+                    Console.WriteLine("No se puede retirar una cantidad negativa o mayor al monto de la cuenta");
+                }
+            } while (Console.ReadKey().Key != ConsoleKey.Enter);
+            Console.Clear();
 
 
 
@@ -234,8 +251,13 @@
 
         static void ConsultarSaldo(int NoCuenta)
         {
-            Cuenta cuenta = cuentas.Find(x => x.NoCuenta == NoCuenta);
-            Console.WriteLine($"{cuenta.nombre}, su saldo actual es de: {cuenta.monto}");
+            do
+            {
+                Cuenta cuenta = cuentas.Find(x => x.NoCuenta == NoCuenta);
+                Console.WriteLine($"{cuenta.nombre}, su saldo actual es de: {cuenta.monto}\nPresione Enter para continuar: ");
+            } while (Console.ReadKey().Key != ConsoleKey.Enter);
+            Console.Clear();
+
         }
 
         static void VerUsuarios()
@@ -247,6 +269,49 @@
                 Console.WriteLine($"{margen1}\n║\t\tUsuarios\t\t║ \n{margen3}");
                 Console.WriteLine($"{margen4}\n║\tNo. Cuenta\tNombre\t\t║");
                 foreach (Cuenta cuenta in cuentas) { Console.WriteLine($"{margen4}\n║\t{cuenta.NoCuenta}\t\t{cuenta.nombre}\t\t║"); }
+                Console.WriteLine($"{margen2}");
+                Console.ResetColor();
+                Console.WriteLine("Presione enter para continuar");
+            } while (Console.ReadKey().Key != ConsoleKey.Enter);
+            Console.Clear();
+        }
+        static void GenerarMovimiento(string accion, double cantidad, int NoCuenta)
+        {
+            List<Cuenta> cuenta_temporal = new List<Cuenta>();
+            for (int i = 0; i < cuentas.Count; i++)
+            {
+                if (cuentas[i].NoCuenta == NoCuenta)
+                {
+                    Movimientos movimiento = new Movimientos();
+                    Cuenta cuenta = cuentas[i];
+                    movimiento.accion = accion;
+                    movimiento.monto = cantidad;
+                    // date without time
+                    movimiento.fecha = DateTime.Now.ToString("dd/MM/yyyy");
+                    cuenta.movimientos.Add(movimiento);
+                    cuenta_temporal.Add(cuenta);
+                    cuentas.RemoveAt(i);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            cuentas.AddRange(cuenta_temporal);
+        }
+        static void VerMovimientos(int NoCuenta)
+        {
+
+            do
+            {
+                Cuenta cuenta = cuentas.Find(x => x.NoCuenta == NoCuenta);
+                string margen1 = "╔═══════════════════════════════════════════════════════╗", margen2 = "╚═══════════════════════════════════════════════════════╝", margen3 = "║═══════════════════════════════════════════════════════║", margen4 = "║                                       ║";
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"{margen1}\n║\t\t\tMovimientos\t\t\t║ \n{margen3}");
+
+                Console.WriteLine($"{margen4}\n║\tFecha\t\tAccion\t\t\tMonto\t║");
+                foreach (Movimientos movimiento in cuenta.movimientos)
+                { Console.WriteLine($"{margen4}\n║\t{movimiento.fecha}\t{movimiento.accion}\t{movimiento.monto}\t║"); }
                 Console.WriteLine($"{margen2}");
                 Console.ResetColor();
                 Console.WriteLine("Presione enter para continuar");
@@ -275,6 +340,7 @@
 
                         do
                         {
+
                             key = Console.ReadKey(true);
                             if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
                             {
@@ -303,10 +369,10 @@
                             Console.Clear();
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine($"{margen1}\n║\tBienvenido {numero_cuenta.nombre}  \t\t║ \n║\t   ¿Qué desea hacer?\t\t║");
-                            Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
+                            Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Ver movimientos\t\t║\n{margen4}\n║\t5. Salir\t\t\t║\n{margen2}");
                             Console.Write("Ingrese una opción: ");
                             int opcion = Convert.ToInt32(Console.ReadLine());
-                            while (opcion != 4)
+                            while (opcion != 5)
                             {
                                 switch (opcion)
                                 {
@@ -314,6 +380,7 @@
                                         Console.Write("Ingrese el monto a depositar: ");
                                         double monto = Convert.ToDouble(Console.ReadLine());
                                         Depositar(monto, numero_cuenta.NoCuenta);
+
                                         break;
                                     case 2:
                                         Console.Write("Ingrese el monto a retirar: ");
@@ -323,17 +390,21 @@
                                     case 3:
                                         ConsultarSaldo(numero_cuenta.NoCuenta);
                                         break;
+                                    case 4:
+                                        VerMovimientos(numero_cuenta.NoCuenta);
+                                        break;
                                     default:
                                         Console.WriteLine("Opción no válida");
                                         break;
                                 }
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine($"{margen1}\n║\tBienvenido al Banco de Luis\t║ \n║\t   ¿Qué desea hacer?\t\t║");
-                                Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
+                                Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Ver movimientos\t\t║\n{margen4}\n║\t5. Salir\t\t\t║\n{margen2}");
+
                                 Console.Write("Ingrese una opción: ");
                                 opcion = Convert.ToInt32(Console.ReadLine());
+                                Console.Clear();
                             }
-                            Console.Clear();
                             break;
                         }
                         else
@@ -349,12 +420,12 @@
                 else
                 {
                     Console.WriteLine("Cuenta no encontrada");
-                    Console.Write("Ingrese su numero de cuenta: ");
-                    NoCuenta = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Ingrese su numero de cuenta: ");
+                    Console.Clear();
+                    break;
 
                 }
             }
-
 
         }
         static void Menu()
