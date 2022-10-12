@@ -332,8 +332,8 @@
                                 Console.WriteLine($"{margen3}\n{margen4}\n║\t1. Depositar\t\t\t║\n{margen4}\n║\t2. Retirar\t\t\t║\n{margen4}\n║\t3. Consultar saldo\t\t║\n{margen4}\n║\t4. Salir\t\t\t║\n{margen2}");
                                 Console.Write("Ingrese una opción: ");
                                 opcion = Convert.ToInt32(Console.ReadLine());
-                                Console.Clear();
                             }
+                            Console.Clear();
                             break;
                         }
                         else
