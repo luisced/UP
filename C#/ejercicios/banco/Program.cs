@@ -22,7 +22,7 @@
 
         }
         static List<Cuenta> cuentas = new List<Cuenta>();
-        static void Main(string[] args) { Menu(); }
+        static void Main(string[] args) { Console.Clear(); Menu(); }
 
         static void AltaCuenta()
         {
@@ -302,7 +302,7 @@
             string margen1 = "╔═══════════════════════════════════════╗", margen2 = "╚═══════════════════════════════════════╝", margen3 = "║═══════════════════════════════════════║", margen4 = "║                                       ║";
             string password = "";
             ConsoleKeyInfo key2;
-
+            Console.Clear();
             Console.Write("Ingrese su numero de cuenta: ");
             int NoCuenta = Convert.ToInt32(Console.ReadLine());
             // find no. cuenta
@@ -432,12 +432,17 @@
                 switch (opcion)
                 {
                     case 1:
+                        Console.Clear();
                         AltaCuenta();
                         break;
                     case 2:
+                        Console.Clear();
+
                         IngresarSistema();
                         break;
                     case 3:
+                        Console.Clear();
+
                         VerUsuarios();
                         break;
                     default:
