@@ -58,13 +58,15 @@
                     key = Console.ReadKey(true);
                     if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
                     {
-                        if (char.IsNumber(key.KeyChar) && password.Length < 4)
+                        // write * instead of the key pressed and add a space between each *
+                        // if the key pressed is a number and the length is 4
+                        if (key.KeyChar >= '0' && key.KeyChar <= '9' && password.Length < 4)
                         {
                             password += key.KeyChar;
-                            Console.Write("*");
+                            Console.Write(" * ");
                             cuenta.nip = password;
-
                         }
+
 
                     }
                     else
