@@ -26,6 +26,8 @@
 
         static void AltaCuenta()
         {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Cuenta cuenta = new Cuenta();
             cuenta.movimientos = new List<Movimientos>();
             Random random = new Random();
@@ -180,30 +182,21 @@
 
         static void Depositar(double cantidad, int NoCuenta)
         {
+
             List<Cuenta> cuentas_temporal = new List<Cuenta>();
 
             do
             {
                 if (cantidad > 0)
                 {
-                    for (int i = 0; i < cuentas.Count; i++)
-                    {
-
-                        if (cuentas[i].NoCuenta == NoCuenta)
-                        {
-                            Cuenta cuenta = cuentas[i];
-                            cuenta.monto += cantidad;
-                            cuentas_temporal.Add(cuenta);
-                            GenerarMovimiento("Deposito", cantidad, cuenta.NoCuenta);
-                            Console.WriteLine($"Se ha depositado {cantidad} a su cuenta\nPresione Enter para continuar");
-                            cuentas.RemoveAt(i);
-                        }
-                        else
-                        {
-                            cuentas_temporal.Add(cuentas[i]);
-                        }
-                    }
+                    int index = cuentas.FindIndex(x => x.NoCuenta == NoCuenta);
+                    Cuenta cuenta = cuentas[index];
+                    cuenta.monto += cantidad;
+                    cuentas_temporal.Add(cuenta);
+                    cuentas.RemoveAt(index);
                     cuentas.AddRange(cuentas_temporal);
+                    GenerarMovimiento("Deposito", cantidad, NoCuenta);
+                    Console.WriteLine($"Se ha depositado {cantidad} a su cuenta\nPresione Enter para continuar");
                 }
                 else
                 {
@@ -221,24 +214,14 @@
             {
                 if (cantidad > 0 && cantidad <= cuentas.Find(x => x.NoCuenta == NoCuenta).monto)
                 {
-                    for (int i = 0; i < cuentas.Count; i++)
-                    {
-                        if (cuentas[i].NoCuenta == NoCuenta)
-                        {
-                            Cuenta cuenta = cuentas[i];
-                            cuenta.monto -= cantidad;
-                            cuentas_temporal.Add(cuenta);
-                            GenerarMovimiento("Retiro", (cantidad * -1), cuenta.NoCuenta);
-                            Console.WriteLine($"Se ha retirado {cantidad} de su cuenta\n Presione Enter para continuar");
-                            cuentas.RemoveAt(i);
-                        }
-                        else
-                        {
-                            cuentas_temporal.Add(cuentas[i]);
-                        }
-                    }
-
+                    int index = cuentas.FindIndex(x => x.NoCuenta == NoCuenta);
+                    Cuenta cuenta = cuentas[index];
+                    cuenta.monto -= cantidad;
+                    cuentas_temporal.Add(cuenta);
+                    cuentas.RemoveAt(index);
                     cuentas.AddRange(cuentas_temporal);
+                    GenerarMovimiento("Retiro", (cantidad * -1), NoCuenta);
+                    Console.WriteLine($"Se ha retirado {cantidad} de su cuenta\nPresione Enter para continuar");
                 }
                 else
                 {
@@ -270,6 +253,7 @@
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine($"{margen1}\n║\t\tUsuarios\t\t║ \n{margen3}");
                 Console.WriteLine($"{margen4}\n║\tNo. Cuenta\tNombre\t\t║");
+                cuentas.Sort((x, y) => x.NoCuenta.CompareTo(y.NoCuenta));
                 foreach (Cuenta cuenta in cuentas) { Console.WriteLine($"{margen4}\n║\t{cuenta.NoCuenta}\t\t{cuenta.nombre}\t\t║"); }
                 Console.WriteLine($"{margen2}");
                 Console.ResetColor();
@@ -279,59 +263,39 @@
         }
         static void GenerarMovimiento(string accion, double cantidad, int NoCuenta)
         {
-            List<Cuenta> cuenta_temporal = new List<Cuenta>();
-            List<Movimientos> movimientos_temporal = new List<Movimientos>();
-            for (int i = 0; i < cuentas.Count; i++)
+            Cuenta cuenta = cuentas.Find(x => x.NoCuenta == NoCuenta);
+            cuenta.movimientos.Add(new Movimientos
             {
-                if (cuentas[i].NoCuenta == NoCuenta)
-                {
-                    Cuenta cuenta = cuentas[i];
-                    cuenta.movimientos.Add(
-                        new Movimientos
-                        {
-                            accion = accion,
-                            monto = cantidad,
-                            fecha = DateTime.Now.ToString("dd/MM/yyyy")
-                        }
-                    );
-                    cuenta_temporal.Add(cuenta);
-                    cuentas.RemoveAt(i);
-                }
-                else
-                {
-                    cuenta_temporal.Add(cuentas[i]);
-                }
-            }
-
-            cuentas.AddRange(cuenta_temporal);
+                accion = accion,
+                monto = cantidad,
+                fecha = DateTime.Now.ToString("dd/MM/yyyy"),
+                id = cuenta.movimientos.Count + 1
+            });
         }
+
+
         static void VerMovimientos(int NoCuenta)
         {
+            string margen1 = "╔═══════════════════════════════════════╗", margen2 = "╚═══════════════════════════════════════╝", margen3 = "║═══════════════════════════════════════║", margen4 = "║                                       ║";
             List<Cuenta> cuenta_temporal = new List<Cuenta>();
-            for (int i = 0; i < cuentas.Count; i++)
+            do
             {
-                if (cuentas[i].NoCuenta == NoCuenta)
+                int index = cuentas.FindIndex(x => x.NoCuenta == NoCuenta);
+                Cuenta cuenta = cuentas[index];
+                cuenta.movimientos.Sort((x, y) => x.id.CompareTo(y.id));
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                // Poner tabla de movimientos con id, fecha, accion, monto
+                Console.WriteLine($"{margen1}\n║\t\tMovimientos\t\t║ \n{margen3}");
+                foreach (Movimientos movimiento in cuenta.movimientos)
                 {
-                    do
-                    {
+                    Console.WriteLine($"{margen4}\n║\t{movimiento.id}\t\t{movimiento.fecha}\t\t{movimiento.accion}\t\t{movimiento.monto}\t\t║");
+                }
+                Console.WriteLine($"{margen2}");
+                Console.ResetColor();
+                Console.WriteLine("Presione enter para continuar");
+            } while (Console.ReadKey().Key != ConsoleKey.Enter);
+            Console.Clear();
 
-                        Cuenta cuenta = cuentas[i];
-                        string margen1 = "╔═══════════════════════════════════════╗", margen2 = "╚═══════════════════════════════════════╝", margen3 = "║═══════════════════════════════════════║", margen4 = "║                                       ║";
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine($"{margen1}\n║\t\tMovimientos\t\t║ \n{margen3}");
-                        Console.WriteLine($"{margen4}\n║\tFecha\t\tAccion\t\tMonto\t║");
-                        foreach (Movimientos movimiento in cuenta.movimientos) { Console.WriteLine($"{margen4}\n║\t{movimiento.fecha}\t{movimiento.accion}\t\t{movimiento.monto}\t║"); }
-                        Console.WriteLine($"{margen2}");
-                        Console.ResetColor();
-                        Console.WriteLine("Presione enter para continuar");
-                    } while (Console.ReadKey().Key != ConsoleKey.Enter);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            cuentas.AddRange(cuenta_temporal);
         }
         static void IngresarSistema()
         {
@@ -392,23 +356,29 @@
                                 switch (opcion)
                                 {
                                     case 1:
+                                        Console.Clear();
                                         Console.Write("Ingrese el monto a depositar: ");
                                         double monto = Convert.ToDouble(Console.ReadLine());
                                         Depositar(monto, numero_cuenta.NoCuenta);
 
                                         break;
                                     case 2:
+                                        Console.Clear();
                                         Console.Write("Ingrese el monto a retirar: ");
                                         monto = Convert.ToDouble(Console.ReadLine());
+
                                         Retirar(monto, numero_cuenta.NoCuenta);
                                         break;
                                     case 3:
+                                        Console.Clear();
                                         ConsultarSaldo(numero_cuenta.NoCuenta);
                                         break;
                                     case 4:
+                                        Console.Clear();
                                         VerMovimientos(numero_cuenta.NoCuenta);
                                         break;
                                     default:
+                                        Console.Clear();
                                         Console.WriteLine("Opción no válida");
                                         break;
                                 }
@@ -418,7 +388,6 @@
 
                                 Console.Write("Ingrese una opción: ");
                                 opcion = Convert.ToInt32(Console.ReadLine());
-                                Console.Clear();
                             }
                             break;
                         }
