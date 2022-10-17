@@ -4,7 +4,7 @@
     {
         public string name;
         public string type;
-        public int rate;
+        public float rate;
     }
     struct User
     {
@@ -15,6 +15,9 @@
 
 
     }
+    // array of user
+
+
     class Program
     {
         static User RegisterUser()
@@ -36,21 +39,60 @@
         static void ShowUserInfo(User user)
         {
             Console.Clear();
-
             Console.Write($"Name: {user.name} Username: {user.username} Password: {user.password}\n");
             Console.WriteLine("Presione cualquier tecla para continuar...");
             Console.ReadKey();
         }
+        // edit user info
         static User EditUserInfo(User user)
         {
             Console.Clear();
-            Console.Write("Ingrese nuevo nombre: ");
-            user.name = Console.ReadLine();
-            Console.Write("Ingrese nuevo username: ");
-            user.username = Console.ReadLine();
-            Console.Write("Ingrese nuevo password: ");
-            Console.WriteLine($"Su nueva información es: Nombre:{user.name}, Username: {user.username}, Password: {user.password}");
+            Console.WriteLine("1. Editar nombre\n2. Editar usuario\n3. Editar contraseña\n4. Salir");
+            Console.Write("Seleccione una opción: ");
+            int option = int.Parse(Console.ReadLine());
+            switch (option)
+            {
+                case 1:
+                    Console.Write("Ingrese su nuevo nombre: ");
+                    user.name = Console.ReadLine();
+                    break;
+                case 2:
+                    Console.Write("Ingrese su nuevo usuario: ");
+                    user.username = Console.ReadLine();
+                    break;
+                case 3:
+                    Console.Write("Ingrese su nueva contraseña: ");
+                    user.password = Console.ReadLine();
+                    break;
+                case 4:
+                    break;
+                default:
+                    Console.WriteLine("Opción inválida");
+                    break;
+            }
             return user;
+        }
+
+        static Dish RegisterDish(User user)
+        {
+            Dish dish = new Dish();
+            Console.Write("Ingrese el nombre del plato: ");
+            dish.name = Console.ReadLine();
+            Console.Write("Ingrese el tipo de plato: ");
+            dish.type = Console.ReadLine();
+            Console.Write("Ingrese la calificación del plato: ");
+            dish.rate = float.Parse(Console.ReadLine());
+
+
+            return dish;
+        }
+        static Dish ShowDishInfo(User user)
+        {
+            Console.Clear();
+            Console.Write($"Nombre del plato: {user.favoriteDish.name} Tipo de plato: {user.favoriteDish.type} Calificación: {user.favoriteDish.rate}/5.0\n");
+            Console.WriteLine("Presione cualquier tecla para continuar...");
+            Console.ReadKey();
+            return user.favoriteDish;
         }
 
 
@@ -73,7 +115,7 @@
                         if (Console.ReadLine() == user.password)
                         {
                             Console.WriteLine("Bienvenido al sistema");
-                            ShowMenu(user);
+                            user = ShowMenu(user);
                         }
                         else
                         {
@@ -96,8 +138,9 @@
 
         }
 
-        static void ShowMenu(User user)
+        static User ShowMenu(User user)
         {
+
             int option;
             Console.Clear();
             Console.WriteLine($"Bienvendio al sistema de usuarios {user.username}\nQue desea hacer?\n1. - Ver información de usuario\n2. - Editar información de usuario\n3. - Alta/edición de Platillo favorito\n4. Ver Platillo Favorito\n5. Salir\nIngrese la opción deseada: ");
@@ -110,13 +153,13 @@
                         ShowUserInfo(user);
                         break;
                     case 2:
-                        EditUserInfo(user);
+                        user = EditUserInfo(user);
                         break;
                     case 3:
-                        // EditFavoriteDish(user);
+                        user.favoriteDish = RegisterDish(user);
                         break;
                     case 4:
-                        // ShowFavoriteDish(user);
+                        ShowDishInfo(user);
                         break;
                     default:
                         Console.WriteLine("Opción no válida");
@@ -125,6 +168,7 @@
                 Console.WriteLine("Que desea hacer?\n1. - Ver información de usuario\n2. - Editar información de usuario\n3. - Alta/edición de Platillo favorito\n4. Ver Platillo Favorito\n5. Salir\nIngrese la opción deseada: ");
                 option = int.TryParse(Console.ReadLine(), out option) ? option : 0;
             }
+            return user;
 
         }
         static void Main(string[] args)
