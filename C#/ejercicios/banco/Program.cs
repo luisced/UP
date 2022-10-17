@@ -34,7 +34,7 @@
             int cvv = random.Next(1000, 9999);
             string exp = DateTime.Now.AddYears(4).ToString("MM/yy");
             string card = string.Join(" ", Enumerable.Range(0, 16).Select(x => random.Next(0, 10)).Select(x => x.ToString()).ToArray()).Substring(0, 19);
-            do
+            while (true)
             {
 
 
@@ -42,11 +42,16 @@
                 while (true)
                 {
                     cuenta.nombre = Console.ReadLine();
-                    if (cuenta.nombre.Length > 0) { break; }
+                    // check if the name lenght is greater than 0 and if it contains only letters
+                    if (cuenta.nombre.Length > 0 && cuenta.nombre.All(char.IsLetter))
+                    {
+                        break;
+                    }
                     else
                     {
-                        Console.WriteLine("Ingrese un nombre válido");
+                        Console.WriteLine("Nombre invalido, intente de nuevo");
                         Console.Write("Ingrese su nombre: ");
+
                     }
                 }
                 cuenta.NoCuenta = cuentas.Count + 1;
@@ -157,9 +162,12 @@
                 ||\\$//\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\\$//||
                 ||====================================================================||");
                 Console.ResetColor();
-                Console.WriteLine("\n\nPresione Enter para continuar");
-            } while (Console.ReadKey().Key != ConsoleKey.Enter);
-            Console.Clear();
+                Console.WriteLine("\n\nPresione cualquier tecla para continuar");
+                Console.ReadKey();
+                Console.Clear();
+                break;
+
+            }
         }
 
         static void VerCuenta()
