@@ -27,6 +27,7 @@
             user.username = Console.ReadLine();
             Console.Write("Enter your password: ");
             user.password = Console.ReadLine();
+            Console.WriteLine($"Su usuario es: {user.username} y su contraseña es: {user.password}");
             Console.WriteLine("Presione cualquier tecla para continuar...");
             Console.ReadKey();
             return user;
@@ -40,41 +41,59 @@
             Console.WriteLine("Presione cualquier tecla para continuar...");
             Console.ReadKey();
         }
-
-        static bool EnterSystem(User user)
+        static User EditUserInfo(User user)
         {
-            bool login = false;
+            Console.Clear();
+            Console.Write("Ingrese nuevo nombre: ");
+            user.name = Console.ReadLine();
+            Console.Write("Ingrese nuevo username: ");
+            user.username = Console.ReadLine();
+            Console.Write("Ingrese nuevo password: ");
+            Console.WriteLine($"Su nueva información es: Nombre:{user.name}, Username: {user.username}, Password: {user.password}");
+            return user;
+        }
+
+
+        static void EnterSystem()
+        {
             int option;
             Console.Clear();
             Console.Write("Menu: \n1. - Alta de usuario \n2. - Ingresar al sistema \n3. - Salir \n");
             option = int.Parse(Console.ReadLine());
-            while (!login)
+            User user = new User();
+            while (option != 3)
             {
-                Console.Write("Enter your password: ");
-                if (Console.ReadLine() == user.password)
+                switch (option)
                 {
-                    login = true;
-                    if (option == 1)
-                    {
-                        RegisterUser();
-                        EnterSystem(user);
-                    }
-                    else if (option == 2)
-                    {
-                        ShowMenu(user);
-                    }
-                    else if (option == 3)
-                    {
-                        Environment.Exit(0);
-                    }
-
+                    case 1:
+                        user = RegisterUser();
+                        break;
+                    case 2:
+                        Console.Write("Ingrese su password: ");
+                        if (Console.ReadLine() == user.password)
+                        {
+                            Console.WriteLine("Bienvenido al sistema");
+                            ShowMenu(user);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Contraseña incorrecta");
+                            Console.WriteLine("Presione cualquier tecla para continuar...");
+                            Console.ReadKey();
+                        }
+                        break;
+                    case 3:
+                        System.Environment.Exit(1);
+                        break;
+                    default:
+                        Console.WriteLine("Opcion invalida");
+                        break;
                 }
-                else
-                {
-                    Console.WriteLine("Login failed");
-                }
+                Console.Clear();
+                Console.Write("Menu: \n1. - Alta de usuario \n2. - Ingresar al sistema \n3. - Salir \n");
+                option = int.Parse(Console.ReadLine());
             }
-            return login;
+
         }
 
         static void ShowMenu(User user)
@@ -83,7 +102,7 @@
             Console.Clear();
             Console.WriteLine($"Bienvendio al sistema de usuarios {user.username}\nQue desea hacer?\n1. - Ver información de usuario\n2. - Editar información de usuario\n3. - Alta/edición de Platillo favorito\n4. Ver Platillo Favorito\n5. Salir\nIngrese la opción deseada: ");
             option = int.TryParse(Console.ReadLine(), out option) ? option : 0;
-            while (option < 6 && option > 0)
+            while (option < 5 && option > 0)
             {
                 switch (option)
                 {
@@ -91,16 +110,13 @@
                         ShowUserInfo(user);
                         break;
                     case 2:
-                        // EditUserInfo(user);
+                        EditUserInfo(user);
                         break;
                     case 3:
                         // EditFavoriteDish(user);
                         break;
                     case 4:
                         // ShowFavoriteDish(user);
-                        break;
-                    case 5:
-                        EnterSystem(user);
                         break;
                     default:
                         Console.WriteLine("Opción no válida");
@@ -114,8 +130,7 @@
         static void Main(string[] args)
         {
             Console.Clear();
-            User user = RegisterUser();
-            EnterSystem(user);
+            EnterSystem();
 
         }
     }
