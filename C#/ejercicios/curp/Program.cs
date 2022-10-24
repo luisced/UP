@@ -3,7 +3,9 @@
     class Program
     {
 
-        static Dictionary<string, string> estados = new Dictionary<string, string>{
+        static void Main(string[] args)
+        {
+            Dictionary<string, string> estados = new Dictionary<string, string>{
             {"AS", "AGUASCALIENTES"},
             {"BC", "BAJA CALIFORNIA"},
             {"BS", "BAJA CALIFORNIA SUR"},
@@ -38,8 +40,6 @@
             {"ZS", "ZACATECAS"},
             {"NE", "EXTRANJERO"}
         };
-        static void Main(string[] args)
-        {
             string nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento, sexo, entidadNacimiento;
             Console.Clear();
             Console.Write("Ingrese su nombre: ");
