@@ -4,287 +4,396 @@ Console.Clear();
 PeriodicTable();
 static void PeriodicTable()
 {
-    string[][][] elements = {
+    string[][] elements = {
                 // Otros No Metales
-                 new string[][]{
-                    new string[] { "H", "Hidrógeno", "1.008", "1"},
-                    new string[] {"C", "Carbono", "12.011", "6"},
-                    new string[] {"N", "Nitrógeno", "14.007", "7"},
-                    new string[] {"O", "Oxígeno", "15.999", "8"},
-                    new string[] {"F", "Flúor", "18.998", "9"},
-                    new string[] {"P", "Fósforo", "30.794", "15"},
-                    new string[] {"S", "Azufre", "32.06", "16"},
-                    new string[] {"Cl", "Cloro", "35.45", "17"},
-                    new string[] {"Se", "Selenio", "78.971", "34"},
-                    new string[] {"Br", "Bromo", "79.904", "35"},
-                    new string[] {"I", "Yodo", "126.90", "53"},
-                },
+                
+                    new string[] { "H", "Hidrógeno", "1.008", "1", "Otros No Metales"},
+                    new string[] {"C", "Carbono", "12.011", "6", "Otros No Metales"},
+                    new string[] {"N", "Nitrógeno", "14.007", "7", "Otros No Metales"},
+                    new string[] {"O", "Oxígeno", "15.999", "8", "Otros No Metales"},
+                    new string[] {"F", "Flúor", "18.998", "9", "Otros No Metales"},
+                    new string[] {"P", "Fósforo", "30.794", "15", "Otros No Metales"},
+                    new string[] {"S", "Azufre", "32.06", "16", "Otros No Metales"},
+                    new string[] {"Cl", "Cloro", "35.45", "17", "Otros No Metales"},
+                    new string[] {"Se", "Selenio", "78.971", "34", "Otros No Metales"},
+                    new string[] {"Br", "Bromo", "79.904", "35", "Otros No Metales"},
+                    new string[] {"I", "Yodo", "126.90", "53", "Otros No Metales"},
+
 
                 // Gases Nobles
-                new string[][]{
-                    new string[] { "He", "Helium", "4.0026", "18"},
-                    new string[] { "Ne", "Neón", "20.180", "10"},
-                    new string[] { "Ar", "Argón", "39.948", "18"},
-                    new string[] { "Kr", "Kriptón", "83.798", "36"},
-                    new string[] { "Xe", "Xenón", "132.29", "54"},
-                    new string[] { "Rn", "Radón", "222", "86"},
-                },
+                    new string[] { "He", "Helium", "4.0026", "2", "Gases Nobles"},
+                    new string[] { "Ne", "Neón", "20.180", "10", "Gases Nobles"},
+                    new string[] { "Ar", "Argón", "39.948", "18", "Gases Nobles"},
+                    new string[] { "Kr", "Kriptón", "83.798", "36", "Gases Nobles"},
+                    new string[] { "Xe", "Xenón", "132.29", "54", "Gases Nobles"},
+                    new string[] { "Rn", "Radón", "222", "86", "Gases Nobles"},
+
 
                 // Alcalinos
-                new string[][]
-                {
-                    new string[] { "Li", "Litio", "6.94", "3"},
-                    new string[] { "Na", "Sodio", "22.990", "11"},
-                    new string[] { "K", "Potasio", "39.098", "19"},
-                    new string[] { "Rb", "Rubidio", "85.468", "37"},
-                    new string[] { "Cs", "Cesio", "132.91", "55"},
-                    new string[] { "Fr", "Francio", "223", "87"},
-                },
+               
+                    new string[] { "Li", "Litio", "6.94", "3", "Alcalinos"},
+                    new string[] { "Na", "Sodio", "22.990", "11", "Alcalinos"},
+                    new string[] { "K", "Potasio", "39.098", "19", "Alcalinos"},
+                    new string[] { "Rb", "Rubidio", "85.468", "37", "Alcalinos"},
+                    new string[] { "Cs", "Cesio", "132.91", "55", "Alcalinos"},
+                    new string[] { "Fr", "Francio", "223", "87", "Alcalinos"},
+
 
                 // Alcalinotérreos
-                new string[][]
-                {
-                    new string[] { "Be", "Berilio", "9.0122", "4"},
-                    new string[] { "Mg", "Magnesio", "24.305", "12"},
-                    new string[] { "Ca", "Calcio", "40.078", "20"},
-                    new string[] { "Sr", "Estroncio", "87.62", "38"},
-                    new string[] { "Ba", "Bario", "137.33", "56"},
-                    new string[] { "Ra", "Radio", "226", "88"},
-                },
+               
+                    new string[] { "Be", "Berilio", "9.0122", "4", "Alcalinotérreos"},
+                    new string[] { "Mg", "Magnesio", "24.305", "12", "Alcalinotérreos"},
+                    new string[] { "Ca", "Calcio", "40.078", "20", "Alcalinotérreos"},
+                    new string[] { "Sr", "Estroncio", "87.62", "38", "Alcalinotérreos"},
+                    new string[] { "Ba", "Bario", "137.33", "56", "Alcalinotérreos"},
+                    new string[] { "Ra", "Radio", "226", "88", "Alcalinotérreos"},
+
 
                 // Lantánidos
-                new string[][]
-                {
-                    new string[] { "La", "Lantano", "138.91", "57"},
-                    new string[] { "Ce", "Cerio", "140.12", "58"},
-                    new string[] { "Pr", "Praseosimio", "140.91", "59"},
-                    new string[] { "Nd", "Neodimio", "144.24", "60"},
-                    new string[] { "Pm", "Prometio", "145", "61"},
-                    new string[] { "Sm", "Samario", "150.36", "62"},
-                    new string[] { "Eu", "Europio", "151.96", "63"},
-                    new string[] { "Gd", "Gadolinio", "157.25", "64"},
-                    new string[] { "Tb", "Terbio", "158.93", "65"},
-                    new string[] { "Dy", "Disprosio", "162.50", "66"},
-                    new string[] { "Ho", "Holmio", "164.93", "67"},
-                    new string[] { "Er", "Erbio", "167.26", "68"},
-                    new string[] { "Tm", "Tulio", "168.93", "69"},
-                    new string[] { "Yb", "Iterbio", "173.05", "70"},
-                    new string[] { "Lu", "Lutecio", "174.97", "71"},
-                },
+
+
+                    new string[] { "La", "Lantano", "138.91", "57", "Lantánidos"},
+                    new string[] { "Ce", "Cerio", "140.12", "58", "Lantánidos"},
+                    new string[] { "Pr", "Praseosimio", "140.91", "59", "Lantánidos"},
+                    new string[] { "Nd", "Neodimio", "144.24", "60", "Lantánidos"},
+                    new string[] { "Pm", "Prometio", "145", "61", "Lantánidos"},
+                    new string[] { "Sm", "Samario", "150.36", "62", "Lantánidos"},
+                    new string[] { "Eu", "Europio", "151.96", "63", "Lantánidos"},
+                    new string[] { "Gd", "Gadolinio", "157.25", "64", "Lantánidos"},
+                    new string[] { "Tb", "Terbio", "158.93", "65", "Lantánidos"},
+                    new string[] { "Dy", "Disprosio", "162.50", "66", "Lantánidos"},
+                    new string[] { "Ho", "Holmio", "164.93", "67", "Lantánidos"},
+                    new string[] { "Er", "Erbio", "167.26", "68", "Lantánidos"},
+                    new string[] { "Tm", "Tulio", "168.93", "69", "Lantánidos"},
+                    new string[] { "Yb", "Iterbio", "173.05", "70", "Lantánidos"},
+                    new string[] { "Lu", "Lutecio", "174.97", "71", "Lantánidos"},
+
 
                 // Actínido
-                new string[][]
-                {
-                    new string[] { "Ac", "Actinio", "227", "89"},
-                    new string[] { "Th", "Torio", "232.04", "90"},
-                    new string[] { "Pa", "Protactinio", "231.04", "91"},
-                    new string[] { "U", "Uranio", "238.03", "92"},
-                    new string[] { "Np", "Neptunio", "237", "93"},
-                    new string[] { "Pu", "Plutonio", "244", "94"},
-                    new string[] { "Am", "Americio", "243", "95"},
-                    new string[] { "Cm", "Curio", "247", "96"},
-                    new string[] { "Bk", "Berkelio", "247", "97"},
-                    new string[] { "Cf", "Californio", "251", "98"},
-                    new string[] { "Es", "Einstenio", "252", "99"},
-                    new string[] { "Fm", "Fermio", "257", "100"},
-                    new string[] { "Md", "Mendelevio", "258", "101"},
-                    new string[] { "No", "Nobelio", "259", "102"},
-                    new string[] { "Lr", "Lawrencio", "103", "266"},
-                },
+               
+                    new string[] { "Ac", "Actinio", "227", "89", "Actínidos"},
+                    new string[] { "Th", "Torio", "232.04", "90", "Actínidos"},
+                    new string[] { "Pa", "Protactinio", "231.04", "91", "Actínidos"},
+                    new string[] { "U", "Uranio", "238.03", "92", "Actínidos"},
+                    new string[] { "Np", "Neptunio", "237", "93", "Actínidos"},
+                    new string[] { "Pu", "Plutonio", "244", "94", "Actínidos"},
+                    new string[] { "Am", "Americio", "243", "95", "Actínidos"},
+                    new string[] { "Cm", "Curio", "247", "96", "Actínidos"},
+                    new string[] { "Bk", "Berkelio", "247", "97", "Actínidos"},
+                    new string[] { "Cf", "Californio", "251", "98", "Actínidos"},
+                    new string[] { "Es", "Einstenio", "252", "99", "Actínidos"},
+                    new string[] { "Fm", "Fermio", "257", "100", "Actínidos"},
+                    new string[] { "Md", "Mendelevio", "258", "101", "Actínidos"},
+                    new string[] { "No", "Nobelio", "259", "102", "Actínidos"},
+                    new string[] { "Lr", "Lawrencio", "103", "266", "Actínidos"},
+
 
                 // Metal de transición
-                new string[][]
-                {
-                    new string[] { "Ti", "Titanio", "27.867", "22"},
-                    new string[] { "V", "Vanadio", "50.942", "23"},
-                    new string[] { "Cr", "Cromo", "51.996", "24"},
-                    new string[] { "Mn", "Manganeso", "54.938", "25"},
-                    new string[] { "Fe", "Hierro", "55.845", "93"},
-                    new string[] { "Co", "Cobalto", "58.933", "27"},
-                    new string[] { "Ni", "Níquel", "58.693", "28"},
-                    new string[] { "Cu", "Cobre", "63.546", "29"},
-                    new string[] { "Zn", "Zinc", "65.38", "30"},
-                    new string[] { "Zr", "Circonio", "91.224", "40"},
-                    new string[] { "Nb", "Niobio", "92.906", "41"},
-                    new string[] { "Mo", "Molibdeno", "95.95", "42"},
-                    new string[] { "Tc", "Tecnecio", "98", "43"},
-                    new string[] { "Ru", "Rutenio", "101.07", "44"},
-                    new string[] { "Rh", "Rodio", "102.91", "45"},
-                    new string[] { "Pd", "Paladio", "106.42", "46"},
-                    new string[] { "Ag", "Plata", "107.87", "47"},
-                    new string[] { "Cd", "Cadmio", "112.41", "48"},
-                    new string[] { "Hf", "Hafnio", "178.49", "72"},
-                    new string[] { "Ta", "Tántalo", "180.95", "73"},
-                    new string[] { "W", "Wolframio", "183.84", "74"},
-                    new string[] { "Re", "Renio", "186.21", "75"},
-                    new string[] { "Os", "Osmio", "190.23", "76"},
-                    new string[] { "Ir", "Iridio", "192.22", "77"},
-                    new string[] { "Pt", "Platino", "195.08", "78"},
-                    new string[] { "Au", "Oro", "196.67", "79"},
-                    new string[] { "Hg", "Mercurio", "200.59", "80"},
-                    new string[] { "Rf", "Rutherfordio", "267", "104"},
-                    new string[] { "Db", "Dubnio", "268", "105"},
-                    new string[] { "Sg", "Seaborgio", "269", "106"},
-                    new string[] { "Bh", "Bohrio", "270", "107"},
-                    new string[] { "Hs", "Hasio", "277", "108"},
-                },
+                    new string[] { "Sc", "Escandio", "44.956", "21", "Metales de Transición"},
+                    new string[] { "Ti", "Titanio", "27.867", "22" ,"Metales de Transición"},
+                    new string[] { "V", "Vanadio", "50.942", "23" ,"Metales de Transición"},
+                    new string[] { "Cr", "Cromo", "51.996", "24" ,"Metales de Transición"},
+                    new string[] { "Mn", "Manganeso", "54.938", "25" ,"Metales de Transición"},
+                    new string[] { "Fe", "Hierro", "55.845", "26" ,"Metales de Transición"},
+                    new string[] { "Co", "Cobalto", "58.933", "27" ,"Metales de Transición"},
+                    new string[] { "Ni", "Níquel", "58.693", "28" ,"Metales de Transición"},
+                    new string[] { "Cu", "Cobre", "63.546", "29" ,"Metales de Transición"},
+                    new string[] { "Zn", "Zinc", "65.38", "30" ,"Metales de Transición"},
+                    new string[] { "Y", "Itrio", "88.906", "39" ,"Metales de Transición"},
+                    new string[] { "Zr", "Circonio", "91.224", "40" ,"Metales de Transición"},
+                    new string[] { "Nb", "Niobio", "92.906", "41" ,"Metales de Transición"},
+                    new string[] { "Mo", "Molibdeno", "95.95", "42" ,"Metales de Transición"},
+                    new string[] { "Tc", "Tecnecio", "98", "43" ,"Metales de Transición"},
+                    new string[] { "Ru", "Rutenio", "101.07", "44" ,"Metales de Transición"},
+                    new string[] { "Rh", "Rodio", "102.91", "45" ,"Metales de Transición"},
+                    new string[] { "Pd", "Paladio", "106.42", "46" ,"Metales de Transición"},
+                    new string[] { "Ag", "Plata", "107.87", "47" ,"Metales de Transición"},
+                    new string[] { "Cd", "Cadmio", "112.41", "48" ,"Metales de Transición"},
+                    new string[] { "Hf", "Hafnio", "178.49", "72" ,"Metales de Transición"},
+                    new string[] { "Ta", "Tántalo", "180.95", "73" ,"Metales de Transición"},
+                    new string[] { "W", "Wolframio", "183.84", "74" ,"Metales de Transición"},
+                    new string[] { "Re", "Renio", "186.21", "75" ,"Metales de Transición"},
+                    new string[] { "Os", "Osmio", "190.23", "76" ,"Metales de Transición"},
+                    new string[] { "Ir", "Iridio", "192.22", "77" ,"Metales de Transición"},
+                    new string[] { "Pt", "Platino", "195.08", "78" ,"Metales de Transición"},
+                    new string[] { "Au", "Oro", "196.67", "79" ,"Metales de Transición"},
+                    new string[] { "Hg", "Mercurio", "200.59", "80" ,"Metales de Transición"},
+                    new string[] { "Rf", "Rutherfordio", "267", "104" ,"Metales de Transición"},
+                    new string[] { "Db", "Dubnio", "268", "105" ,"Metales de Transición"},
+                    new string[] { "Sg", "Seaborgio", "269", "106" ,"Metales de Transición"},
+                    new string[] { "Bh", "Bohrio", "270", "107" ,"Metales de Transición"},
+                    new string[] { "Hs", "Hasio", "277", "108" ,"Metales de Transición"},
+
 
                 // Metal del bloque p
-                new string[][]
-                {
-                    new string[] { "Al", "Aluminio", "26.982", "13"},
-                    new string[] { "Ga", "Galio", "69.723", "31"},
-                    new string[] { "In", "Indio", "114.82", "49"},
-                    new string[] { "Tl", "Talio", "204.38", "81"},
-                    new string[] { "Sn", "Estaño", "118.71", "50"},
-                    new string[] { "Pb", "Plomo", "207.2", "82"},
-                    new string[] { "Bi", "Bismuto", "208.98", "83"},
-                    new string[] { "Po", "Polonio", "209", "84"},
-                    new string[] { "Bk", "Berkelio", "247", "97"},
-                    new string[] { "Cf", "Californio", "251", "98"},
-                    new string[] { "Es", "Einstenio", "252", "99"},
-                    new string[] { "Fm", "Fermio", "257", "100"},
-                    new string[] { "Md", "Mendelevio", "258", "101"},
-                    new string[] { "No", "Nobelio", "259", "102"},
-                    new string[] { "Lr", "Lawrencio", "103", "266"},
-                },
+               
+                    new string[] { "Al", "Aluminio", "26.982", "13", "Metales del Bloque P"},
+                    new string[] { "Ga", "Galio", "69.723", "31", "Metales del Bloque P"},
+                    new string[] { "In", "Indio", "114.82", "49", "Metales del Bloque P"},
+                    new string[] { "Tl", "Talio", "204.38", "81", "Metales del Bloque P"},
+                    new string[] { "Sn", "Estaño", "118.71", "50", "Metales del Bloque P"},
+                    new string[] { "Pb", "Plomo", "207.2", "82", "Metales del Bloque P"},
+                    new string[] { "Bi", "Bismuto", "208.98", "83", "Metales del Bloque P"},
+                    new string[] { "Po", "Polonio", "209", "84", "Metales del Bloque P"},
+                    new string[] { "Lr", "Lawrencio", "103", "266", "Metales del Bloque P"},
+
 
                 // Semimetal
-                new string[][]
-                {
-                    new string[] { "B", "Boro", "10.81", "5"},
-                    new string[] { "Si", "Silicio", "28.085", "14"},
-                    new string[] { "Ge", "Germanio", "72.630", "32"},
-                    new string[] { "As", "Arsénico", "74.922", "33"},
-                    new string[] { "Sb", "Antimonio", "121.76", "51"},
-                    new string[] { "Te", "Telurio", "127.60", "52"},
-                    new string[] { "At", "Ástato", "210", "85"},
-                },
+               
+                    new string[] { "B", "Boro", "10.81", "5", "Semimetales"},
+                    new string[] { "Si", "Silicio", "28.085", "14", "Semimetales"},
+                    new string[] { "Ge", "Germanio", "72.630", "32", "Semimetales"},
+                    new string[] { "As", "Arsénico", "74.922", "33", "Semimetales"},
+                    new string[] { "Sb", "Antimonio", "121.76", "51", "Semimetales"},
+                    new string[] { "Te", "Telurio", "127.60", "52", "Semimetales"},
+                    new string[] { "At", "Ástato", "210", "85", "Semimetales"},
+
 
                 // Sin nombre
-                new string[][]
-                {
-                    new string[] { "Mt", "Meitnerio", "278", "109"},
-                    new string[] { "Ds", "Darmstatio", "281", "110"},
-                    new string[] { "Rg", "Roentgenio", "281", "111"},
-                    new string[] { "Cn", "Copernicio", "285", "112"},
-                    new string[] { "Nh", "Nihonio", "286", "113"},
-                    new string[] { "Fl", "Flerovio", "289", "114"},
-                    new string[] { "Mc", "Moscovio", "290", "115"},
-                    new string[] { "Lv", "Livermorio", "293", "116"},
-                    new string[] { "Ts", "Teneso", "294", "117"},
-                    new string[] { "Og", "Oganesón", "294", "118"},
-                },
+               
+                    new string[] { "Mt", "Meitnerio", "278", "109", "Sin Categoría"},
+                    new string[] { "Ds", "Darmstatio", "281", "110", "Sin Categoría"},
+                    new string[] { "Rg", "Roentgenio", "281", "111", "Sin Categoría"},
+                    new string[] { "Cn", "Copernicio", "285", "112", "Sin Categoría"},
+                    new string[] { "Nh", "Nihonio", "286", "113", "Sin Categoría"},
+                    new string[] { "Fl", "Flerovio", "289", "114", "Sin Categoría"},
+                    new string[] { "Mc", "Moscovio", "290", "115", "Sin Categoría"},
+                    new string[] { "Lv", "Livermorio", "293", "116", "Sin Categoría"},
+                    new string[] { "Ts", "Teneso", "294", "117", "Sin Categoría"},
+                    new string[] { "Og", "Oganesón", "294", "118", "Sin Categoría"},
+
             };
 
 
+
+
+
+
+
     Console.ResetColor();
-    Console.WriteLine(@$"
- __________________________________________________________________________ 
-|   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18 |
-|                                                                          |
-|1  H                                                                   He |
-|                                                                          |
-|2  Li  Be                                          B   C   N   O   F   Ne |
-|                                                                          |
-|3  Na  Mg                                          Al  Si  P   S   Cl  Ar |
-|                                                                          |
-|4  K   Ca  Sc  Ti  V   Cr  Mn  Fe  Co  Ni  Cu  Zn  Ga  Ge  As  Se  Br  Kr |
-|                                                                          |
-|5  Rb  Sr  Y   Zr  Nb  Mo  Tc  Ru  Rh  Pd  Ag  Cd  In  Sn  Sb  Te  I   Xe |
-|                                                                          |
-|6  Cs  Ba  *   Hf  Ta  W   Re  Os  Ir  Pt  Au  Hg  Tl  Pb  Bi  Po  At  Rn |
-|                                                                          |
-|7  Fr  Ra  **  Rf  Db  Sg  Bh  Hs  Mt  Ds  Rg  Cn  Nh  Fl  Mc  Lv  Ts  Og |
-|__________________________________________________________________________|
-|                                                                          |
-|                                                                          |
-| Lantanoidi*   La  Ce  Pr  Nd  Pm  Sm  Eu  Gd  Tb  Dy  Ho  Er  Tm  Yb  Lu |
-|                                                                          |
-|  Aktinoidi**  Ac  Th  Pa  U   Np  Pu  Am  Cm  Bk  Cf  Es  Fm  Md  No  Lr |
-|__________________________________________________________________________|
-");
-    foreach (string[][] group in elements)
+    //     Console.WriteLine(@$"
+    //  __________________________________________________________________________ 
+    // |   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18 |C
+    // |                                                                          |
+    // |1  H                                                                   He |
+    // |                                                                          |
+    // |2  Li  Be                                          B   C   N   O   F   Ne |
+    // |                                                                          |
+    // |3  Na  Mg                                          Al  Si  P   S   Cl  Ar |
+    // |                                                                          |
+    // |4  K   Ca  Sc  Ti  V   Cr  Mn  Fe  Co  Ni  Cu  Zn  Ga  Ge  As  Se  Br  Kr |
+    // |                                                                          |
+    // |5  Rb  Sr  Y   Zr  Nb  Mo  Tc  Ru  Rh  Pd  Ag  Cd  In  Sn  Sb  Te  I   Xe |
+    // |                                                                          |
+    // |6  Cs  Ba  *   Hf  Ta  W   Re  Os  Ir  Pt  Au  Hg  Tl  Pb  Bi  Po  At  Rn |
+    // |                                                                          |
+    // |7  Fr  Ra  **  Rf  Db  Sg  Bh  Hs  Mt  Ds  Rg  Cn  Nh  Fl  Mc  Lv  Ts  Og |
+    // |__________________________________________________________________________|
+    // |                                                                          |
+    // |                                                                          |
+    // | Lantanoidi*   La  Ce  Pr  Nd  Pm  Sm  Eu  Gd  Tb  Dy  Ho  Er  Tm  Yb  Lu |
+    // |                                                                          |
+    // |  Aktinoidi**  Ac  Th  Pa  U   Np  Pu  Am  Cm  Bk  Cf  Es  Fm  Md  No  Lr |
+    // |__________________________________________________________________________|
+    // ");
+    // print all elements in the table ordered by atomic number
+    // sort the elements by atomic number
+    string[][] sortedElements = elements.OrderBy(x => int.Parse(x[3])).ToArray();
+
+    // first row of the table 2 elements
+    Console.WriteLine($"      1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18 ");
+    Console.WriteLine($"                                                                               ");
+    Console.Write($"    1");
+    for (int i = 0; i < 118; i++)
     {
-        // get the name of the element, and print it but change the background color depending on the group
-        foreach (string[] element in group)
+        switch (i)
         {
-            // if the element is in the first group, print it in red
-            if (group == elements[0])
-            {
-                Console.BackgroundColor = ConsoleColor.Green;
-                Console.WriteLine(element[0]);
-            }
-            else if (group == elements[1])
-            {
-                Console.BackgroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine(element[0]);
-            }
-            else if (group == elements[2])
-            {
-                Console.BackgroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(element[0]);
-            }
-            else if (group == elements[3])
-            {
-                Console.BackgroundColor = ConsoleColor.DarkMagenta;
-                Console.WriteLine(element[0]);
-            }
-            else if (group == elements[4])
-            {
-                Console.BackgroundColor = ConsoleColor.Magenta;
-                Console.WriteLine(element[0]);
-            }
-            else if (group == elements[5])
-            {
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.WriteLine(element[0]);
-            }
-            else if (group == elements[6])
-            {
-                Console.BackgroundColor = ConsoleColor.Blue;
-                Console.WriteLine(element[0]);
-            }
-            else if (group == elements[7])
-            {
-                Console.BackgroundColor = ConsoleColor.Cyan;
-                Console.WriteLine(element[0]);
-            }
-            else if (group == elements[8])
-            {
-                Console.BackgroundColor = ConsoleColor.DarkBlue;
-                Console.WriteLine(element[0]);
-            }
-            else if (group == elements[9])
-            {
-                Console.BackgroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine(element[0]);
-            }
-            // cantidad de elementos en la tabla
+            case 2:
+                rows(2);
+                break;
+            case 10:
+                rows(3);
+                break;
+            case 18:
+                rows(4);
+                break;
+            case 36:
+                rows(5);
+                break;
+            case 54:
+                rows(6);
+                break;
+            case 86:
+                rows(7);
+                break;
+
+        }
+
+        switch (sortedElements[i][4])
+        {
+
+            case "Alcalinos":
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                if (sortedElements[i][0].Length == 1)
+                {
+                    Console.Write($" {sortedElements[i][0]}  ");
+                }
+                else
+                {
+                    Console.Write($" {sortedElements[i][0]} ");
+                }
+                break;
+            case "Alcalinotérreos":
+                Console.ForegroundColor = ConsoleColor.Green;
+                if (i >= 19 && i < 55)
+                {
+                    Console.Write($" {sortedElements[i][0]} ");
+                }
+                else if (sortedElements[i][0] == "Ba")
+                {
+                    Console.Write($" {sortedElements[i][0]}");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write($"  *  ");
+                }
+                else if (sortedElements[i][0] == "Ra")
+                {
+                    Console.Write($" {sortedElements[i][0]}");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write($"  ** ");
+                }
+                else
+                {
+                    Console.Write($" {sortedElements[i][0]}\t\t\t\t\t     ");
+                }
+                break;
+            case "Metales de Transición":
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                if (sortedElements[i][0].Length == 2)
+                {
+                    Console.Write($" {sortedElements[i][0]} ");
+
+                }
+                else
+                {
+                    Console.Write($" {sortedElements[i][0]}  ");
+                }
+
+                break;
+            case "Metales del Bloque P":
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+
+                Console.Write($" {sortedElements[i][0]} ");
+                break;
+            case "Semimetales":
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                if (sortedElements[i][0].Length == 2)
+                {
+                    Console.Write($" {sortedElements[i][0]} ");
+                }
+                else
+                {
+
+                    Console.Write($" {sortedElements[i][0]} ");
+                }
+                break;
+            case "Otros No Metales":
+                Console.ForegroundColor = ConsoleColor.Red;
+                if (i == 0)
+                {
+                    Console.Write(" " + $"{sortedElements[i][0]}                                                                 ");
+                }
+                else if (sortedElements[i][0].Length == 2)
+                {
+                    Console.Write($"  {sortedElements[i][0]}");
+                }
+                else
+                {
+                    Console.Write($"  {sortedElements[i][0]} ");
+                }
+                break;
+            case "Gases Nobles":
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write($"  {sortedElements[i][0]}");
+                break;
+            case "Sin Categoría":
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write($" {sortedElements[i][0]} ");
+                break;
+            // si son lantanoides o actinoides muevelos hasta abajo de la tabla
+            case "Lantanoides":
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write($" {sortedElements[i][0]} ");
+                break;
+        }
+    }
+    // sort lantanoides and actinoides by atomic number
+    Console.WriteLine("\n");
+    for (int i = 56; i < 71; i++)
+    {
+        switch (i)
+        {
+            case 56:
+                Console.Write($"\t\t*");
+                break;
+        }
+        if (i % 2 == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+        }
+        Console.Write($" {sortedElements[i][0]} ");
+    }
+    Console.ResetColor();
+    for (int i = 88; i < 103; i++)
+    {
+        switch (i)
+        {
+            case 88:
+                Console.Write($"\n\t\t**");
+                break;
+        }
+        // alternate colors between each character of the symbol
+        if (i % 2 == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
+        Console.Write($" {sortedElements[i][0]} ");
+    }
+
+    Console.ResetColor();
+
+    Console.Write("\n\nIngrese el simbolo del elemento: ");
+    string elementName = Console.ReadLine();
+    for (int i = 0; i < elements.Length; i++)
+    {
+        if (elements[i][0] == elementName)
+        {
+            // tabla de datos
+            Console.WriteLine(@$"
+        Nombre: {elements[i][1]}                                                
+        Masa Atómico: {elements[i][2]}                                        
+        Número de Atómico: {elements[i][3]}                                        
+        Categoría: {elements[i][4]}                                             
+    ");
+            break;
         }
 
     }
-    // cantidad de elementos en el array de arrays
-    Console.ResetColor();
-    Console.Write("Ingrese el simbolo del elemento: ");
-    string elementName = Console.ReadLine();
-    foreach (string[][] group in elements)
-    {
-        foreach (string[] element in group)
-        {
-            if (element[0] == elementName)
-            {
-                Console.WriteLine(@$"
-    __________________________________________________________________________
-    |                                                                          |
-    |   Nombre: {element[1]}  |  Numero atomico: {element[3]}  |  Masa atomica: {element[2]}  |
-    |__________________________________________________________________________|
-");
-            }
-            else
-            {
-                Console.WriteLine("Elemento no encontrado");
-            }
-        }
-    }
+
+
 }
+static void rows(int number)
+{
+    Console.WriteLine("\n");
+    Console.ResetColor();
+    Console.Write($"    {number}");
+}
+
+
