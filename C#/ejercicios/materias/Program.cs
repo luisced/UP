@@ -5,7 +5,7 @@
         struct Materia
         {
             public string nombre;
-            public double calif_acumulada;
+            public double promedio;
             public Actividad[] actividades;
 
         }
@@ -33,13 +33,13 @@
                         for (int i = 0; i < num_materias; i++) { materias[i] = CrearMateria(); }
                         break;
                     case 2:
-                        // AgregarActividades();
+                        AgregarActividades();
                         break;
                     case 3:
                         VerTablaMaterias();
                         break;
                     case 4:
-                        // VerDetallesMateria();
+                        VerDetallesMateria();
                         break;
                     default:
                         Console.WriteLine("Opción no válida");
@@ -67,7 +67,7 @@
             {
                 if (materia.nombre != null)
                 {
-                    Console.WriteLine(materia.nombre + "\t\t" + materia.calif_acumulada);
+                    Console.WriteLine(materia.nombre + "\t\t" + materia.promedio);
                 }
                 else
                 {
@@ -75,30 +75,60 @@
                 }
             }
         }
-        static Actividad CrearActividad()
+        static Actividad AgregarActividades()
         {
+            // crear actividad y agregarla a la materia
             Actividad actividad = new Actividad();
+            Console.WriteLine("¿A qué materia le quieres agregar una actividad?");
+            int index = Array.FindIndex(materias, m => m.nombre == Console.ReadLine());
+            if (index != -1)
+            {
+                Console.WriteLine("¿Cuántas materias deseas agregar?");
+                int num_actividades = int.Parse(Console.ReadLine());
+                materias[index].actividades = new Actividad[num_actividades];
+                for (int i = 0; i < num_actividades; i++)
+                {
+                    actividad.id = i + 1;
+                    Console.Write($"Calificación de la actividad {i + 1}: ");
+                    actividad.calificacion = double.Parse(Console.ReadLine());
+                    materias[index].actividades[i] = actividad;
+                    materias[index].promedio = CalcularPromedio(materias[index].actividades);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No existe la materia");
+            }
+            return actividad;
+        }
+        static double CalcularPromedio(Actividad[] actividades)
+        {
+            double promedio = 0;
+            foreach (Actividad actividad in actividades)
+            {
+                promedio += actividad.calificacion;
+            }
+            promedio /= actividades.Length;
+            return promedio;
+        }
+
+        static void VerDetallesMateria()
+        {
             Console.Write("Ingrese el nombre de la materia: ");
             int index = Array.FindIndex(materias, m => m.nombre == Console.ReadLine());
             if (index != -1)
             {
-                Console.Write("Ingrese el número de actividades: ");
-                int num_actividades = int.Parse(Console.ReadLine());
-                for (int i = 0; i < num_actividades; i++)
+                Console.WriteLine($"Materia: {materias[index].nombre}\nCalificación: {materias[index].promedio}");
+                Console.WriteLine("Actividades:");
+                foreach (Actividad actividad in materias[index].actividades)
                 {
-                    Console.Write("Ingrese el nombre de la actividad: ");
-                    actividad.id = int.Parse(Console.ReadLine());
-                    Console.Write("Ingrese la calificación de la actividad: ");
-                    actividad.calificacion = double.Parse(Console.ReadLine());
-                    materias[index].actividades[i] = actividad;
-                    materias[index].calif_acumulada = (float)actividad.calificacion / num_actividades;
+                    Console.WriteLine($"\tActividad {actividad.id}: {actividad.calificacion}");
                 }
-                return actividad;
+
             }
             else
             {
                 Console.WriteLine("La materia no existe");
-                return actividad;
             }
         }
     }
