@@ -16,9 +16,9 @@ class Ticket:
     }
 
     def __post_init__(self) -> None:
-        if not self.userName:
+        if not self.userName or not isinstance(self.userName, str):
             raise ValueError("Name is required.")
-        if self.watts <= 0:
+        if self.watts <= 0 or not isinstance(self.watts, (int, float)):
             raise ValueError("Watts must be a positive number.")
         self.total = self.calculate()
 
@@ -34,10 +34,6 @@ class Ticket:
         base = f"Base price: {self.base_price}$"
         usage = f"Additional charge for usage above 50 watts: {self.total - self.base_price}$"
         return base + "\n" + usage
-
-    @classmethod
-    def get_pricing_tiers(cls):
-        return cls.pricing_tiers
 
     def __str__(self):
         return f'{self.userName}, your total bill is {self.total}$'
