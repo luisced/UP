@@ -5,13 +5,14 @@ from dataclasses import dataclass
 class Ticket:
     userName: str
     watts: float
-    total: float
+    total: float = 0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.total = self.calculate()
 
-    def calculate(self):
-        if self.watts < 50 and self.watts > 0:
+    def calculate(self) -> float:
+        '''Calculate the total price of the bill'''
+        if self.watts <= 50 and self.watts > 0:
             price = 50
         elif self.watts > 49 and self.watts < 100:
             price = 50 * 1.2
@@ -32,7 +33,7 @@ class Ticket:
 def main():
     name = input("Enter your name: ")
     watts = float(input("How many Watt/hr you have in your bill: "))
-    ticket = Ticket(name, watts, 0)
+    ticket = Ticket(name, watts)
     print(ticket)
 
 
