@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from matplotlib import pyplot as plt
 import tkinter as tk
+import os
 
 
 @dataclass
@@ -82,6 +83,7 @@ class GraphGUI():
 def main() -> None:
     """Main function"""
     # Create the GUI
+    os.system("clear")
     gui = GraphGUI()
     graph = Graph(gui.gui[0], gui.gui[1])
     print(f'set of points: {gui.gui}\nMidpoint: {graph.midPoint}')
