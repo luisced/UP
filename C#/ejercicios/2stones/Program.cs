@@ -1,11 +1,11 @@
-﻿namespace TwoStones
+﻿using System;
+namespace TwoStones
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Enter the number of stones: ");
-            int numero_piedras = Convert.ToInt32(Console.ReadLine());
+            int numero_piedras = int.Parse(Console.ReadLine());
             if (numero_piedras % 2 == 0)
             {
                 Console.WriteLine("Bob");
