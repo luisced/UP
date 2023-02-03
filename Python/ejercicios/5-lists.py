@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from tabulate import tabulate
 
 
 def evenListNumbers() -> list[int]:
@@ -69,10 +70,13 @@ class Product:
     quantity: int
 
 
-@dataclass
-class Sale:
-    name: str
+@dataclass(init=False)
+class Sale(Product):
+    name: Product
     quantity: int
+
+    def __init__(self, name: str, quantity: int) -> None:
+        super().__init__(self, name, quantity)
 
 
 stock = []
@@ -119,7 +123,7 @@ def addProductToStock() -> Product:
 
 def seeStock() -> list[Product]:
     """See the stock"""
-    print(stock)
+    print(tabulate(stock, headers="keys", tablefmt="fancy_grid"))
 
 
 def createSale() -> None:
@@ -127,19 +131,18 @@ def createSale() -> None:
     name = input("Enter the name of the product: ")
     quantity = int(input("Enter the quantity of the product: "))
     if name in [product.name for product in stock] and quantity <= [product.quantity for product in stock if product.name == name][0]:
+        sales.append(Sale(name=name, quantity=quantity))
         quantitypurchased.append((name, quantity))
         for product in stock:
             if product.name == name:
                 product.quantity -= quantity
-        sale = Sale(name, quantity)
-        sales.append(sale)
     else:
         print("Invalid product or quantity")
 
 
 def viewSale() -> None:
     """View the sale"""
-    print(sales)
+    print(tabulate(sales, headers="keys", tablefmt="fancy_grid"))
 
 
 def main() -> None:
