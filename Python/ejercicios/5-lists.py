@@ -33,8 +33,7 @@ def uniqueElements() -> list[str]:
 
 def convertListToString() -> str:
     """Convert a list to a string"""
-    return "".join([n for n in input(
-        "Enter the elements of list 1 separated by spaces: ").split()])
+    return "".join([n for n in input("Enter the elements of list 1 separated by spaces: ").split()])
 
 
 def replaceLastElement() -> list[str]:
@@ -146,7 +145,7 @@ def viewSale() -> None:
 
 
 def main() -> None:
-    print(salesMenu())
+    print(averageOfTwoLIsts())
 
 
 if __name__ == __name__:
