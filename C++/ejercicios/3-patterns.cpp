@@ -27,7 +27,7 @@ void squarePattern()
     {
         for (int j = 0; j < a; j++)
         {
-            cout << "*";
+            cout << " *";
         }
         cout << endl;
     }
@@ -51,7 +51,7 @@ void multiplicationTable()
     cin >> a;
     for (int i = 1; i <= 10; i++)
     {
-        cout << a << " * " << i << " = " << a * i << endl;
+        cout << a << " x " << i << " = " << a * i << endl;
     }
 }
 
@@ -85,7 +85,7 @@ void lenghString()
 {
     string a;
     printf("Enter a string: ");
-    cin >> a;
+    getline(cin, a);
     int count = 0;
     for (int i : a)
     {
@@ -116,7 +116,6 @@ void digitFrecuency()
             two++;
             break;
         case 3:
-
             three++;
             break;
         case 4:
@@ -153,7 +152,7 @@ void digitFrecuency()
     cout << endl;
 }
 
-void numberToWord()
+static void numberToWord()
 {
     int a;
     printf("Enter a number: ");
