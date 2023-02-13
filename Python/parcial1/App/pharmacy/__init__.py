@@ -37,6 +37,9 @@ def create_app(config_class=Config):
 
     app.app_context().push()
 
+    from pharmacy.products.routes import product
+
     app.config.from_object(Config)
+    app.register_blueprint(product)
 
     return app
