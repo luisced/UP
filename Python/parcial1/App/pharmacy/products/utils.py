@@ -16,9 +16,9 @@ def createProduct(name: str, presentation: str, cost: float, price: float, stock
             db.session.commit()
         else:
             raise ValueError('Product already exists')
-    except Exception as e:
+    except Exception:
         logging.error(traceback.format_exc())
-        product = None
+        product = Product.query.filter_by(name=name).first()
 
     return product
 
@@ -26,7 +26,8 @@ def createProduct(name: str, presentation: str, cost: float, price: float, stock
 def getProduct(product: Product) -> dict[Product]:
     """Get a product"""
     try:
-        product = toDict(Product.query.filter_by(id=product.id).first())
+        product = Product.toDict(
+            Product.query.filter_by(id=product.id).first())
     except Exception as e:
         logging.error(traceback.format_exc())
         product = None
