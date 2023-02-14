@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from pharmacy.products.utils import createProduct, getProduct
 
 product = Blueprint('product', __name__)
 
@@ -12,13 +13,16 @@ def createProductDB():
         data: list[dict[str, str]] = []
         response: dict[str, str] = {}
         error, code = None, None
-        if not jsonData or not all(jsonData.values()):
-            error, code = 'Missing data', 400
-        elif ('name', 'presentation', 'cost', 'price', 'stock', 'expireDate', 'iva') not in jsonData:
-            error, code = 'Missing data', 400
+        keys = ['name', 'presentation', 'cost',
+                'price', 'stock', 'expireDate', 'iva']
+        if not jsonData:
+            error, code = 'Empty Request', 400
+        elif not all(key in jsonData for key in keys):
+            error, code = f'Missing key: {", ".join(key for key in keys if key not in jsonData)}', 400
         else:
-            print(jsonData.values())
-            message, code = f'Product'
+            product = createProduct(**jsonData)
+            message, code = f'Product {jsonData["name"]} created', 200
+            data.append("Product created")
     else:
         error, code = 'Method not allowed', 405
 

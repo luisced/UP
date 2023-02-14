@@ -1,5 +1,5 @@
 from pharmacy.models import Product
-from pharmacy.tools import toDict
+from pharmacy.tools.tools import toDict
 from pharmacy import db
 from datetime import datetime
 import logging
