@@ -27,7 +27,7 @@ def getProduct(product: Product) -> dict[Product]:
     """Get a product"""
     try:
         product = Product.toDict(
-            Product.query.filter_by(id=product.id).first())
+            Product.query.filter_by(id=product.id, status=True).first())
     except Exception as e:
         logging.error(traceback.format_exc())
         product = None
@@ -56,5 +56,21 @@ def updateProduct(id: Product, name: str, presentation: str, cost: float, price:
     except Exception:
         logging.error(traceback.format_exc())
         product = Product.query.filter_by(name=name).first()
+
+    return product
+
+
+def deleteProduct(id: Product) -> Product:
+    """Delete a product"""
+    try:
+        if Product.query.filter_by(id=id).first():
+            product = Product.query.filter_by(id=id).first()
+            product.status = False
+            db.session.commit()
+        else:
+            raise ValueError('Product does not exist')
+    except Exception:
+        logging.error(traceback.format_exc())
+        product = Product.query.filter_by(id=id).first()
 
     return product
