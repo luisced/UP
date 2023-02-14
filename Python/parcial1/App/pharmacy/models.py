@@ -36,12 +36,14 @@ class Product(db.Model):
     name: str = db.Column(db.String(100), nullable=False, default='Product')
     presentation: str = db.Column(
         db.String(100), nullable=False, default='Presentation')
+    sku: str = db.Column(db.String(100), nullable=False,
+                         default=db.text("CONCAT(LEFT(name, 3), LEFT(presentation, 3), FLOOR(RAND() * 9000) + 1000)"))
     cost: float = db.Column(db.Float, nullable=False, default=0.0)
     price: float = db.Column(db.Float, nullable=False, default=0.0)
     stock: int = db.Column(db.Integer, nullable=False, default=0)
     price: float = db.Column(db.Float, nullable=False, default=0.0)
     expireDate: datetime = db.Column(
-        db.DateTime, nullable=False, default=datetime.utcnow)
+        db.Date, nullable=False, default=datetime.utcnow)
     iva: bool = db.Column(db.Boolean, nullable=False, default=True)
     status: bool = db.Column(db.Boolean, nullable=False, default=True)
     creationDate: datetime = db.Column(
@@ -52,13 +54,6 @@ class Product(db.Model):
     # Foreign Keys
     laboratory: int = db.Column(
         db.Integer, db.ForeignKey('Laboratory.id'), nullable=False)
-
-    def __post_init__(self):
-        self.sku = db.Column(db.String(100), nullable=False,
-                             default=self.generateSKU())
-
-    def generateSKU(self):
-        return f'{self.name[:3]}{self.presentation[:3]}{randint(1000, 9999)}'
 
 
 @dataclass
