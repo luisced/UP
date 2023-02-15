@@ -9,8 +9,9 @@ using namespace std;
 class PaymMethod
 {
 public:
-    string methods[3] = {"Efectivo", "Tarjeta de Crédito", "Tarjeta de Débito"};
+    string methods[3] = {"Cash", "Credit Card", "Debit Card"};
 };
+
 
 class Pharmacy
 {
@@ -25,7 +26,7 @@ public:
 class Product
 {
 public:
-    string id;
+    int id;
     string sku;
     string name;
     string presentation;
@@ -36,8 +37,10 @@ public:
     string expirationDate;
     bool iva;
 
-    Product(string name, string presentation, string laboratory, int stock, float cost, float price, string expirationDate, bool iva)
+    Product(int id, string sku ,string name, string presentation, string laboratory, int stock, float cost, float price, string expirationDate, bool iva)
     {
+        this->id = id;
+        this->sku = sku;
         this->name = name;
         this->presentation = presentation;
         this->laboratory = laboratory;
@@ -48,7 +51,7 @@ public:
         this->iva = iva;
     }
 
-    void showProduct()
+    void print()
     {
         cout << "ID: " << this->id << endl;
         cout << "SKU: " << this->sku << endl;
@@ -62,16 +65,6 @@ public:
         cout << "IVA: " << this->iva << endl;
     }
 
-private:
-    string generateId()
-    {
-        string id = "";
-        for (int i = 0; i < 10; i++)
-        {
-            id += to_string(rand() % 10);
-        }
-        return id;
-    }
 };
 
 class Sale
@@ -97,8 +90,33 @@ public:
         this->bill = bill;
     }
 };
+static void pressEnterToContinue()
+{
+    cout << "Press Enter to continue...";
+    cin.ignore();
+    cin.get();
+}
 
-class SalesSystem
+static void consoleClear()
+{
+    system("clear");
+}
+
+static string randomString()
+{
+    string str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    int pos;
+    char randomString[10];
+    for (int i = 0; i < 10; ++i)
+    {
+        pos = ((rand() % (str.size() - 1)));
+        randomString[i] = str[pos];
+    }
+    return randomString;
+}
+
+
+class DB
 {
 public:
     vector<Product> products;
@@ -126,7 +144,7 @@ public:
             cout << "Productos: " << endl;
             for (int j = 0; j < sale.products.size(); j++)
             {
-                sale.products[j].showProduct();
+                sale.products[j].print();
             }
             cout << "Productos Vendidos: " << sale.productsSold << endl;
             cout << "Subtotal: " << sale.subtotal << endl;
@@ -156,8 +174,19 @@ public:
                 unbilledSales += sale.total;
             }
         }
+
+    }
+    void listProducts()
+    {
+        consoleClear();
+        for (int i = 0; i < this->products.size(); i++)
+        {
+            this->products[i].print();
+        }
     }
 };
+
+static DB db;
 
 class Menu
 {
@@ -216,6 +245,7 @@ private:
 
 static void displayInputBox(string prompt)
 {
+    consoleClear();
     string userInput;
 
     int promptLength = prompt.length();
@@ -241,62 +271,36 @@ static void displayInputBox(string prompt)
 
 static void createProduct()
 {
-    system("clear");
-    // enter product name
-    string productName;
+    PaymMethod payment;
+    string name, presentation, laboratory, expirationDate, sku;
+    int stock, id;
+    float cost, price;
+    bool iva;
     displayInputBox("Enter the product name");
-    cin >> productName;
-
-    // enter product price
-    float productPrice;
-    displayInputBox("Enter the product price");
-    cin >> productPrice;
-
-    // enter product presentation
-    string productPresentation;
+    cin >> name;
+    // cout << "Payments:" << endl;
+    // for (int i = 0; i < 3; i++) {
+    //     string method = payment.methods[i];
+    //     cout << method << endl;
+    // }
     displayInputBox("Enter the product presentation");
-    cin >> productPresentation;
-
-    // enter product quantity
-    int productQuantity;
-    displayInputBox("Enter the product quantity");
-    cin >> productQuantity;
-
-    // enter product laboratory
-    string productLaboratory;
-    displayInputBox("Enter the product laboratory");
-    cin >> productLaboratory;
-
-    // enter product stock
-    int productStock;
-    displayInputBox("Enter the product stock");
-    cin >> productStock;
-
-    // enter procut cost
-    float productCost;
-    displayInputBox("Enter the product cost");
-    cin >> productCost;
-
-    // enter product price
-    float productPrice;
+    getline(cin, presentation);
     displayInputBox("Enter the product price");
-    cin >> productPrice;
+    cin >> price;
+    displayInputBox("Enter the product stock");
+    cin >> stock;
+    displayInputBox("Enter the laboratory");
+    getline(cin, laboratory);
+    displayInputBox("Enter the expiration date");
+    getline(cin, expirationDate);
 
-    // enter product expiration date
-    string productExpirationDate;
-    displayInputBox("Enter the product expiration date");
-    cin >> productExpirationDate;
+    id = db.products.size() + 1;
+    sku = randomString();
 
-    // enter product iva
-    bool productIva;
-    displayInputBox("Enter the product iva y/n");
-    string productIvaString;
-    productIva = productIvaString == "y" ? true : false;
-
-    // create product
-    Product product(productName, productPrice, productPresentation, productQuantity, productLaboratory, productStock, productCost, productPrice, productExpirationDate, productIva);
-    SalesSystem::addProduct(product);
+    Product product(id, sku,name, presentation, laboratory,stock  ,cost, price, expirationDate, iva);
+    db.addProduct(product);
 }
+
 
 int main()
 {
@@ -304,7 +308,7 @@ int main()
     vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Exit"};
     Menu menu(options);
     int choice = menu.display();
-    while (choice != 4)
+    while (choice != 5)
     {
         switch (choice)
         {
@@ -312,7 +316,8 @@ int main()
             createProduct();
             break;
         case 2:
-            listProducts();
+            db.listProducts();
+            pressEnterToContinue();
             break;
         case 3:
             break;
