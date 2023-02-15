@@ -1,0 +1,93 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Parcial1",
+    "dateExported": "2023-02-15T02:14:59.499Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "b71d3d86-447e-449e-aaf9-87af11f33066",
+            "name": "Product",
+            "containerId": "",
+            "created": "2023-02-14T06:49:47.921Z",
+            "sortNum": 10000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "ac5408e7-4ce8-4c17-9320-0d8fe5157c76",
+            "colId": "f9c3ff6a-a3b0-444a-b5c2-80ae51098103",
+            "containerId": "b71d3d86-447e-449e-aaf9-87af11f33066",
+            "name": "Create Product",
+            "url": "http://localhost:5555/createProduct",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-02-14T05:48:14.430Z",
+            "modified": "2023-02-14T06:53:02.211Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"name\",\n  \"presentation\": \"presentation\",\n  \"cost\": 0.0,\n  \"price\": 0.0,\n  \"stock\": 1,\n  \"expireDate\": \"13/02/2023\",\n  \"iva\": true\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "25325245-a073-4b50-b2ac-ff2c3d7d0101",
+            "colId": "f9c3ff6a-a3b0-444a-b5c2-80ae51098103",
+            "containerId": "b71d3d86-447e-449e-aaf9-87af11f33066",
+            "name": "Get Producdt",
+            "url": "http://localhost:5555/getProduct",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-02-14T06:35:34.506Z",
+            "modified": "2023-02-14T06:49:50.081Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\":4\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "02279cdb-c50e-419f-a38d-bf19f1708820",
+            "colId": "f9c3ff6a-a3b0-444a-b5c2-80ae51098103",
+            "containerId": "b71d3d86-447e-449e-aaf9-87af11f33066",
+            "name": "Update Product",
+            "url": "http://localhost:5555/updateProduct",
+            "method": "PUT",
+            "sortNum": 30000,
+            "created": "2023-02-14T06:49:58.768Z",
+            "modified": "2023-02-14T06:52:56.352Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\":4,\n  \"name\": \"editedname\",\n  \"presentation\": \"editedpresentation\",\n  \"cost\": 100.5,\n  \"price\": 225.90,\n  \"stock\": 5,\n  \"expireDate\": \"15/02/2023\",\n  \"iva\": true\n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "1ab5e447-63ef-44e9-8912-5f111265bc14",
+            "colId": "f9c3ff6a-a3b0-444a-b5c2-80ae51098103",
+            "containerId": "b71d3d86-447e-449e-aaf9-87af11f33066",
+            "name": "Delete Product",
+            "url": "http://localhost:5555/deleteProduct",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2023-02-14T06:55:17.465Z",
+            "modified": "2023-02-14T06:55:40.077Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\":4\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}
