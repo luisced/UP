@@ -154,25 +154,29 @@ class Menu
 {
 public:
     // Constructor to initialize the menu options
-    Menu(const std::vector<std::string> &options) : options_(options) {}
+    Menu(const vector<string> &options) : options_(options) {}
 
     // Display the menu and prompt for user input
     int display()
     {
         while (true)
         {
-            std::cout << "===================================" << std::endl;
-            std::cout << "|            MAIN MENU            |" << std::endl;
-            std::cout << "===================================" << std::endl;
+
+            system("clear");
+            printTitle();
+            cout << "\u001b[34m";
+            cout << "╔═════════════════════════════════╗" << endl;
+            cout << "║            MAIN MENU            ║" << endl;
+            cout << "╠═════════════════════════════════╣" << endl;
             for (int i = 0; i < options_.size(); i++)
             {
-                std::cout << "| " << (i + 1) << ". " << options_[i] << std::endl;
+                cout << "║ " << i + 1 << ". " << options_[i] << string(29 - options_[i].size(), ' ') << "║" << endl;
             }
-            std::cout << "===================================" << std::endl;
-            std::cout << "Enter your choice (1-" << options_.size() << "): ";
+            cout << "╚═════════════════════════════════╝" << endl;
+            cout << "Enter your choice (1-" << options_.size() << "): ";
 
             int choice;
-            std::cin >> choice;
+            cin >> choice;
 
             if (choice >= 1 && choice <= options_.size())
             {
@@ -180,19 +184,31 @@ public:
             }
             else
             {
-                std::cout << "Invalid choice. Please try again." << std::endl;
+                cout << "Invalid choice. Please try again." << endl;
             }
         }
     }
 
 private:
-    std::vector<std::string> options_;
+    vector<string> options_;
+
+    void printTitle()
+    {
+        cout << "\u001b[32m";
+        cout << "░██████╗░█████╗░███╗░░██╗  ██████╗░░█████╗░██████╗░██╗░░░░░░█████╗░" << endl;
+        cout << "██╔════╝██╔══██╗████╗░██║  ██╔══██╗██╔══██╗██╔══██╗██║░░░░░██╔══██╗" << endl;
+        cout << "╚█████╗░███████║██╔██╗██║  ██████╔╝███████║██████╦╝██║░░░░░██║░░██║" << endl;
+        cout << "░╚═══██╗██╔══██║██║╚████║  ██╔═══╝░██╔══██║██╔══██╗██║░░░░░██║░░██║" << endl;
+        cout << "██████╔╝██║░░██║██║░╚███║  ██║░░░░░██║░░██║██████╦╝███████╗╚█████╔╝" << endl;
+        cout << "╚═════╝░╚═╝░░╚═╝╚═╝░░╚══╝  ╚═╝░░░░░╚═╝░░╚═╝╚═════╝░╚══════╝░╚════╝░" << endl;
+        cout << endl;
+    }
 };
 
 int main()
 {
 
-    std::vector<std::string> options = {"Agregar Producto", "Crear Venta", "Listar Ventas", "Salir"};
+    vector<string> options = {"Agregar Producto", "Crear Venta", "Listar Ventas", "Salir"};
     Menu menu(options);
     int choice = menu.display();
 
@@ -215,8 +231,8 @@ int main()
         break;
     default:
         // This should not happen
-        std::cerr << "Error: Invalid choice" << std::endl;
+        cerr << "Error: Invalid choice" << endl;
         break;
+        return 0;
     }
-    return 0;
 }
