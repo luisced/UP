@@ -36,10 +36,8 @@ public:
     string expirationDate;
     bool iva;
 
-    Product(string id, string sku, string name, string presentation, string laboratory, int stock, float cost, float price, string expirationDate, bool iva)
+    Product(string name, string presentation, string laboratory, int stock, float cost, float price, string expirationDate, bool iva)
     {
-        this->id = id;
-        this->sku = sku;
         this->name = name;
         this->presentation = presentation;
         this->laboratory = laboratory;
@@ -54,14 +52,25 @@ public:
     {
         cout << "ID: " << this->id << endl;
         cout << "SKU: " << this->sku << endl;
-        cout << "Nombre: " << this->name << endl;
-        cout << "Presentación: " << this->presentation << endl;
-        cout << "Laboratorio: " << this->laboratory << endl;
+        cout << "Name: " << this->name << endl;
+        cout << "Presentation: " << this->presentation << endl;
+        cout << "Laboratory: " << this->laboratory << endl;
         cout << "Stock: " << this->stock << endl;
-        cout << "Costo: " << this->cost << endl;
-        cout << "Precio: " << this->price << endl;
-        cout << "Fecha de Vencimiento: " << this->expirationDate << endl;
+        cout << "Cost: " << this->cost << endl;
+        cout << "Price: " << this->price << endl;
+        cout << "Expire Date: " << this->expirationDate << endl;
         cout << "IVA: " << this->iva << endl;
+    }
+
+private:
+    string generateId()
+    {
+        string id = "";
+        for (int i = 0; i < 10; i++)
+        {
+            id += to_string(rand() % 10);
+        }
+        return id;
     }
 };
 
@@ -173,7 +182,7 @@ public:
                 cout << "║ " << i + 1 << ". " << options_[i] << string(29 - options_[i].size(), ' ') << "║" << endl;
             }
             cout << "╚═════════════════════════════════╝" << endl;
-            cout << "Enter your choice (1-" << options_.size() << "): ";
+            cout << "Enter your option (1-" << options_.size() << "): ";
 
             int choice;
             cin >> choice;
@@ -184,7 +193,7 @@ public:
             }
             else
             {
-                cout << "Invalid choice. Please try again." << endl;
+                cout << "Invalid option, please try again:" << endl;
             }
         }
     }
@@ -205,34 +214,114 @@ private:
     }
 };
 
+static void displayInputBox(string prompt)
+{
+    string userInput;
+
+    int promptLength = prompt.length();
+    int boxWidth = promptLength + 6;
+
+    cout << "╔";
+    for (int i = 0; i < boxWidth - 2; i++)
+    {
+        cout << "═";
+    }
+    cout << "╗" << endl;
+
+    cout << "║   " << prompt << " ║" << endl;
+
+    cout << "╚";
+    for (int i = 0; i < boxWidth - 2; i++)
+    {
+        cout << "═";
+    }
+    cout << "╝" << endl;
+    cout << "Enter your option: ";
+}
+
+static void createProduct()
+{
+    system("clear");
+    // enter product name
+    string productName;
+    displayInputBox("Enter the product name");
+    cin >> productName;
+
+    // enter product price
+    float productPrice;
+    displayInputBox("Enter the product price");
+    cin >> productPrice;
+
+    // enter product presentation
+    string productPresentation;
+    displayInputBox("Enter the product presentation");
+    cin >> productPresentation;
+
+    // enter product quantity
+    int productQuantity;
+    displayInputBox("Enter the product quantity");
+    cin >> productQuantity;
+
+    // enter product laboratory
+    string productLaboratory;
+    displayInputBox("Enter the product laboratory");
+    cin >> productLaboratory;
+
+    // enter product stock
+    int productStock;
+    displayInputBox("Enter the product stock");
+    cin >> productStock;
+
+    // enter procut cost
+    float productCost;
+    displayInputBox("Enter the product cost");
+    cin >> productCost;
+
+    // enter product price
+    float productPrice;
+    displayInputBox("Enter the product price");
+    cin >> productPrice;
+
+    // enter product expiration date
+    string productExpirationDate;
+    displayInputBox("Enter the product expiration date");
+    cin >> productExpirationDate;
+
+    // enter product iva
+    bool productIva;
+    displayInputBox("Enter the product iva y/n");
+    string productIvaString;
+    productIva = productIvaString == "y" ? true : false;
+
+    // create product
+    Product product(productName, productPrice, productPresentation, productQuantity, productLaboratory, productStock, productCost, productPrice, productExpirationDate, productIva);
+    SalesSystem::addProduct(product);
+}
+
 int main()
 {
 
-    vector<string> options = {"Agregar Producto", "Crear Venta", "Listar Ventas", "Salir"};
+    vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Exit"};
     Menu menu(options);
     int choice = menu.display();
-
-    switch (choice)
+    while (choice != 4)
     {
-    case 1:
-        // Handle option 1
-        break;
-    case 2:
-        // Handle option 2
-        break;
-    case 3:
-        // Handle option 3
-        break;
-    case 4:
-        // Handle option 4
-        break;
-    case 5:
-        // Exit the program
-        break;
-    default:
-        // This should not happen
-        cerr << "Error: Invalid choice" << endl;
-        break;
-        return 0;
+        switch (choice)
+        {
+        case 1:
+            createProduct();
+            break;
+        case 2:
+            listProducts();
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        }
+        choice = menu.display();
     }
+    return 0;
 }
