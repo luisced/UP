@@ -149,11 +149,74 @@ public:
         }
     }
 };
+
+class Menu
+{
+public:
+    // Constructor to initialize the menu options
+    Menu(const std::vector<std::string> &options) : options_(options) {}
+
+    // Display the menu and prompt for user input
+    int display()
+    {
+        while (true)
+        {
+            std::cout << "===================================" << std::endl;
+            std::cout << "|            MAIN MENU            |" << std::endl;
+            std::cout << "===================================" << std::endl;
+            for (int i = 0; i < options_.size(); i++)
+            {
+                std::cout << "| " << (i + 1) << ". " << options_[i] << std::endl;
+            }
+            std::cout << "===================================" << std::endl;
+            std::cout << "Enter your choice (1-" << options_.size() << "): ";
+
+            int choice;
+            std::cin >> choice;
+
+            if (choice >= 1 && choice <= options_.size())
+            {
+                return choice;
+            }
+            else
+            {
+                std::cout << "Invalid choice. Please try again." << std::endl;
+            }
+        }
+    }
+
+private:
+    std::vector<std::string> options_;
+};
+
 int main()
 {
-    cout << "Bienvenido al Sistema de Ventas de Farmacias" << endl;
-    Product product = Product("1", "123456", "Paracetamol", "Tabletas", "Bayer", 100, 10.0, 15.0, "2021-12-31", true);
-    cout << "Producto: " << endl;
-    product.showProduct();
+
+    std::vector<std::string> options = {"Agregar Producto", "Crear Venta", "Listar Ventas", "Salir"};
+    Menu menu(options);
+    int choice = menu.display();
+
+    switch (choice)
+    {
+    case 1:
+        // Handle option 1
+        break;
+    case 2:
+        // Handle option 2
+        break;
+    case 3:
+        // Handle option 3
+        break;
+    case 4:
+        // Handle option 4
+        break;
+    case 5:
+        // Exit the program
+        break;
+    default:
+        // This should not happen
+        std::cerr << "Error: Invalid choice" << std::endl;
+        break;
+    }
     return 0;
 }
