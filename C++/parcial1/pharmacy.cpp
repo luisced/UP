@@ -12,7 +12,6 @@ public:
     string methods[3] = {"Cash", "Credit Card", "Debit Card"};
 };
 
-
 class Pharmacy
 {
 public:
@@ -37,7 +36,7 @@ public:
     string expirationDate;
     bool iva;
 
-    Product(int id, string sku ,string name, string presentation, string laboratory, int stock, float cost, float price, string expirationDate, bool iva)
+    Product(int id, string sku, string name, string presentation, string laboratory, int stock, float cost, float price, string expirationDate, bool iva)
     {
         this->id = id;
         this->sku = sku;
@@ -64,7 +63,6 @@ public:
         cout << "Expire Date: " << this->expirationDate << endl;
         cout << "IVA: " << this->iva << endl;
     }
-
 };
 
 class Sale
@@ -115,7 +113,6 @@ static string randomString()
     return randomString;
 }
 
-
 class DB
 {
 public:
@@ -125,6 +122,17 @@ public:
     void addProduct(Product product)
     {
         this->products.push_back(product);
+    }
+
+    string findProductByName(string product)
+    {
+        string findProduct;
+        // return the products name and the quantity, else deliver an error
+        for (int i = 0; i < this->products.size(); i++)
+        {
+            findProduct = this->products[i].name == product ? this->products[i].name : "";
+        }
+        return findProduct;
     }
 
     void createSale(Sale sale)
@@ -174,7 +182,6 @@ public:
                 unbilledSales += sale.total;
             }
         }
-
     }
     void listProducts()
     {
@@ -297,10 +304,34 @@ static void createProduct()
     id = db.products.size() + 1;
     sku = randomString();
 
-    Product product(id, sku,name, presentation, laboratory,stock  ,cost, price, expirationDate, iva);
+    Product product(id, sku, name, presentation, laboratory, stock, cost, price, expirationDate, iva);
     db.addProduct(product);
 }
 
+static void createSale()
+{
+    string orderNumber, date, paymentMethod, productName, findProduct;
+    int id, productsSold;
+    float subtotal, total;
+    bool bill;
+    vector<Product> products;
+
+    displayInputBox("Enter the product name");
+    cin >> productName;
+    findProduct = db.findProductByName(productName);
+    if (findProduct == "")
+    {
+        cout << "Product not found" << endl;
+        pressEnterToContinue();
+        return;
+    }
+    else
+    {
+        cout << findProduct << endl;
+    }
+    displayInputBox("What quantity would you like to buy?");
+    cin >> productsSold;
+}
 
 int main()
 {
@@ -320,6 +351,7 @@ int main()
             pressEnterToContinue();
             break;
         case 3:
+            createSale();
             break;
         case 4:
             break;
