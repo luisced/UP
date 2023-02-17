@@ -118,6 +118,11 @@ class DB
 public:
     vector<Product> products;
     vector<Sale> sales;
+    struct ProductInfo
+    {
+        string name;
+        int quantity;
+    };
 
     void addProduct(Product product)
     {
@@ -127,10 +132,12 @@ public:
     string findProductByName(string product)
     {
         string findProduct;
+        int productQuantity;
         // return the products name and the quantity, else deliver an error
         for (int i = 0; i < this->products.size(); i++)
         {
             findProduct = this->products[i].name == product ? this->products[i].name : "";
+            productQuantity = this->products[i].stock;
         }
         return findProduct;
     }
