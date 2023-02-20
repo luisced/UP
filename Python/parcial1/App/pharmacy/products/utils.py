@@ -1,17 +1,17 @@
 from pharmacy.models import Product
-from pharmacy.tools.tools import toDict
 from pharmacy import db
 from datetime import datetime
+from pharmacy.laboratory.utils import createLaboratory
 import logging
 import traceback
 
 
-def createProduct(name: str, presentation: str, cost: float, price: float, stock: int, expireDate: datetime, iva: bool, ) -> Product:
+def createProduct(name: str, presentation: str, cost: float, price: float, stock: int, expireDate: datetime, iva: bool, laboratory: str) -> Product:
     """Create a new product"""
     try:
         if not Product.query.filter_by(name=name).first():
             product = Product(name=name, presentation=presentation, cost=cost,
-                              price=price, stock=stock, expireDate=datetime.strptime(expireDate, '%d/%m/%Y'), iva=iva, laboratory=1)
+                              price=price, stock=stock, expireDate=datetime.strptime(expireDate, '%d/%m/%Y'), iva=iva, laboratory=getattr(createLaboratory(laboratory), 'id', 1))
             db.session.add(product)
             db.session.commit()
         else:

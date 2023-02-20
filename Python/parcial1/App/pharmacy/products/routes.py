@@ -15,13 +15,14 @@ def createProductDB():
         response: dict[str, str] = {}
         error, code = None, None
         keys = ['name', 'presentation', 'cost',
-                'price', 'stock', 'expireDate', 'iva']
+                'price', 'stock', 'expireDate', 'iva', 'laboratory']
         if not jsonData:
             error, code = 'Empty Request', 400
         elif not all(key in jsonData for key in keys):
             error, code = f'Missing key: {", ".join(key for key in keys if key not in jsonData)}', 400
         else:
             message, code = f'Product {jsonData["name"]} created', 200
+            print(jsonData)
             data.append(createProduct(**jsonData))
     else:
         error, code = 'Method not allowed', 405
