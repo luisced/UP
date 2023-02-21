@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <chrono>
 #include <map>
 
 using namespace std;
@@ -68,24 +69,38 @@ public:
 class Sale
 {
 public:
-    string orderNumber;
+    int orderNumber;
     string date;
-    vector<Product> products;
+    vector<map<string, int>> productList;
     int productsSold;
     float subtotal;
     float total;
     string paymentMethod;
     bool bill;
-    Sale(string orderNumber, string date, vector<Product> products, int productsSold, float subtotal, float total, string paymentMethod, bool bill)
+    Sale(int orderNumber, string date, vector<map<string, int>> productList, float subtotal, float total, string paymentMethod, bool bill)
     {
         this->orderNumber = orderNumber;
         this->date = date;
-        this->products = products;
-        this->productsSold = productsSold;
+        this->productList = productList;
         this->subtotal = subtotal;
         this->total = total;
         this->paymentMethod = paymentMethod;
         this->bill = bill;
+    }
+    void print()
+    {
+        cout << "Número de Orden: " << this->orderNumber << endl;
+        cout << "Fecha: " << this->date << endl;
+        cout << "Productos: " << endl;
+        for (int i = 0; i < productList.size(); i++)
+        {
+            cout << productList[i].begin()->first << " " << productList[i].begin()->second << endl;
+        }
+        cout << "Subtotal: " << this->subtotal << endl;
+        cout << "Total: " << this->total << endl;
+        cout << "Método de Pago: " << this->paymentMethod << endl;
+        cout << "Facturado: " << this->bill << endl;
+        cout << endl;
     }
 };
 static void pressEnterToContinue()
@@ -118,76 +133,37 @@ class DB
 public:
     vector<Product> products;
     vector<Sale> sales;
-    struct ProductInfo
-    {
-        string name;
-        int quantity;
-    };
-
     void addProduct(Product product)
     {
         this->products.push_back(product);
     }
 
-    string findProductByName(string product)
+    Product findProductByName(string product)
     {
-        string findProduct;
-        int productQuantity;
+
         // return the products name and the quantity, else deliver an error
         for (int i = 0; i < this->products.size(); i++)
         {
-            findProduct = this->products[i].name == product ? this->products[i].name : "";
-            productQuantity = this->products[i].stock;
+            if (this->products[i].name == product)
+            {
+                return this->products[i];
+            }
         }
-        return findProduct;
+
+        return Product(0, "", "", "", "", 0, 0, 0, "", false);
     }
 
-    void createSale(Sale sale)
+    void addSale(Sale sale)
     {
         this->sales.push_back(sale);
     }
 
     void listSales()
     {
-        double totalSales = 0, cardSalesAmount = 0, cashSalesAmount = 0, debitCardSalesAmount = 0, billedSales = 0, unbilledSales = 0;
-
+        consoleClear();
         for (int i = 0; i < this->sales.size(); i++)
         {
-            Sale sale = this->sales[i];
-            cout << "Número de Orden: " << sale.orderNumber << endl;
-            cout << "Fecha: " << sale.date << endl;
-            cout << "Productos: " << endl;
-            for (int j = 0; j < sale.products.size(); j++)
-            {
-                sale.products[j].print();
-            }
-            cout << "Productos Vendidos: " << sale.productsSold << endl;
-            cout << "Subtotal: " << sale.subtotal << endl;
-            cout << "Total: " << sale.total << endl;
-            cout << "Método de Pago: " << sale.paymentMethod << endl;
-            cout << "Facturado: " << sale.bill << endl;
-            cout << endl;
-            totalSales += sale.total;
-            if (sale.paymentMethod == "Efectivo")
-            {
-                cashSalesAmount += sale.total;
-            }
-            else if (sale.paymentMethod == "Tarjeta de Crédito")
-            {
-                cardSalesAmount += sale.total;
-            }
-            else if (sale.paymentMethod == "Tarjeta de Débito")
-            {
-                debitCardSalesAmount += sale.total;
-            }
-            if (sale.bill)
-            {
-                billedSales += sale.total;
-            }
-            else
-            {
-                unbilledSales += sale.total;
-            }
+            this->sales[i].print();
         }
     }
     void listProducts()
@@ -196,6 +172,17 @@ public:
         for (int i = 0; i < this->products.size(); i++)
         {
             this->products[i].print();
+        }
+    }
+
+    void updateProduct(int id, Product product)
+    {
+        for (int i = 0; i < this->products.size(); i++)
+        {
+            if (this->products[i].id == id)
+            {
+                this->products[i] = product;
+            }
         }
     }
 };
@@ -292,11 +279,6 @@ static void createProduct()
     bool iva;
     displayInputBox("Enter the product name");
     cin >> name;
-    // cout << "Payments:" << endl;
-    // for (int i = 0; i < 3; i++) {
-    //     string method = payment.methods[i];
-    //     cout << method << endl;
-    // }
     displayInputBox("Enter the product presentation");
     getline(cin, presentation);
     displayInputBox("Enter the product price");
@@ -315,29 +297,127 @@ static void createProduct()
     db.addProduct(product);
 }
 
-static void createSale()
+static Product addProductToSale()
 {
-    string orderNumber, date, paymentMethod, productName, findProduct;
-    int id, productsSold;
+    string productName, findProduct;
+    int id, productsSold, stock;
     float subtotal, total;
     bool bill;
     vector<Product> products;
 
     displayInputBox("Enter the product name");
     cin >> productName;
-    findProduct = db.findProductByName(productName);
-    if (findProduct == "")
+    Product product = db.findProductByName(productName);
+    if (product.id == 0)
     {
         cout << "Product not found" << endl;
+        return product;
         pressEnterToContinue();
-        return;
+    }
+    displayInputBox("What quantity would you like to buy?");
+    cin >> stock;
+    if (stock > product.stock)
+    {
+        cout << "Not enough stock" << endl;
+        return product;
+        pressEnterToContinue();
     }
     else
     {
-        cout << findProduct << endl;
+        product.stock -= stock;
+        Product updatedproduct(product.id, product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost, product.price, product.expirationDate, product.iva);
+        db.updateProduct(product.id, updatedproduct);
     }
-    displayInputBox("What quantity would you like to buy?");
-    cin >> productsSold;
+    return product;
+}
+
+static void createSale()
+{
+
+    string date, productName, buyProduct, payMethod;
+    int productsSold, stock, paymentOption, orderNumber;
+    float subtotal, total;
+    bool bill;
+    vector<Product> products;
+    vector<map<string, int>> productList;
+    PaymMethod payments;
+
+    while (true)
+    {
+        Product product = addProductToSale();
+        if (product.id == 0)
+        {
+            break;
+        }
+        else
+        {
+            products.push_back(product);
+            displayInputBox("Would you like to add another product? (y/n)");
+            cin >> buyProduct;
+            if (buyProduct == "n")
+            {
+                for (int i = 0; i < products.size(); i++)
+                {
+                    Product product = products[i];
+                    map<string, int> productMap;
+                    productMap.insert(pair<string, int>(product.name, product.stock));
+                    productList.push_back(productMap);
+                }
+                break;
+            }
+        }
+    }
+    // display payments:
+
+    displayInputBox("Enter the payment method, please input a number");
+    for (int i = 0; i < 3; i++)
+    {
+        cout << i + 1 << ". " << payments.methods[i] << endl;
+    }
+    cin >> paymentOption;
+    switch (paymentOption)
+    {
+    case 1:
+        payMethod = payments.methods[0];
+        break;
+    case 2:
+        payMethod = payments.methods[1];
+        break;
+    case 3:
+        payMethod = payments.methods[2];
+        break;
+    default:
+        break;
+    }
+
+    // calculate subtotal sum al cost
+    for (int i = 0; i < products.size(); i++)
+    {
+        subtotal += products[i].price;
+    }
+
+    // // calculate total sum al cost + iva
+    for (int i = 0; i < products.size(); i++)
+    {
+        total += products[i].price + products[i].iva;
+    }
+
+    // todays date
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    date = to_string(1900 + ltm->tm_year) + "-" + to_string(1 + ltm->tm_mon) + "-" + to_string(ltm->tm_mday);
+
+    // bill
+    displayInputBox("Would you like a bill? (y/n)");
+    string billInput;
+    cin >> billInput;
+    bill = true ? billInput == "y" : false;
+
+    // order number
+    orderNumber = db.sales.size() + 1;
+
+    Sale sale(orderNumber, date, productList, subtotal, total, payMethod, bill);
+    db.addSale(sale);
 }
 
 int main()
@@ -361,6 +441,8 @@ int main()
             createSale();
             break;
         case 4:
+            db.listSales();
+            pressEnterToContinue();
             break;
         case 5:
             break;
