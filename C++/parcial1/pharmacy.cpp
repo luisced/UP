@@ -374,7 +374,7 @@ static void createSale()
     else
     {
         map<string, int> productMap;
-        productMap.insert(pair<string, int>(products[i].name, products[i].stock));
+        productMap.insert(pair<string, int>(product.name, productsSold));
         db.addTemporaryProduct(productMap);
     }
     // display payments:
