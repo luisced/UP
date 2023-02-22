@@ -328,6 +328,7 @@ static Product addProductToSale()
         Product updatedproduct(product.id, product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost, product.price, product.expirationDate, product.iva);
         db.updateProduct(product.id, updatedproduct);
         cin >> findProduct;
+        return product;
     }
 }
 
