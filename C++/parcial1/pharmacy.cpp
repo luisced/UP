@@ -327,13 +327,18 @@ static Product addProductToSale()
         product.stock -= stock;
         Product updatedproduct(product.id, product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost, product.price, product.expirationDate, product.iva);
         db.updateProduct(product.id, updatedproduct);
+        cin >> findProduct;
     }
-    return product;
 }
 
 static void createSale()
 {
-
+    if (db.products.size() == 0)
+    {
+        cout << "There are no products to sell" << endl;
+        pressEnterToContinue();
+        return;
+    }
     string date, productName, buyProduct, payMethod;
     int productsSold, stock, paymentOption, orderNumber;
     float subtotal, total;
@@ -342,12 +347,133 @@ static void createSale()
     vector<map<string, int>> productList;
     PaymMethod payments;
 
-    while (true)
+    bool isSale = true;
+
+    // Ask for the product name
+    string productName;
+    displayInputBox("Enter the product name");
+    cin >> productName;
+    Product product = db.findProductByName(productName);
+    if (product.id == 0)
+    {
+        cout << "Product not found" << endl;
+        return;
+        pressEnterToContinue();
+    }
+    // Ask for the quantity, if the quantity is greater than the stock, show an error message
+    int stockInventory;
+    displayInputBox("What quantity would you like to buy?");
+    cin >> stockInventory;
+    while (stockInventory > product.stock)
+    {
+        cout << "Not enough stock" << endl;
+        displayInputBox("What quantity would you like to buy?");
+        cin >> stockInventory;
+    }
+    string anotherProduct;
+    displayInputBox("Would you like to add another product? (y/n)");
+    cin >> anotherProduct;
+    if (anotherProduct == "y")
+    {
+        createSale();
+    }
+    else
+    {
+        // display payments:
+        displayInputBox("Enter the payment method, please input a number");
+        for (int i = 0; i < 3; i++)
+        {
+            cout << i + 1 << ". " << payments.methods[i] << endl;
+        }
+        cin >> paymentOption;
+        switch (paymentOption)
+        {
+        case 1:
+            payMethod = "Cash";
+            break;
+        case 2:
+            payMethod = "Credit Card";
+            break;
+        case 3:
+            payMethod = "Debit Card";
+            break;
+        default:
+            break;
+        }
+        // Ask for the bill
+        string billOption;
+        displayInputBox("Would you like a bill? (y/n)");
+        cin >> billOption;
+        if (billOption == "y")
+        {
+            bill = true;
+        }
+        else
+        {
+            bill = false;
+        }
+
+        displayInputBox("Enter the payment method, please input a number");
+        for (int i = 0; i < 3; i++)
+        {
+            cout << i + 1 << ". " << payments.methods[i] << endl;
+        }
+        cin >> paymentOption;
+        switch (paymentOption)
+        {
+        case 1:
+            payMethod = payments.methods[0];
+            break;
+        case 2:
+            payMethod = payments.methods[1];
+            break;
+        case 3:
+            payMethod = payments.methods[2];
+            break;
+        default:
+            break;
+        }
+
+        // calculate subtotal sum al cost
+        for (int i = 0; i < products.size(); i++)
+        {
+            subtotal += products[i].price;
+        }
+
+        // // calculate total sum al cost + iva
+        for (int i = 0; i < products.size(); i++)
+        {
+            total += products[i].price + products[i].iva;
+        }
+
+        // todays date
+        time_t now = time(0);
+        tm *ltm = localtime(&now);
+        date = to_string(1900 + ltm->tm_year) + "-" + to_string(1 + ltm->tm_mon) + "-" + to_string(ltm->tm_mday);
+
+        // bill
+        displayInputBox("Would you like a bill? (y/n)");
+        string billInput;
+        cin >> billInput;
+        bill = true ? billInput == "y" : false;
+
+        // order number
+        orderNumber = db.sales.size() + 1;
+
+        Sale sale(orderNumber, date, productList, subtotal, total, payMethod, bill);
+        db.addSale(sale);
+        // Update the stock
+        product.stock -= stockInventory;
+        Product updatedproduct(product.id, product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost, product.price, product.expirationDate, product.iva);
+        db.updateProduct(product.id, updatedproduct);
+    }
+
+    while (isSale)
     {
         Product product = addProductToSale();
         if (product.id == 0)
         {
-            break;
+            isSale = false;
         }
         else
         {
@@ -364,60 +490,64 @@ static void createSale()
                     productList.push_back(productMap);
                 }
                 break;
+                // display payments:
+
+                displayInputBox("Enter the payment method, please input a number");
+                for (int i = 0; i < 3; i++)
+                {
+                    cout << i + 1 << ". " << payments.methods[i] << endl;
+                }
+                cin >> paymentOption;
+                switch (paymentOption)
+                {
+                case 1:
+                    payMethod = payments.methods[0];
+                    break;
+                case 2:
+                    payMethod = payments.methods[1];
+                    break;
+                case 3:
+                    payMethod = payments.methods[2];
+                    break;
+                default:
+                    break;
+                }
+
+                // calculate subtotal sum al cost
+                for (int i = 0; i < products.size(); i++)
+                {
+                    subtotal += products[i].price;
+                }
+
+                // // calculate total sum al cost + iva
+                for (int i = 0; i < products.size(); i++)
+                {
+                    total += products[i].price + products[i].iva;
+                }
+
+                // todays date
+                time_t now = time(0);
+                tm *ltm = localtime(&now);
+                date = to_string(1900 + ltm->tm_year) + "-" + to_string(1 + ltm->tm_mon) + "-" + to_string(ltm->tm_mday);
+
+                // bill
+                displayInputBox("Would you like a bill? (y/n)");
+                string billInput;
+                cin >> billInput;
+                bill = true ? billInput == "y" : false;
+
+                // order number
+                orderNumber = db.sales.size() + 1;
+
+                Sale sale(orderNumber, date, productList, subtotal, total, payMethod, bill);
+                db.addSale(sale);
+            }
+            else
+            {
+                isSale = true;
             }
         }
     }
-    // display payments:
-
-    displayInputBox("Enter the payment method, please input a number");
-    for (int i = 0; i < 3; i++)
-    {
-        cout << i + 1 << ". " << payments.methods[i] << endl;
-    }
-    cin >> paymentOption;
-    switch (paymentOption)
-    {
-    case 1:
-        payMethod = payments.methods[0];
-        break;
-    case 2:
-        payMethod = payments.methods[1];
-        break;
-    case 3:
-        payMethod = payments.methods[2];
-        break;
-    default:
-        break;
-    }
-
-    // calculate subtotal sum al cost
-    for (int i = 0; i < products.size(); i++)
-    {
-        subtotal += products[i].price;
-    }
-
-    // // calculate total sum al cost + iva
-    for (int i = 0; i < products.size(); i++)
-    {
-        total += products[i].price + products[i].iva;
-    }
-
-    // todays date
-    time_t now = time(0);
-    tm *ltm = localtime(&now);
-    date = to_string(1900 + ltm->tm_year) + "-" + to_string(1 + ltm->tm_mon) + "-" + to_string(ltm->tm_mday);
-
-    // bill
-    displayInputBox("Would you like a bill? (y/n)");
-    string billInput;
-    cin >> billInput;
-    bill = true ? billInput == "y" : false;
-
-    // order number
-    orderNumber = db.sales.size() + 1;
-
-    Sale sale(orderNumber, date, productList, subtotal, total, payMethod, bill);
-    db.addSale(sale);
 }
 
 int main()
