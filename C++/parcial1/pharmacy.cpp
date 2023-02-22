@@ -1,5 +1,4 @@
 #include <iostream>
-#include <iomanip>
 #include <string>
 #include <vector>
 #include <ctime>
@@ -163,9 +162,7 @@ public:
     void listSales()
     {
         consoleClear();
-        cout << "╔════╦════╗" << endl;
-        cout << "║ ID ║ SKU║                                " << endl;
-        cout << "╠════╣════╣" << endl;
+
         for (int i = 0; i < this->sales.size(); i++)
         {
             this->sales[i].print();
@@ -174,28 +171,10 @@ public:
     void listProducts()
     {
         consoleClear();
-        vector<string> headers = {"ID", "SKU", "Name", "Presentation", "Laboratory", "Stock", "Cost", "Price", "Expire Date", "IVA"};
-        vector<vector<string>> data;
         for (int i = 0; i < this->products.size(); i++)
         {
-            vector<string> row;
-            row.push_back(to_string(this->products[i].id));
-            row.push_back(this->products[i].sku);
-            row.push_back(this->products[i].name);
-            row.push_back(this->products[i].presentation);
-            row.push_back(this->products[i].laboratory);
-            row.push_back(to_string(this->products[i].stock));
-            row.push_back(to_string(this->products[i].cost));
-            row.push_back(to_string(this->products[i].price));
-            row.push_back(this->products[i].expirationDate);
-            row.push_back(to_string(this->products[i].iva));
-            data.push_back(row);
+            this->products[i].print();
         }
-        buildTable(headers, data);
-        // for (int i = 0; i < this->products.size(); i++)
-        // {
-        //     this->products[i].print();
-        // }
     }
 
     void updateProduct(int id, Product product)
@@ -218,44 +197,6 @@ public:
     vector<map<string, int>> getTemporaryProducts()
     {
         return this->temporaryProducts;
-    }
-
-private:
-    void buildTable(const vector<string> &headers, const vector<vector<string>> &data)
-    {
-        // Determine the maximum width of each column
-        vector<size_t> widths(headers.size(), 0);
-        for (const auto &row : data)
-        {
-            for (size_t i = 0; i < row.size(); i++)
-            {
-                widths[i] = max(widths[i], row[i].size());
-            }
-        }
-
-        // Print the table
-        wcout << setfill(L' ') << left;
-        wcout << L"╔" << setw(widths[0] + 2) << setfill(L'═') << L"╦";
-        wcout << setw(widths[1] + 2) << setfill(L'═') << L"╗" << endl;
-
-        wcout << setfill(L' ') << left;
-        wcout << L"║ " << setw(widths[0]) << headers[0] << L" ║";
-        wcout << setw(widths[1]) << headers[1] << L" ║" << endl;
-
-        wcout << setfill(L' ') << left;
-        wcout << L"╠" << setw(widths[0] + 2) << setfill(L'═') << L"╬";
-        wcout << setw(widths[1] + 2) << setfill(L'═') << L"╣" << endl;
-
-        for (const auto &row : data)
-        {
-            wcout << setfill(L' ') << left;
-            wcout << L"║ " << setw(widths[0]) << row[0] << L" ║";
-            wcout << setw(widths[1]) << row[1] << L" ║" << endl;
-        }
-
-        wcout << setfill(L' ') << left;
-        wcout << L"╚" << setw(widths[0] + 2) << setfill(L'═') << L"╩";
-        wcout << setw(widths[1] + 2) << setfill(L'═') << L"╝" << endl;
     }
 };
 
