@@ -133,6 +133,7 @@ class DB
 public:
     vector<Product> products;
     vector<Sale> sales;
+    vector<map<string, int>> temporaryProducts;
     void addProduct(Product product)
     {
         this->products.push_back(product);
@@ -184,6 +185,17 @@ public:
                 this->products[i] = product;
             }
         }
+    }
+
+    void addTemporaryProduct(map<string, int> product)
+    {
+        this->temporaryProducts.push_back(product);
+    }
+
+    vector<map<string, int>> getTemporaryProducts()
+    {
+        return this->temporaryProducts;
+        temporaryProducts.clear();
     }
 };
 
@@ -307,19 +319,31 @@ static void createSale()
     }
     string date, buyProduct, payMethod;
     int productsSold, stock, paymentOption, orderNumber;
-    float subtotal, total;
+    float subtotal = 0.0, total = 0.0;
     bool bill;
-    vector<Product> products;
     vector<map<string, int>> productList;
     PaymMethod payments;
-
-    bool isSale = true;
 
     // Ask for the product name
     string productName;
     displayInputBox("Enter the product name");
     cin >> productName;
     Product product = db.findProductByName(productName);
+
+    while (product.id == 0)
+    {
+        displayInputBox("Product not found, Enter the product name or type 'exit' to exit");
+        cin >> productName;
+        if (productName == "exit")
+        {
+            return;
+        }
+        else
+        {
+            product = db.findProductByName(productName);
+        }
+    }
+
     if (product.id == 0)
     {
         cout << "Product not found" << endl;
@@ -332,8 +356,7 @@ static void createSale()
     cin >> stockInventory;
     while (stockInventory > product.stock)
     {
-        cout << "Not enough stock" << endl;
-        displayInputBox("What quantity would you like to buy?");
+        displayInputBox("Not enough stock, What quantity would you like to buy?");
         cin >> stockInventory;
     }
     productsSold = product.stock - stockInventory;
@@ -343,11 +366,16 @@ static void createSale()
     cin >> anotherProduct;
     if (anotherProduct == "y")
     {
+        map<string, int> productMap;
+        productMap.insert(pair<string, int>(product.name, productsSold));
+        db.addTemporaryProduct(productMap);
         createSale();
     }
     else
     {
-        products.push_back(product);
+        map<string, int> productMap;
+        productMap.insert(pair<string, int>(products[i].name, products[i].stock));
+        db.addTemporaryProduct(productMap);
     }
     // display payments:
     displayInputBox("Enter the payment method, please input a number");
@@ -357,6 +385,11 @@ static void createSale()
         cout << i + 1 << ". " << payments.methods[i] << endl;
     }
     cin >> paymentOption;
+    while (paymentOption > 3 || paymentOption < 1)
+    {
+        cout << "Invalid option, please try again: " << endl;
+        cin >> paymentOption;
+    }
     switch (paymentOption)
     {
     case 1:
@@ -372,24 +405,27 @@ static void createSale()
         break;
     }
 
-    // add map to vector
-    for (int i = 0; i < products.size(); i++)
-    {
-        map<string, int> productMap;
-        productMap.insert(pair<string, int>(products[i].name, products[i].stock));
-        productList.push_back(productMap);
-    }
-
     // bill
     string billInput;
     displayInputBox("Would you like a bill? (y/n)");
     cin >> billInput;
     bill = true ? billInput == "y" : false;
 
-    // calculate subtotal sum al cost
+    // fetch products from the temporary list
+    productList = db.getTemporaryProducts();
+    // calculate subtotal sum all productList map values´
+    for (const auto &productMap : productList)
+    {
+        for (const auto &product : productMap)
+        {
+            subtotal += product.second;
+        }
+    }
+
+    // calculate total sum al cost + iva
     for (int i = 0; i < products.size(); i++)
     {
-        subtotal += products[i].price;
+        total += products[i].price + products[i].iva;
     }
 
     // // calculate total sum al cost + iva
@@ -405,6 +441,8 @@ static void createSale()
 
     // order number
     orderNumber = db.sales.size() + 1;
+
+    // add sale to the database
 
     Sale sale(orderNumber, date, productList, subtotal, total, payMethod, bill);
     db.addSale(sale);
