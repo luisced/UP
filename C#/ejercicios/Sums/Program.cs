@@ -27,3 +27,16 @@ public class Program {
         }
     }
 }
+
+/*
+Inicio del programa
+Leer el número de conjuntos de datos
+Para cada conjunto de datos
+Leer el número de datos y el número N
+Calcular la suma de los primeros N enteros
+Calcular la suma de los primeros N cuadrados
+Calcular la suma de los primeros N cubos
+Imprimir el resultado
+Fin del bucle Para
+Fin del programa
+*/
