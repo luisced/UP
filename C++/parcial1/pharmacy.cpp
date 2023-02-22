@@ -423,16 +423,6 @@ static void createSale()
     }
 
     // calculate total sum al cost + iva
-    for (int i = 0; i < products.size(); i++)
-    {
-        total += products[i].price + products[i].iva;
-    }
-
-    // // calculate total sum al cost + iva
-    for (int i = 0; i < products.size(); i++)
-    {
-        total += products[i].price + products[i].iva;
-    }
 
     // todays date
     time_t now = time(0);
@@ -444,7 +434,7 @@ static void createSale()
 
     // add sale to the database
 
-    Sale sale(orderNumber, date, productList, subtotal, total, payMethod, bill);
+    Sale sale(orderNumber, date, productList, subtotal, 100, payMethod, bill);
     db.addSale(sale);
     // Update the stock
     Product updatedproduct(product.id, product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost, product.price, product.expirationDate, product.iva);
