@@ -38,8 +38,10 @@ def create_app(config_class=Config):
     app.app_context().push()
 
     from pharmacy.products.routes import product
+    from pharmacy.sales.routes import sale
 
     app.config.from_object(Config)
     app.register_blueprint(product)
+    app.register_blueprint(sale)
 
     return app
