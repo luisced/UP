@@ -163,9 +163,9 @@ public:
     void listSales()
     {
         consoleClear();
-        cout << "╔═════════════════════════════════╗" << endl;
-        cout << "║ ID ║                                 " << endl;
-        cout << "╠════╣═════════════════════════════╣" << endl;
+        cout << "╔════╦════╗" << endl;
+        cout << "║ ID ║ SKU║                                " << endl;
+        cout << "╠════╣════╣" << endl;
         for (int i = 0; i < this->sales.size(); i++)
         {
             this->sales[i].print();
@@ -235,48 +235,34 @@ private:
 
         // Print the table
         wcout << setfill(L' ') << left;
-        wcout << L"╔" << setw(widths[0] + 2) << setfill(L'═') << L"╗";
-        for (size_t i = 1; i < headers.size(); i++)
-        {
-            wcout << L"╤" << setw(widths[i] + 2) << setfill(L'═') << L"╗";
-        }
-        wcout << endl;
+        wcout << L"╔" << setw(widths[0] + 2) << setfill(L'═') << L"╦";
+        wcout << setw(widths[1] + 2) << setfill(L'═') << L"╗" << endl;
 
         wcout << setfill(L' ') << left;
         wcout << L"║ " << setw(widths[0]) << headers[0] << L" ║";
-        for (size_t i = 1; i < headers.size(); i++)
-        {
-            wcout << L" " << setw(widths[i]) << headers[i] << L" ║";
-        }
-        wcout << endl;
+        wcout << setw(widths[1]) << headers[1] << L" ║" << endl;
 
         wcout << setfill(L' ') << left;
-        wcout << L"╠" << setw(widths[0] + 2) << setfill(L'═') << L"╣";
-        for (size_t i = 1; i < headers.size(); i++)
-        {
-            wcout << L"╪" << setw(widths[i] + 2) << setfill(L'═') << L"╣";
-        }
-        wcout << endl;
+        wcout << L"╠" << setw(widths[0] + 2) << setfill(L'═') << L"╬";
+        wcout << setw(widths[1] + 2) << setfill(L'═') << L"╣" << endl;
 
         for (const auto &row : data)
         {
             wcout << setfill(L' ') << left;
             wcout << L"║ " << setw(widths[0]) << row[0] << L" ║";
-            for (size_t i = 1; i < row.size(); i++)
-            {
-                wcout << L" " << setw(widths[i]) << row[i] << L" ║";
-            }
-            wcout << endl;
+            wcout << setw(widths[1]) << row[1] << L" ║" << endl;
         }
 
         wcout << setfill(L' ') << left;
-    wcout << L"╚" << setw(widths[0]
-    };
+        wcout << L"╚" << setw(widths[0] + 2) << setfill(L'═') << L"╩";
+        wcout << setw(widths[1] + 2) << setfill(L'═') << L"╝" << endl;
+    }
+};
 
-    static DB db;
+static DB db;
 
-    class Menu
-    {
+class Menu
+{
 public:
     // Constructor to initialize the menu options
     Menu(const vector<string> &options) : options_(options) {}
@@ -328,10 +314,10 @@ private:
         cout << "╚═════╝░╚═╝░░╚═╝╚═╝░░╚══╝  ╚═╝░░░░░╚═╝░░╚═╝╚═════╝░╚══════╝░╚════╝░" << endl;
         cout << endl;
     }
-    };
+};
 
-    static void displayInputBox(string prompt)
-    {
+static void displayInputBox(string prompt)
+{
     consoleClear();
     string userInput;
 
@@ -354,10 +340,10 @@ private:
     }
     cout << "╝" << endl;
     cout << "Enter your option: ";
-    }
+}
 
-    static void createProduct()
-    {
+static void createProduct()
+{
     PaymMethod payment;
     string name, presentation, laboratory, expirationDate, sku;
     int stock, id;
@@ -387,10 +373,10 @@ private:
 
     Product product(id, sku, name, presentation, laboratory, stock, cost, price, expirationDate, iva);
     db.addProduct(product);
-    }
+}
 
-    static void createSale()
-    {
+static void createSale()
+{
     if (db.products.size() == 0)
     {
         cout << "There are no products to sell" << endl;
@@ -529,10 +515,10 @@ private:
     // Update the stock
     Product updatedproduct(product.id, product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost, product.price, product.expirationDate, product.iva);
     db.updateProduct(product.id, updatedproduct);
-    }
+}
 
-    int main()
-    {
+int main()
+{
 
     vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Exit"};
     Menu menu(options);
@@ -561,4 +547,4 @@ private:
         choice = menu.display();
     }
     return 0;
-    }
+}
