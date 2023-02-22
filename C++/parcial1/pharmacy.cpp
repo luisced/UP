@@ -561,4 +561,4 @@ private:
         choice = menu.display();
     }
     return 0;
-    }
+    };
