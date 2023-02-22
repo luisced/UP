@@ -202,6 +202,10 @@ public:
 
 static DB db;
 
+class Report
+{
+};
+
 class Menu
 {
 public:
