@@ -234,55 +234,49 @@ private:
         }
 
         // Print the table
-        cout << setfill(' ') << left;
-        cout << "╔" << setw(widths[0] + 2) << setfill('═') << "╗";
+        wcout << setfill(L' ') << left;
+        wcout << L"╔" << setw(widths[0] + 2) << setfill(L'═') << L"╗";
         for (size_t i = 1; i < headers.size(); i++)
         {
-            cout << "╤" << setw(widths[i] + 2) << setfill('═') << "╗";
+            wcout << L"╤" << setw(widths[i] + 2) << setfill(L'═') << L"╗";
         }
-        cout << endl;
+        wcout << endl;
 
-        cout << setfill(' ') << left;
-        cout << "║ " << setw(widths[0]) << headers[0] << " ║";
+        wcout << setfill(L' ') << left;
+        wcout << L"║ " << setw(widths[0]) << headers[0] << L" ║";
         for (size_t i = 1; i < headers.size(); i++)
         {
-            cout << " " << setw(widths[i]) << headers[i] << " ║";
+            wcout << L" " << setw(widths[i]) << headers[i] << L" ║";
         }
-        cout << endl;
+        wcout << endl;
 
-        cout << setfill(' ') << left;
-        cout << "╠" << setw(widths[0] + 2) << setfill('═') << "╣";
+        wcout << setfill(L' ') << left;
+        wcout << L"╠" << setw(widths[0] + 2) << setfill(L'═') << L"╣";
         for (size_t i = 1; i < headers.size(); i++)
         {
-            cout << "╪" << setw(widths[i] + 2) << setfill('═') << "╣";
+            wcout << L"╪" << setw(widths[i] + 2) << setfill(L'═') << L"╣";
         }
-        cout << endl;
+        wcout << endl;
 
         for (const auto &row : data)
         {
-            cout << setfill(' ') << left;
-            cout << "║ " << setw(widths[0]) << row[0] << " ║";
+            wcout << setfill(L' ') << left;
+            wcout << L"║ " << setw(widths[0]) << row[0] << L" ║";
             for (size_t i = 1; i < row.size(); i++)
             {
-                cout << " " << setw(widths[i]) << row[i] << " ║";
+                wcout << L" " << setw(widths[i]) << row[i] << L" ║";
             }
-            cout << endl;
+            wcout << endl;
         }
 
-        cout << setfill(' ') << left;
-        cout << "╚" << setw(widths[0] + 2) << setfill('═') << "╝";
-        for (size_t i = 1; i < headers.size(); i++)
-        {
-            cout << "╧" << setw(widths[i] + 2) << setfill('═') << "╝";
-        }
-        cout << endl;
-    }
-};
+        wcout << setfill(L' ') << left;
+    wcout << L"╚" << setw(widths[0]
+    };
 
-static DB db;
+    static DB db;
 
-class Menu
-{
+    class Menu
+    {
 public:
     // Constructor to initialize the menu options
     Menu(const vector<string> &options) : options_(options) {}
@@ -334,10 +328,10 @@ private:
         cout << "╚═════╝░╚═╝░░╚═╝╚═╝░░╚══╝  ╚═╝░░░░░╚═╝░░╚═╝╚═════╝░╚══════╝░╚════╝░" << endl;
         cout << endl;
     }
-};
+    };
 
-static void displayInputBox(string prompt)
-{
+    static void displayInputBox(string prompt)
+    {
     consoleClear();
     string userInput;
 
@@ -360,10 +354,10 @@ static void displayInputBox(string prompt)
     }
     cout << "╝" << endl;
     cout << "Enter your option: ";
-}
+    }
 
-static void createProduct()
-{
+    static void createProduct()
+    {
     PaymMethod payment;
     string name, presentation, laboratory, expirationDate, sku;
     int stock, id;
@@ -393,10 +387,10 @@ static void createProduct()
 
     Product product(id, sku, name, presentation, laboratory, stock, cost, price, expirationDate, iva);
     db.addProduct(product);
-}
+    }
 
-static void createSale()
-{
+    static void createSale()
+    {
     if (db.products.size() == 0)
     {
         cout << "There are no products to sell" << endl;
@@ -535,10 +529,10 @@ static void createSale()
     // Update the stock
     Product updatedproduct(product.id, product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost, product.price, product.expirationDate, product.iva);
     db.updateProduct(product.id, updatedproduct);
-}
+    }
 
-int main()
-{
+    int main()
+    {
 
     vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Exit"};
     Menu menu(options);
@@ -567,4 +561,4 @@ int main()
         choice = menu.display();
     }
     return 0;
-}
+    }
