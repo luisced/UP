@@ -190,7 +190,6 @@ public:
 
     void addTemporaryProduct(map<string, int> product)
     {
-        temporaryProducts.clear();
         this->temporaryProducts.push_back(product);
     }
 
@@ -198,6 +197,104 @@ public:
     {
         return this->temporaryProducts;
     }
+
+    void clearTemporaryProducts()
+    {
+        this->temporaryProducts.clear();
+    }
+
+    // filters
+
+    void SaleFilterByOrderNumber(int oderNumber)
+    {
+        for (int i = 0; i < this->sales.size(); i++)
+        {
+            if (this->sales[i].orderNumber == oderNumber)
+            {
+                this->sales[i].print();
+            }
+            else
+            {
+                cout << "Sale was not found" << endl;
+            }
+        }
+    }
+
+    void SaleFilterByYear(int year)
+    {
+        for (int i = 0; i < this->sales.size(); i++)
+        {
+            if (this->sales[i].date.substr(6, 4) == to_string(year))
+            {
+                this->sales[i].print();
+            }
+            else
+            {
+                cout << "Sale was not found" << endl;
+            }
+        }
+    }
+
+    void SaleFilterByMont(string month)
+    {
+        map<string, int> months = {
+            {"January", 1},
+            {"February", 2},
+            {"March", 3},
+            {"April", 4},
+            {"May", 5},
+            {"June", 6},
+            {"July", 7},
+            {"August", 8},
+            {"September", 9},
+            {"October", 10},
+            {"November", 11},
+            {"December", 12}};
+        for (int i = 0; i < this->sales.size(); i++)
+        {
+            if (this->sales[i].date.substr(3, 2) == to_string(months[month]))
+            {
+                this->sales[i].print();
+            }
+            else
+            {
+                cout << "Sale was not found" << endl;
+            }
+        }
+    }
+
+    void SaleFilterBetweenDates(string date1, string date2)
+    {
+
+        for (int i = 0; i < this->sales.size(); i++)
+        {
+            if (this->sales[i].date >= date1 && this->sales[i].date <= date2)
+            {
+                this->sales[i].print();
+            }
+            else
+            {
+                cout << "Sale was not found" << endl;
+            }
+        }
+    }
+
+    void ProductFilterByID(int id)
+    {
+        for (int i = 0; i < this->products.size(); i++)
+        {
+            if (this->products[i].id == id)
+            {
+                this->products[i].print();
+            }
+            else
+            {
+                cout << "Product was not found" << endl;
+            }
+        }
+    }
+
+    // build report
 };
 
 static DB db;
@@ -298,7 +395,7 @@ static void createProduct()
     displayInputBox("Enter the product name");
     cin >> name;
     displayInputBox("Enter the product presentation");
-    getline(cin, presentation);
+    cin >> presentation;
     displayInputBox("Enter the product price");
     cin >> price;
     displayInputBox("Enter the product cost");
@@ -308,7 +405,7 @@ static void createProduct()
     displayInputBox("Enter the laboratory");
     cin >> laboratory;
     displayInputBox("Enter the expiration date");
-    getline(cin, expirationDate);
+    cin >> expirationDate;
     displayInputBox("Is the product taxable? (y/n)");
     string tax;
     cin >> tax;
@@ -441,7 +538,11 @@ static void createSale()
         {
             if (db.findProductByName(product.first).iva)
             {
-                total += product.second * (db.findProductByName(product.first).price * 1.16);
+                total += product.second * (db.findProductByName(product.first).price + (db.findProductByName(product.first).price * 0.16));
+            }
+            else
+            {
+                total += product.second * db.findProductByName(product.first).price;
             }
         }
     }
@@ -461,6 +562,9 @@ static void createSale()
     // Update the stock
     Product updatedproduct(product.id, product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost, product.price, product.expirationDate, product.iva);
     db.updateProduct(product.id, updatedproduct);
+    db.clearTemporaryProducts();
+
+    // clear the temporary list
 }
 
 int main()
