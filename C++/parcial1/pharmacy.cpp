@@ -191,6 +191,7 @@ public:
             row.push_back(to_string(this->products[i].iva));
             data.push_back(row);
         }
+        buildTable(headers, data);
         // for (int i = 0; i < this->products.size(); i++)
         // {
         //     this->products[i].print();
@@ -234,43 +235,47 @@ private:
 
         // Print the table
         cout << setfill(' ') << left;
-        cout << setw(widths[0]) << headers[0] << " ";
+        cout << "╔" << setw(widths[0] + 2) << setfill('═') << "╗";
         for (size_t i = 1; i < headers.size(); i++)
         {
-            cout << "│ " << setw(widths[i]) << headers[i] << " ";
+            cout << "╤" << setw(widths[i] + 2) << setfill('═') << "╗";
         }
         cout << endl;
 
         cout << setfill(' ') << left;
-        cout << setw(widths[0]) << "╠═══"
-             << "═";
+        cout << "║ " << setw(widths[0]) << headers[0] << " ║";
         for (size_t i = 1; i < headers.size(); i++)
         {
-            cout << "╪═══" << setfill('═') << setw(widths[i]) << "═";
-            cout << setfill(' ') << left << "═";
+            cout << " " << setw(widths[i]) << headers[i] << " ║";
         }
-        cout << "╣" << endl;
+        cout << endl;
+
+        cout << setfill(' ') << left;
+        cout << "╠" << setw(widths[0] + 2) << setfill('═') << "╣";
+        for (size_t i = 1; i < headers.size(); i++)
+        {
+            cout << "╪" << setw(widths[i] + 2) << setfill('═') << "╣";
+        }
+        cout << endl;
 
         for (const auto &row : data)
         {
             cout << setfill(' ') << left;
-            cout << setw(widths[0]) << row[0] << " ";
+            cout << "║ " << setw(widths[0]) << row[0] << " ║";
             for (size_t i = 1; i < row.size(); i++)
             {
-                cout << "│ " << setw(widths[i]) << row[i] << " ";
+                cout << " " << setw(widths[i]) << row[i] << " ║";
             }
             cout << endl;
         }
 
         cout << setfill(' ') << left;
-        cout << setw(widths[0]) << "╚═══"
-             << "═";
+        cout << "╚" << setw(widths[0] + 2) << setfill('═') << "╝";
         for (size_t i = 1; i < headers.size(); i++)
         {
-            cout << "╧═══" << setfill('═') << setw(widths[i]) << "═";
-            cout << setfill(' ') << left << "═";
+            cout << "╧" << setw(widths[i] + 2) << setfill('═') << "╝";
         }
-        cout << "╝" << endl;
+        cout << endl;
     }
 };
 
