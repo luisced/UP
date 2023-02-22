@@ -345,6 +345,10 @@ static void createSale()
     {
         createSale();
     }
+    else
+    {
+        products.push_back(product);
+    }
     // display payments:
     displayInputBox("Enter the payment method, please input a number");
     cout << "\n";
