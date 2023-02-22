@@ -162,6 +162,9 @@ public:
     void listSales()
     {
         consoleClear();
+        cout << "╔═════════════════════════════════╗" << endl;
+        cout << "║ ID ║                                 " << endl;
+        cout << "╠════╣═════════════════════════════╣" << endl;
         for (int i = 0; i < this->sales.size(); i++)
         {
             this->sales[i].print();
@@ -170,10 +173,27 @@ public:
     void listProducts()
     {
         consoleClear();
+        vector<string> headers = {"ID", "SKU", "Name", "Presentation", "Laboratory", "Stock", "Cost", "Price", "Expire Date", "IVA"};
+        vector<vector<string>> data;
         for (int i = 0; i < this->products.size(); i++)
         {
-            this->products[i].print();
+            vector<string> row;
+            row.push_back(to_string(this->products[i].id));
+            row.push_back(this->products[i].sku);
+            row.push_back(this->products[i].name);
+            row.push_back(this->products[i].presentation);
+            row.push_back(this->products[i].laboratory);
+            row.push_back(to_string(this->products[i].stock));
+            row.push_back(to_string(this->products[i].cost));
+            row.push_back(to_string(this->products[i].price));
+            row.push_back(this->products[i].expirationDate);
+            row.push_back(to_string(this->products[i].iva));
+            data.push_back(row);
         }
+        // for (int i = 0; i < this->products.size(); i++)
+        // {
+        //     this->products[i].print();
+        // }
     }
 
     void updateProduct(int id, Product product)
@@ -189,13 +209,67 @@ public:
 
     void addTemporaryProduct(map<string, int> product)
     {
+        temporaryProducts.clear();
         this->temporaryProducts.push_back(product);
     }
 
     vector<map<string, int>> getTemporaryProducts()
     {
         return this->temporaryProducts;
-        temporaryProducts.clear();
+    }
+
+private:
+    void buildTable(const vector<string> &headers, const vector<vector<string>> &data)
+    {
+        // Determine the maximum width of each column
+        vector<size_t> widths(headers.size(), 0);
+        for (const auto &row : data)
+        {
+            for (size_t i = 0; i < row.size(); i++)
+            {
+                widths[i] = max(widths[i], row[i].size());
+            }
+        }
+
+        // Print the table
+        cout << setfill(' ') << left;
+        cout << setw(widths[0]) << headers[0] << " ";
+        for (size_t i = 1; i < headers.size(); i++)
+        {
+            cout << "│ " << setw(widths[i]) << headers[i] << " ";
+        }
+        cout << endl;
+
+        cout << setfill(' ') << left;
+        cout << setw(widths[0]) << "╠═══"
+             << "═";
+        for (size_t i = 1; i < headers.size(); i++)
+        {
+            cout << "╪═══" << setfill('═') << setw(widths[i]) << "═";
+            cout << setfill(' ') << left << "═";
+        }
+        cout << "╣" << endl;
+
+        for (const auto &row : data)
+        {
+            cout << setfill(' ') << left;
+            cout << setw(widths[0]) << row[0] << " ";
+            for (size_t i = 1; i < row.size(); i++)
+            {
+                cout << "│ " << setw(widths[i]) << row[i] << " ";
+            }
+            cout << endl;
+        }
+
+        cout << setfill(' ') << left;
+        cout << setw(widths[0]) << "╚═══"
+             << "═";
+        for (size_t i = 1; i < headers.size(); i++)
+        {
+            cout << "╧═══" << setfill('═') << setw(widths[i]) << "═";
+            cout << setfill(' ') << left << "═";
+        }
+        cout << "╝" << endl;
     }
 };
 
@@ -295,12 +369,18 @@ static void createProduct()
     getline(cin, presentation);
     displayInputBox("Enter the product price");
     cin >> price;
+    displayInputBox("Enter the product cost");
+    cin >> cost;
     displayInputBox("Enter the product stock");
     cin >> stock;
     displayInputBox("Enter the laboratory");
-    getline(cin, laboratory);
+    cin >> laboratory;
     displayInputBox("Enter the expiration date");
     getline(cin, expirationDate);
+    displayInputBox("Is the product taxable? (y/n)");
+    string tax;
+    cin >> tax;
+    iva = true ? tax == "y" : false;
 
     id = db.products.size() + 1;
     sku = randomString();
@@ -359,7 +439,6 @@ static void createSale()
         displayInputBox("Not enough stock, What quantity would you like to buy?");
         cin >> stockInventory;
     }
-    productsSold = product.stock - stockInventory;
     product.stock -= stockInventory;
     string anotherProduct;
     displayInputBox("Would you like to add another product? (y/n)");
@@ -367,14 +446,15 @@ static void createSale()
     if (anotherProduct == "y")
     {
         map<string, int> productMap;
-        productMap.insert(pair<string, int>(product.name, productsSold));
+        productMap.insert(pair<string, int>(product.name, stockInventory));
         db.addTemporaryProduct(productMap);
         createSale();
+        return;
     }
     else
     {
         map<string, int> productMap;
-        productMap.insert(pair<string, int>(product.name, productsSold));
+        productMap.insert(pair<string, int>(product.name, stockInventory));
         db.addTemporaryProduct(productMap);
     }
     // display payments:
@@ -418,11 +498,21 @@ static void createSale()
     {
         for (const auto &product : productMap)
         {
-            subtotal += product.second;
+            subtotal += product.second * db.findProductByName(product.first).price;
         }
     }
 
-    // calculate total sum al cost + iva
+    // calculate total sum al cost + iva if the product is taxable
+    for (const auto &productMap : productList)
+    {
+        for (const auto &product : productMap)
+        {
+            if (db.findProductByName(product.first).iva)
+            {
+                total += product.second * (db.findProductByName(product.first).price * 1.16);
+            }
+        }
+    }
 
     // todays date
     time_t now = time(0);
@@ -434,7 +524,7 @@ static void createSale()
 
     // add sale to the database
 
-    Sale sale(orderNumber, date, productList, subtotal, 100, payMethod, bill);
+    Sale sale(orderNumber, date, productList, subtotal, total, payMethod, bill);
     db.addSale(sale);
     // Update the stock
     Product updatedproduct(product.id, product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost, product.price, product.expirationDate, product.iva);
