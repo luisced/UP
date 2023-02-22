@@ -339,7 +339,7 @@ static void createSale()
         pressEnterToContinue();
         return;
     }
-    string date buyProduct, payMethod;
+    string date, buyProduct, payMethod;
     int productsSold, stock, paymentOption, orderNumber;
     float subtotal, total;
     bool bill;
