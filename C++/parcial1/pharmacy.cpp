@@ -307,7 +307,7 @@ class Menu
 {
 public:
     // Constructor to initialize the menu options
-    Menu(const vector<string> &options) : options_(options) {}
+    Menu(string menuTitle, const vector<string> &options) : options_(options) {}
 
     // Display the menu and prompt for user input
     int display()
@@ -319,7 +319,7 @@ public:
             printTitle();
             cout << "\u001b[34m";
             cout << "╔═════════════════════════════════╗" << endl;
-            cout << "║            MAIN MENU            ║" << endl;
+            cout << "║ " << string((29 - menuTitle_.size()) / 2, ' ') << menuTitle_ << string((29 - menuTitle_.size()) / 2, ' ') << " ║" << endl;
             cout << "╠═════════════════════════════════╣" << endl;
             for (int i = 0; i < options_.size(); i++)
             {
@@ -604,7 +604,7 @@ int main()
 
     vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Generate Report", "Exit"};
     vector<string> options2 = {"See specific sale information", "List all the sales", "List all the sales filtered by date", "List all the sales filtered by payment method", "List all sales by lab", "List all the sales filtered by bill", "See specific product information", "List al products by laboratory", "List all products soon to expire"};
-    Menu menu(options);
+    Menu menu("hola", options);
     Menu menu2(options);
     int choice = menu.display();
     while (choice != 6)
