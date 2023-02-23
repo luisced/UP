@@ -346,6 +346,31 @@ public:
     {
         while (true)
         {
+
+            system("clear");
+            printTitle();
+            cout << "\u001b[34m";
+            cout << "╔═════════════════════════════════╗" << endl;
+            cout << "║            FILTER MENU          ║" << endl;
+            cout << "╠═════════════════════════════════╣" << endl;
+            for (int i = 0; i < options_.size(); i++)
+            {
+                cout << "║ " << i + 1 << ". " << options_[i] << string(29 - options_[i].size(), ' ') << "║" << endl;
+            }
+            cout << "╚═════════════════════════════════╝" << endl;
+            cout << "Enter your option (1-" << options_.size() << "): ";
+
+            int choice;
+            cin >> choice;
+
+            if (choice >= 1 && choice <= options_.size())
+            {
+                return choice;
+            }
+            else
+            {
+                cout << "Invalid option, please try again:" << endl;
+            }
         }
     }
 
@@ -577,10 +602,12 @@ static void createSale()
 int main()
 {
 
-    vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Generate Report", "Search by Filters", "Exit"};
+    vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Generate Report", "Exit"};
+    vector<string> options2 = {"See specific sale information", "List all the sales", "List all the sales filtered by date", "List all the sales filtered by payment method", "List all sales by lab", "List all the sales filtered by bill", "See specific product information", "List al products by laboratory", "List all products soon to expire"};
     Menu menu(options);
+    Menu menu2(options);
     int choice = menu.display();
-    while (choice != 5)
+    while (choice != 6)
     {
         switch (choice)
         {
@@ -599,12 +626,50 @@ int main()
             pressEnterToContinue();
             break;
         case 5:
-            // db.generateReport();
-            break;
-        case 6:
-            break;
-
-        case 7:
+            int choice2 = menu2.display();
+            while (choice2 != 9)
+            {
+                switch (choice2)
+                {
+                case 1:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 2:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 3:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 4:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 5:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 6:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 7:
+                    db.listProducts();
+                    pressEnterToContinue();
+                    break;
+                case 8:
+                    db.listProducts();
+                    pressEnterToContinue();
+                    break;
+                case 9:
+                    db.listProducts();
+                    pressEnterToContinue();
+                    break;
+                }
+                choice2 = menu2.display();
+            }
             break;
         }
         choice = menu.display();
