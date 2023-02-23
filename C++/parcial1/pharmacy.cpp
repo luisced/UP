@@ -593,49 +593,7 @@ int main()
             pressEnterToContinue();
             break;
         case 5:
-            while (choice2 != 9)
-            {
-                switch (choice2)
-                {
-                case 1:
-                    db.listSales();
-                    pressEnterToContinue();
-                    break;
-                case 2:
-                    db.listSales();
-                    pressEnterToContinue();
-                    break;
-                case 3:
-                    db.listSales();
-                    pressEnterToContinue();
-                    break;
-                case 4:
-                    db.listSales();
-                    pressEnterToContinue();
-                    break;
-                case 5:
-                    db.listSales();
-                    pressEnterToContinue();
-                    break;
-                case 6:
-                    db.listSales();
-                    pressEnterToContinue();
-                    break;
-                case 7:
-                    db.listProducts();
-                    pressEnterToContinue();
-                    break;
-                case 8:
-                    db.listProducts();
-                    pressEnterToContinue();
-                    break;
-                case 9:
-                    db.listProducts();
-                    pressEnterToContinue();
-                    break;
-                }
-                choice2 = menu2.display();
-            }
+
             break;
         }
         choice = menu.display();
