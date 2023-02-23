@@ -342,6 +342,13 @@ public:
         }
     }
 
+    int filterMenu()
+    {
+        while (true)
+        {
+        }
+    }
+
 private:
     vector<string> options_;
 
@@ -570,7 +577,7 @@ static void createSale()
 int main()
 {
 
-    vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Exit"};
+    vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Generate Report", "Search by Filters", "Exit"};
     Menu menu(options);
     int choice = menu.display();
     while (choice != 5)
@@ -592,6 +599,12 @@ int main()
             pressEnterToContinue();
             break;
         case 5:
+            // db.generateReport();
+            break;
+        case 6:
+            break;
+
+        case 7:
             break;
         }
         choice = menu.display();
