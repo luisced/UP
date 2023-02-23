@@ -306,8 +306,12 @@ class Report
 class Menu
 {
 public:
-    // Constructor to initialize the menu options
-    Menu(string menuTitle, const vector<string> &options) : options_(options) {}
+    // Constructor to initialize the menu options and title
+    Menu(vector<string> options, string menuTitle)
+    {
+        options_ = options;
+        menuTitle_ = menuTitle;
+    }
 
     // Display the menu and prompt for user input
     int display()
@@ -604,7 +608,7 @@ int main()
 
     vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Generate Report", "Exit"};
     vector<string> options2 = {"See specific sale information", "List all the sales", "List all the sales filtered by date", "List all the sales filtered by payment method", "List all sales by lab", "List all the sales filtered by bill", "See specific product information", "List al products by laboratory", "List all products soon to expire"};
-    Menu menu("hola", options);
+    Menu menu(options, "hola");
     Menu menu2(options);
     int choice = menu.display();
     while (choice != 6)
