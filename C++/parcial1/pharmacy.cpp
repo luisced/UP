@@ -318,7 +318,7 @@ public:
             printTitle();
             cout << "\u001b[34m";
             cout << "╔═════════════════════════════════╗" << endl;
-            cout << "║ " << menuTitle_ << string(29 - menuTitle_.size(), ' ') << "║" << endl;
+            cout << "║ " << menuTitle_ << string(29 - menuTitle_.size(), ' ') << "   ║" << endl;
             cout << "╠═════════════════════════════════╣" << endl;
             for (int i = 0; i < options_.size(); i++)
             {
@@ -572,7 +572,7 @@ int main()
 
     vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Generate Report", "Exit"};
     vector<string> options2 = {"See specific sale information", "List all the sales", "List all the sales filtered by date", "List all the sales filtered by payment method", "List all sales by lab", "List all the sales filtered by bill", "See specific product information", "List al products by laboratory", "List all products soon to expire"};
-    Menu menu(options, "hola");
+    Menu menu(options, "MAIN MENU");
     int choice = menu.display();
     while (choice != 6)
     {
@@ -593,6 +593,7 @@ int main()
             pressEnterToContinue();
             break;
         case 5:
+            Menu menu2(options2, "REPORTS");
 
             break;
         }
