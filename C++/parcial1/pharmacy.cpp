@@ -279,11 +279,11 @@ public:
         }
     }
 
-    void ProductFilterByID(int id)
+    void ProductFilterByName(string name)
     {
         for (int i = 0; i < this->products.size(); i++)
         {
-            if (this->products[i].id == id)
+            if (this->products[i].name == name)
             {
                 this->products[i].print();
             }
@@ -570,11 +570,11 @@ static void createSale()
 int main()
 {
 
-    vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Generate Report", "Exit"};
-    vector<string> options2 = {"See specific sale information", "List all the sales", "List all the sales filtered by date", "List all the sales filtered by payment method", "List all sales by lab", "List all the sales filtered by bill", "See specific product information", "List al products by laboratory", "List all products soon to expire"};
+    vector<string> options = {"Create Product", "Create Sale", "Generate Report", "Exit"};
+    vector<string> options2 = {"See specific sale information", "List all the sales", "S.filtered by date", "S. by payment method", "S. by lab", "S. by bill", "P. information", "P. by aboratory", "P. soon to expire", "Exit"};
     Menu menu(options, "MAIN MENU");
     int choice = menu.display();
-    while (choice != 6)
+    while (choice != 4)
     {
         switch (choice)
         {
@@ -582,19 +582,58 @@ int main()
             createProduct();
             break;
         case 2:
-            db.listProducts();
-            pressEnterToContinue();
-            break;
-        case 3:
             createSale();
             break;
-        case 4:
-            db.listSales();
-            pressEnterToContinue();
-            break;
-        case 5:
+        case 3:
             Menu menu2(options2, "REPORTS");
-
+            int choice2 = menu2.display();
+            while (choice2 != 10)
+            {
+                switch (choice2)
+                {
+                case 1:
+                    db.ProductFilterByName();
+                    pressEnterToContinue();
+                    break;
+                case 2:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 3:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 4:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 5:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 6:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 7:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 8:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 9:
+                    db.listSales();
+                    pressEnterToContinue();
+                    break;
+                case 10:
+                    break;
+                default:
+                    break;
+                }
+                choice2 = menu2.display();
+            }
             break;
         }
         choice = menu.display();
