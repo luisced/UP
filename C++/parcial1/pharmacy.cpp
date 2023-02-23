@@ -572,7 +572,7 @@ int main()
 
     vector<string> options = {"Create Product", "List Products", "Create Sale", "List Sales", "Generate Report", "Exit"};
     vector<string> options2 = {"See specific sale information", "List all the sales", "List all the sales filtered by date", "List all the sales filtered by payment method", "List all sales by lab", "List all the sales filtered by bill", "See specific product information", "List al products by laboratory", "List all products soon to expire"};
-    Menu menu(options);
+    Menu menu("hola", options);
     int choice = menu.display();
     while (choice != 6)
     {
