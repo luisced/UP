@@ -612,22 +612,7 @@ int main()
                     cout << "Sales filtered by date" << endl;
                     Menu menu3(options3, "SALES FILTERED BY DATE");
                     int choice3 = menu3.display();
-                    while (choice3 != 4)
-                    {
-                        switch (choice3)
-                        {
-                        case 1:
-                            pressEnterToContinue();
-                            break;
-                        case 2:
-                            pressEnterToContinue();
-                            break;
-                        case 3:
-                            pressEnterToContinue();
-                            break;
-                        }
-                        choice3 = menu3.display();
-                    }
+
                     break;
                 case 4:
                     db.listSales();
@@ -654,8 +639,6 @@ int main()
                     pressEnterToContinue();
                     break;
                 case 10:
-                    break;
-                default:
                     break;
                 }
                 choice2 = menu2.display();
