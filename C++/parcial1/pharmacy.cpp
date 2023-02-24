@@ -4,6 +4,8 @@
 #include <vector>
 #include <ctime>
 #include <chrono>
+#include <sstream>
+
 #include <map>
 
 using namespace std;
@@ -271,16 +273,20 @@ public:
     void ProductFilterBySoonToExpire()
     {
         consoleClear();
-        time_t t = time(nullptr);
-        tm tm = *localtime(&t);
-        string today = to_string(tm.tm_year + 1900) + "-" + to_string(tm.tm_mon + 1) + "-" + to_string(tm.tm_mday);
+        auto now = chrono::system_clock::now();
+        auto thirtyDaysAgo = now - chrono::hours(24 * 30);
 
-        // 30 before today is the soon to expire date
-        for (int i = 0; i < this->products.size(); i++)
+        for (auto product : this->products)
         {
-            if (this->products[i].expirationDate >= today && this->products[i].expirationDate <= today.substr(0, 8) + "30")
+
+            tm t = {};
+            istringstream ss(product.expirationDate);
+            ss >> get_time(&t, "%Y-%m-%d");
+            auto expirationDate = chrono::system_clock::from_time_t(mktime(&t));
+
+            if (expirationDate < thirtyDaysAgo)
             {
-                this->products[i].print();
+                product.print();
             }
         }
     }
