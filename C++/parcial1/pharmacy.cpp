@@ -205,8 +205,13 @@ public:
 
     // filters
 
-    void SaleFilterByOrderNumber(int oderNumber)
+    void SaleFilterByOrderNumber()
     {
+        consoleClear();
+        int oderNumber;
+        cout << "Enter the order number: ";
+        cin >> oderNumber;
+
         for (int i = 0; i < this->sales.size(); i++)
         {
             if (this->sales[i].orderNumber == oderNumber)
@@ -592,7 +597,8 @@ int main()
                 switch (choice2)
                 {
                 case 1:
-                    db.ProductFilterByName();
+
+                    db.SaleFilterByOrderNumber();
                     pressEnterToContinue();
                     break;
                 case 2:
@@ -600,8 +606,32 @@ int main()
                     pressEnterToContinue();
                     break;
                 case 3:
-                    db.listSales();
-                    pressEnterToContinue();
+                    consoleClear();
+                    cout << "Sales filtered by date" << endl;
+                    vector<string> options3 = {"By year", "By month", "By date range", "Exit"};
+                    Menu menu3(options3, "SALES FILTERED BY DATE");
+                    int choice3 = menu3.display();
+                    while (choice3 != 4)
+                    {
+                        switch (choice3)
+                        {
+                        case 1:
+                            db.SaleFilterByYear();
+                            pressEnterToContinue();
+                            break;
+                        case 2:
+                            db.SaleFilterByMonth();
+                            pressEnterToContinue();
+                            break;
+                        case 3:
+                            db.SaleFilterByDateRange();
+                            pressEnterToContinue();
+                            break;
+                        default:
+                            break;
+                        }
+                        choice3 = menu3.display();
+                    }
                     break;
                 case 4:
                     db.listSales();
