@@ -141,11 +141,11 @@ public:
         Product(4, "123456789", "Cetirizina", "Tabletas", "Bayer", 100, 10, 15, "2023-02-10", true),
     };
     vector<Sale> sales = {
-        Sale(1001, "2022-01-01", {{{"Product 1", 2}, {"Product 2", 1}}, {{"Product 3", 4}}}, 100.00, 115.00, "Credit Card", true),
-        Sale(1002, "2021-01-05", {{{"Product 2", 3}}, {{"Product 1", 1}, {"Product 3", 2}}}, 50.00, 58.50, "Cash", false),
-        Sale(1003, "2019-02-10", {{{"Product 3", 5}}}, 25.00, 28.75, "Debit Card", true),
-        Sale(1004, "2019-03-15", {{{"Product 1", 2}, {"Product 3", 1}}}, 75.00, 86.25, "Cash", false),
-        Sale(1005, "2022-12-20", {{{"Product 2", 1}}, {{"Product 1", 3}, {"Product 3", 2}}}, 80.00, 92.00, "Credit Card", true)};
+        Sale(1, "2022-01-01", {{{"Product 1", 2}, {"Product 2", 1}}, {{"Product 3", 4}}}, 100.00, 115.00, "Credit Card", true),
+        Sale(2, "2021-01-05", {{{"Product 2", 3}}, {{"Product 1", 1}, {"Product 3", 2}}}, 50.00, 58.50, "Cash", false),
+        Sale(3, "2019-02-10", {{{"Product 3", 5}}}, 25.00, 28.75, "Debit Card", true),
+        Sale(4, "2019-03-15", {{{"Product 1", 2}, {"Product 3", 1}}}, 75.00, 86.25, "Cash", false),
+        Sale(5, "2022-12-20", {{{"Product 2", 1}}, {{"Product 1", 3}, {"Product 3", 2}}}, 80.00, 92.00, "Credit Card", true)};
 
     vector<map<string, int>> temporaryProducts;
     void addProduct(Product product)
@@ -175,15 +175,18 @@ public:
 
     void listSales()
     {
+        float total = 0;
         consoleClear();
-
         for (int i = 0; i < this->sales.size(); i++)
         {
             this->sales[i].print();
+            total += this->sales[i].total;
         }
+        cout << "Total: " << total << endl;
     }
     void listProducts()
     {
+
         consoleClear();
         for (int i = 0; i < this->products.size(); i++)
         {
@@ -223,7 +226,7 @@ public:
     {
         consoleClear();
         int oderNumber;
-        cout << "Enter the order number: ";
+        float totalSold = 0;
         cin >> oderNumber;
 
         for (int i = 0; i < this->sales.size(); i++)
@@ -231,10 +234,7 @@ public:
             if (this->sales[i].orderNumber == oderNumber)
             {
                 this->sales[i].print();
-            }
-            else
-            {
-                cout << "Sale was not found" << endl;
+                totalSold += this->sales[i].total;
             }
         }
     }
@@ -243,6 +243,7 @@ public:
     {
         consoleClear();
         int year;
+        float totalSold = 0;
         cout << "Enter the year: ";
         cin >> year;
 
@@ -251,14 +252,18 @@ public:
             if (this->sales[i].date.substr(0, 4) == to_string(year))
             {
                 this->sales[i].print();
+                totalSold += this->sales[i].total;
             }
         }
+        cout << "Total sold: " << totalSold << endl;
     }
 
     void SaleFilterByMonth()
     {
         consoleClear();
         string month;
+        float totalSold = 0;
+
         cout << "Enter the month: ";
         cin >> month;
 
@@ -267,6 +272,7 @@ public:
             if (this->sales[i].date.substr(5, 2) == month)
             {
                 this->sales[i].print();
+                totalSold += this->sales[i].total;
             }
         }
     }
@@ -282,9 +288,8 @@ public:
             tm t = {};
             istringstream ss(product.expirationDate);
             ss >> get_time(&t, "%Y-%m-%d");
-            auto expirationDate = chrono::system_clock::from_time_t(mktime(&t));
-
-            if (expirationDate < thirtyDaysAgo)
+            auto time = chrono::system_clock::from_time_t(mktime(&t));
+            if (time >= thirtyDaysAgo && time <= now)
             {
                 product.print();
             }
@@ -295,6 +300,7 @@ public:
     {
         consoleClear();
         string date1, date2;
+        float totalSold = 0;
         cout << "Enter the first date: ";
         cin >> date1;
         cout << "Enter the second date: ";
@@ -305,14 +311,18 @@ public:
             if (this->sales[i].date >= date1 && this->sales[i].date <= date2)
             {
                 this->sales[i].print();
+                totalSold += this->sales[i].total;
             }
         }
+        cout << "Total sold: " << totalSold << endl;
     }
 
     void SaleFilterByPaymentMethod()
     {
         consoleClear();
         string paymentMethod;
+        float totalSold = 0;
+
         cout << "Enter the payment method: ";
         cin >> paymentMethod;
 
@@ -321,8 +331,10 @@ public:
             if (this->sales[i].paymentMethod == paymentMethod)
             {
                 this->sales[i].print();
+                totalSold += this->sales[i].total;
             }
         }
+        cout << "Total sold: " << totalSold << endl;
     }
 
     void SaleFilterByBill()
@@ -330,6 +342,7 @@ public:
         consoleClear();
         bool bill;
         char billChar;
+        float totalSold = 0;
         cout << "Bill(y/n): ";
         cin >> billChar;
         bill = billChar == 'y' ? true : false;
@@ -339,8 +352,10 @@ public:
             if (this->sales[i].bill == bill)
             {
                 this->sales[i].print();
+                totalSold += this->sales[i].total;
             }
         }
+        cout << "Total sold: " << totalSold << endl;
     }
 
     void ProductFilterByName()
@@ -377,10 +392,6 @@ public:
 };
 
 static DB db;
-
-class Report
-{
-};
 
 class Menu
 {
