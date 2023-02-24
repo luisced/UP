@@ -135,9 +135,9 @@ class DB
 {
 public:
     vector<Product> products = {
-        Product(1, "123456789", "Paracetamol", "Tabletas", "Bayer", 100, 10, 15, "2023-12-31", true),
+        Product(1, "123456789", "Paracetamol", "Tabletas", "Bayer", 100, 10, 15, "2019-12-31", true),
         Product(2, "123456789", "Ibuprofeno", "Tabletas", "Pfizer", 100, 10, 15, "2021-12-31", true),
-        Product(3, "123456789", "Aspirina", "Tabletas", "Astra", 100, 10, 15, "2021-12-31", false),
+        Product(3, "123456789", "Aspirina", "Tabletas", "Astra", 100, 10, 15, "2022-12-31", false),
         Product(4, "123456789", "Cetirizina", "Tabletas", "Bayer", 100, 10, 15, "2023-02-10", true),
     };
     vector<Sale> sales = {
