@@ -616,15 +616,12 @@ int main()
                         switch (choice3)
                         {
                         case 1:
-                            db.SaleFilterByYear();
                             pressEnterToContinue();
                             break;
                         case 2:
-                            db.SaleFilterByMonth();
                             pressEnterToContinue();
                             break;
                         case 3:
-                            db.SaleFilterByDateRange();
                             pressEnterToContinue();
                             break;
                         default:
