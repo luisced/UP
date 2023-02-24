@@ -577,6 +577,8 @@ int main()
 
     vector<string> options = {"Create Product", "Create Sale", "Generate Report", "Exit"};
     vector<string> options2 = {"See specific sale information", "List all the sales", "S.filtered by date", "S. by payment method", "S. by lab", "S. by bill", "P. information", "P. by aboratory", "P. soon to expire", "Exit"};
+    vector<string> options3 = {"By year", "By month", "By date range", "Exit"};
+
     Menu menu(options, "MAIN MENU");
     int choice = menu.display();
     while (choice != 4)
@@ -608,7 +610,6 @@ int main()
                 case 3:
                     consoleClear();
                     cout << "Sales filtered by date" << endl;
-                    vector<string> options3 = {"By year", "By month", "By date range", "Exit"};
                     Menu menu3(options3, "SALES FILTERED BY DATE");
                     int choice3 = menu3.display();
                     while (choice3 != 4)
@@ -623,8 +624,6 @@ int main()
                             break;
                         case 3:
                             pressEnterToContinue();
-                            break;
-                        default:
                             break;
                         }
                         choice3 = menu3.display();
