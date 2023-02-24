@@ -1,4 +1,4 @@
-from pharmacy.models import Product
+from pharmacy.models import Product, Laboratory
 from pharmacy import db
 from datetime import datetime
 from pharmacy.laboratory.utils import createLaboratory
@@ -28,6 +28,11 @@ def getProduct(product: Product) -> dict[Product]:
     try:
         product = Product.toDict(
             Product.query.filter_by(id=product.id, status=True).first())
+        product['laboratory'] = getattr(
+            Laboratory.query.filter_by(
+                id=product['laboratory']).first(), 'name', None
+        )
+
     except Exception as e:
         logging.error(traceback.format_exc())
         product = None

@@ -55,7 +55,7 @@ def getProductDB():
 
     response.update({'sucess': True, 'message': message, 'Product': data, 'status_code': 200, 'error': error, 'code': code} if data and data != [] and data != [None] else {
         'sucess': False,  'message': 'Could not get content', 'status_code': 400, 'error': f'{error}', 'code': code})
-    return jsonify(response)
+    return jsonify(data)
 
 
 @product.route('/updateProduct', methods=['GET', 'PUT'])
