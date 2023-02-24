@@ -572,6 +572,16 @@ static void createSale()
     // clear the temporary list
 }
 
+// fliter sales by date menu
+
+static void filterbydate()
+{
+    consoleClear();
+    cout << "Sales filtered by date" << endl;
+    Menu menu3(options3, "SALES FILTERED BY DATE");
+    int choice3 = menu3.display();
+}
+
 int main()
 {
 
@@ -608,11 +618,7 @@ int main()
                     pressEnterToContinue();
                     break;
                 case 3:
-                    consoleClear();
-                    cout << "Sales filtered by date" << endl;
-                    Menu menu3(options3, "SALES FILTERED BY DATE");
-                    int choice3 = menu3.display();
-
+                    filterbydate();
                     break;
                 case 4:
                     db.listSales();
