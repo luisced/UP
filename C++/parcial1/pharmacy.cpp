@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <ctime>
@@ -131,8 +132,19 @@ static string randomString()
 class DB
 {
 public:
-    vector<Product> products;
-    vector<Sale> sales;
+    vector<Product> products = {
+        Product(1, "123456789", "Paracetamol", "Tabletas", "Bayer", 100, 10, 15, "2023-12-31", true),
+        Product(2, "123456789", "Ibuprofeno", "Tabletas", "Pfizer", 100, 10, 15, "2021-12-31", true),
+        Product(3, "123456789", "Aspirina", "Tabletas", "Astra", 100, 10, 15, "2021-12-31", false),
+        Product(4, "123456789", "Cetirizina", "Tabletas", "Bayer", 100, 10, 15, "2023-02-10", true),
+    };
+    vector<Sale> sales = {
+        Sale(1001, "2022-01-01", {{{"Product 1", 2}, {"Product 2", 1}}, {{"Product 3", 4}}}, 100.00, 115.00, "Credit Card", true),
+        Sale(1002, "2021-01-05", {{{"Product 2", 3}}, {{"Product 1", 1}, {"Product 3", 2}}}, 50.00, 58.50, "Cash", false),
+        Sale(1003, "2019-02-10", {{{"Product 3", 5}}}, 25.00, 28.75, "Debit Card", true),
+        Sale(1004, "2019-03-15", {{{"Product 1", 2}, {"Product 3", 1}}}, 75.00, 86.25, "Cash", false),
+        Sale(1005, "2022-12-20", {{{"Product 2", 1}}, {{"Product 1", 3}, {"Product 3", 2}}}, 80.00, 92.00, "Credit Card", true)};
+
     vector<map<string, int>> temporaryProducts;
     void addProduct(Product product)
     {
@@ -225,51 +237,62 @@ public:
         }
     }
 
-    void SaleFilterByYear(int year)
+    void SaleFilterByYear()
     {
+        consoleClear();
+        int year;
+        cout << "Enter the year: ";
+        cin >> year;
+
         for (int i = 0; i < this->sales.size(); i++)
         {
-            if (this->sales[i].date.substr(6, 4) == to_string(year))
+            if (this->sales[i].date.substr(0, 4) == to_string(year))
             {
                 this->sales[i].print();
-            }
-            else
-            {
-                cout << "Sale was not found" << endl;
             }
         }
     }
 
-    void SaleFilterByMont(string month)
+    void SaleFilterByMonth()
     {
-        map<string, int> months = {
-            {"January", 1},
-            {"February", 2},
-            {"March", 3},
-            {"April", 4},
-            {"May", 5},
-            {"June", 6},
-            {"July", 7},
-            {"August", 8},
-            {"September", 9},
-            {"October", 10},
-            {"November", 11},
-            {"December", 12}};
+        consoleClear();
+        string month;
+        cout << "Enter the month: ";
+        cin >> month;
+
         for (int i = 0; i < this->sales.size(); i++)
         {
-            if (this->sales[i].date.substr(3, 2) == to_string(months[month]))
+            if (this->sales[i].date.substr(5, 2) == month)
             {
                 this->sales[i].print();
             }
-            else
+        }
+    }
+    void ProductFilterBySoonToExpire()
+    {
+        consoleClear();
+        time_t t = time(nullptr);
+        tm tm = *localtime(&t);
+        string today = to_string(tm.tm_year + 1900) + "-" + to_string(tm.tm_mon + 1) + "-" + to_string(tm.tm_mday);
+
+        // 30 before today is the soon to expire date
+        for (int i = 0; i < this->products.size(); i++)
+        {
+            if (this->products[i].expirationDate >= today && this->products[i].expirationDate <= today.substr(0, 8) + "30")
             {
-                cout << "Sale was not found" << endl;
+                this->products[i].print();
             }
         }
     }
 
-    void SaleFilterBetweenDates(string date1, string date2)
+    void SaleFilterByDateRange()
     {
+        consoleClear();
+        string date1, date2;
+        cout << "Enter the first date: ";
+        cin >> date1;
+        cout << "Enter the second date: ";
+        cin >> date2;
 
         for (int i = 0; i < this->sales.size(); i++)
         {
@@ -277,29 +300,74 @@ public:
             {
                 this->sales[i].print();
             }
-            else
+        }
+    }
+
+    void SaleFilterByPaymentMethod()
+    {
+        consoleClear();
+        string paymentMethod;
+        cout << "Enter the payment method: ";
+        cin >> paymentMethod;
+
+        for (int i = 0; i < this->sales.size(); i++)
+        {
+            if (this->sales[i].paymentMethod == paymentMethod)
             {
-                cout << "Sale was not found" << endl;
+                this->sales[i].print();
             }
         }
     }
 
-    void ProductFilterByName(string name)
+    void SaleFilterByBill()
     {
+        consoleClear();
+        bool bill;
+        char billChar;
+        cout << "Bill(y/n): ";
+        cin >> billChar;
+        bill = billChar == 'y' ? true : false;
+
+        for (int i = 0; i < this->sales.size(); i++)
+        {
+            if (this->sales[i].bill == bill)
+            {
+                this->sales[i].print();
+            }
+        }
+    }
+
+    void ProductFilterByName()
+    {
+        consoleClear();
+        string name;
+        cout << "Enter the name: ";
+        cin >> name;
+
         for (int i = 0; i < this->products.size(); i++)
         {
             if (this->products[i].name == name)
             {
                 this->products[i].print();
             }
-            else
-            {
-                cout << "Product was not found" << endl;
-            }
         }
     }
 
-    // build report
+    void ProductFilterByLaboratory()
+    {
+        consoleClear();
+        string laboratory;
+        cout << "Enter the laboratory: ";
+        cin >> laboratory;
+
+        for (int i = 0; i < this->products.size(); i++)
+        {
+            if (this->products[i].laboratory == laboratory)
+            {
+                this->products[i].print();
+            }
+        }
+    }
 };
 
 static DB db;
@@ -576,18 +644,37 @@ static void createSale()
 
 static void filterbydate()
 {
+    vector<string> options3 = {"By year", "By month", "By date range", "Exit"};
+
     consoleClear();
     cout << "Sales filtered by date" << endl;
     Menu menu3(options3, "SALES FILTERED BY DATE");
     int choice3 = menu3.display();
+    switch (choice3)
+    {
+    case 1:
+        db.SaleFilterByYear();
+        pressEnterToContinue();
+        break;
+    case 2:
+        db.SaleFilterByMonth();
+        pressEnterToContinue();
+        break;
+    case 3:
+        db.SaleFilterByDateRange();
+        pressEnterToContinue();
+        break;
+    case 4:
+        return;
+    }
 }
 
 int main()
 {
 
     vector<string> options = {"Create Product", "Create Sale", "Generate Report", "Exit"};
-    vector<string> options2 = {"See specific sale information", "List all the sales", "S.filtered by date", "S. by payment method", "S. by lab", "S. by bill", "P. information", "P. by aboratory", "P. soon to expire", "Exit"};
-    vector<string> options3 = {"By year", "By month", "By date range", "Exit"};
+    vector<string> options2 = {"See specific sale information", "List all the sales", "S.filtered by date", "S. by payment method", "S. by lab", "S. by bill", "P. information", "P. by Laboratory", "P. soon to expire", "All Products",
+                               "Exit"};
 
     Menu menu(options, "MAIN MENU");
     int choice = menu.display();
@@ -604,7 +691,7 @@ int main()
         case 3:
             Menu menu2(options2, "REPORTS");
             int choice2 = menu2.display();
-            while (choice2 != 10)
+            while (choice2 != 11)
             {
                 switch (choice2)
                 {
@@ -621,7 +708,7 @@ int main()
                     filterbydate();
                     break;
                 case 4:
-                    db.listSales();
+                    db.SaleFilterByPaymentMethod();
                     pressEnterToContinue();
                     break;
                 case 5:
@@ -629,22 +716,25 @@ int main()
                     pressEnterToContinue();
                     break;
                 case 6:
-                    db.listSales();
+                    db.SaleFilterByBill();
                     pressEnterToContinue();
                     break;
                 case 7:
-                    db.listSales();
+                    db.ProductFilterByName();
+
                     pressEnterToContinue();
                     break;
                 case 8:
-                    db.listSales();
+                    db.ProductFilterByLaboratory();
                     pressEnterToContinue();
                     break;
                 case 9:
-                    db.listSales();
+                    db.ProductFilterBySoonToExpire();
                     pressEnterToContinue();
                     break;
                 case 10:
+                    db.listProducts();
+                    pressEnterToContinue();
                     break;
                 }
                 choice2 = menu2.display();
