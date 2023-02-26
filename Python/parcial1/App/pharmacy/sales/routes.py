@@ -29,3 +29,30 @@ def createSaleDB():
         'sucess': False,  'message': 'Could not get content', 'status_code': 400, 'error': f'{error}', 'code': code})
 
     return jsonify(response)
+
+
+@sale.route('/getSale', methods=['GET'])
+def getSaleDB():
+    """This endpoint gets a sale"""
+
+    jsonData = request.get_json()
+    data: list[dict[str, str]] = []
+    response: dict[str, str] = {}
+    error, code = None, None
+    keys = ['id']
+    if request.method == 'GET':
+        if not jsonData:
+            error, code = 'Empty Request', 400
+        elif not all(key in jsonData for key in keys):
+            error, code = f'Missing key: {", ".join(key for key in keys if key not in jsonData)}', 400
+        else:
+            message, code = f'Sale {jsonData["id"]} found', 200
+            data.append(getSale(
+                Sale.query.filter_by(id=jsonData['id']).first()))
+    else:
+        error, code = 'Method not allowed', 405
+
+    response.update({'sucess': True, 'message': message, 'Sale': data, 'status_code': 200, 'error': error, 'code': code} if data and data != [] and data != [None] else {
+        'sucess': False,  'message': 'Could not get content', 'status_code': 400, 'error': f'{error}', 'code': code})
+
+    return jsonify(data)

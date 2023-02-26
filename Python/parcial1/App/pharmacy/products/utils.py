@@ -9,7 +9,7 @@ import traceback
 def createProduct(name: str, presentation: str, cost: float, price: float, stock: int, expireDate: datetime, iva: bool, laboratory: str) -> Product:
     """Create a new product"""
     try:
-        if not Product.query.filter_by(name=name).first():
+        if not Product.query.filter_by(name=name, presentation=presentation).first():
             product = Product(name=name, presentation=presentation, cost=cost,
                               price=price, stock=stock, expireDate=datetime.strptime(expireDate, '%d/%m/%Y'), iva=iva, laboratory=getattr(createLaboratory(laboratory), 'id', 1))
             db.session.add(product)

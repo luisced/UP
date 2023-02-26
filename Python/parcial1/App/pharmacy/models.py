@@ -95,11 +95,5 @@ class Sale(db.Model):
     productID = db.relationship('Product', secondary=RelationProductSale,
                                 backref=db.backref('saleID', lazy=True))
 
-    def __post_init__(self):
-        self.quantity: int = db.Column(db.Integer, nullable=False,
-                                       default=len(self.productID))
-        self.subtotal: float = db.Column(db.Float, nullable=False,
-                                         default=sum([product.price for product in self.productID]))
-
-        self.total: float = db.Column(db.Float, nullable=False,
-                                      default=self.subtotal * 1.16 if self.iva else self.subtotal)
+    def toDict(self) -> dict:
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
