@@ -58,9 +58,15 @@ def createRelationProductSale(sale: Sale, product: int, quantity: int) -> Sale:
 def getSale(sale: Sale) -> dict[Product]:
     """Get a sale"""
     try:
-
+        products = []
         sale = Sale.query.filter_by(id=sale.id).first()
-        print(products)
+        for product in sale.productID:
+            product = Product.query.filter_by(id=product.id).first()
+            quantity = sale.productID.count(product)
+            products.append({product.name: quantity})
+
+        sale = Sale.toDict(sale)
+        sale['products'] = products
 
     except Exception as e:
         logging.error(traceback.format_exc())
