@@ -63,7 +63,7 @@ class Product(db.Model):
 class Payments(db.Model):
     __tablename__ = 'Payments'
     id: int = db.Column(db.Integer, primary_key=True)
-    name: str = db.Column(db.String(100), nullable=False, default='Payment')
+    type: str = db.Column(db.String(100), nullable=False, default='Payment')
     status: bool = db.Column(db.Boolean, nullable=False, default=True)
     creationDate: datetime = db.Column(
         db.DateTime, nullable=False, default=datetime.utcnow)
@@ -92,8 +92,30 @@ class Sale(db.Model):
         db.Integer, db.ForeignKey('Payments.id'), nullable=False)
 
     # Relationships
-    productID = db.relationship('Product', secondary=RelationProductSale,
-                                backref=db.backref('saleID', lazy=True))
+
+    def toDict(self) -> dict:
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
+
+@dataclass
+class Ticket(db.Model):
+    __tablename__ = 'Ticket'
+    id: int = db.Column(db.Integer, primary_key=True)
+    quantity: int = db.Column(db.Integer, nullable=False, default=0)
+    status: bool = db.Column(db.Boolean, nullable=False, default=True)
+    creationDate: datetime = db.Column(
+        db.DateTime, nullable=False, default=datetime.utcnow)
+    lastUpdate: datetime = db.Column(
+        db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Foreign Keys
+    productID: int = db.Column(
+        db.Integer, db.ForeignKey('Product.id'), nullable=False)
+
+    saleID: int = db.Column(
+        db.Integer, db.ForeignKey('Sale.id'), nullable=False)
+
+    # Relationships
 
     def toDict(self) -> dict:
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}

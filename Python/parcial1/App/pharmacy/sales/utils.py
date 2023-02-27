@@ -1,5 +1,5 @@
-from datetime import datetime
-from pharmacy.models import Sale, Product, Laboratory
+from sqlalchemy.orm import joinedload
+from pharmacy.models import Sale, Product, Ticket, Payments
 from pharmacy import db
 import logging
 import traceback
@@ -14,8 +14,7 @@ def createSale(bill: bool, products: list[dict[Product]], payment: int) -> Sale:
 
         for product in products:
             productObj = Product.query.filter_by(id=product['id']).first()
-            createRelationProductSale(
-                sale, product['id'], product['quantity'])
+            createTicket(product['id'], product['quantity'], sale.id)
             if sale:
                 sale.subtotal = productObj.price * product['quantity']
                 sale.total = sale.subtotal if not productObj.iva else sale.subtotal * 1.16
@@ -31,42 +30,50 @@ def createSale(bill: bool, products: list[dict[Product]], payment: int) -> Sale:
     return sale
 
 
-def createRelationProductSale(sale: Sale, product: int, quantity: int) -> Sale:
-    """Create a new relation between sale and product"""
+def createTicket(product: int, quantity: int, sale: int) -> Ticket:
+    """Create a new ticket for a sale"""
     try:
-        sale = Sale.query.filter_by(id=sale.id).first()
         product = Product.query.filter_by(id=product).first()
 
-        if sale and product:
+        if product:
             if product.stock >= quantity:
-                product.stock -= quantity
-                for i in range(quantity):
-                    sale.productID.append(product)
+                ticket = Ticket(productID=product.id,
+                                quantity=quantity, saleID=sale)
+                db.session.add(ticket)
                 db.session.commit()
+                if ticket:
+                    product.stock -= quantity
+                    db.session.commit()
+                else:
+                    raise ValueError('Ticket not created')
             else:
                 raise ValueError('Insufficient stock')
         else:
             raise ValueError('Sale or product does not exist')
 
+        db.session.add(ticket)
+        db.session.commit()
+
     except Exception:
         logging.error(traceback.format_exc())
         sale = None
 
-    return sale
+    return ticket
 
 
-def getSale(sale: Sale) -> dict[Product]:
+def getSale(sale: Sale) -> dict:
     """Get a sale"""
     try:
-        products = []
-        sale = Sale.query.filter_by(id=sale.id).first()
-        for product in sale.productID:
-            product = Product.query.filter_by(id=product.id).first()
-            quantity = sale.productID.count(product)
-            products.append({product.name: quantity})
 
-        sale = Sale.toDict(sale)
-        sale['products'] = products
+        sale = Sale.toDict(Sale.query.filter_by(id=sale.id).first())
+        sale['payment'] = getattr(
+            Payments.query.filter_by(id=sale['payment']).first(), 'type', None)
+        sale['products'] = []
+
+        for ticket in Ticket.query.filter_by(saleID=sale['id']).all():
+            product = Product.query.filter_by(id=ticket.productID).first()
+            sale['products'].append(
+                {'name': product.name, 'quantity': ticket.quantity})
 
     except Exception as e:
         logging.error(traceback.format_exc())
