@@ -1,6 +1,7 @@
 from sqlalchemy.orm import joinedload
 from pharmacy.models import Sale, Product, Ticket, Payments
 from pharmacy import db
+from datetime import datetime, timedelta
 import logging
 import traceback
 
@@ -80,3 +81,54 @@ def getSale(sale: Sale) -> dict:
         sale = None
 
     return sale
+
+
+def filterSales(filterSale: str) -> list[dict]:
+    """Filter sales"""
+    try:
+        if isinstance(filterSale, str):
+            match filterSale:
+                case 'all':
+                    sales = [getSale(sale) for sale in Sale.query.all()]
+                # case 'soonToExpire':
+                #     sales = [
+                #         getSale(sale) for sale in Sale.query.filter(Sale.date.between(
+                #             datetime.now(), datetime.now() + timedelta(days=30))).all()
+                #     ]
+                # case 'expired':
+                #     sales = [
+                #         getSale(sale) for sale in Sale.query.filter(Sale.date < datetime.now()).all()
+                #     ]
+                case _:
+                    sales = None
+        elif isinstance(filterSale, dict):
+            if 'id' in filterSale:
+                sales = getSale(Sale.query.filter_by(
+                    id=filterSale['id']).first())
+            elif 'bill' in filterSale:
+                sales = [getSale(sale) for sale in Sale.query.filter_by(
+                    bill=filterSale['bill']).all()]
+            elif 'payment' in filterSale:
+                sales = [getSale(sale) for sale in Sale.query.filter_by(
+                    payment=filterSale['payment']).all()]
+            elif 'year' in filterSale:
+                sales = [getSale(sale) for sale in
+                         Sale.query.filter(Sale.date.between(datetime(int(filterSale['year']), 1, 1), datetime(int(filterSale['year']), 12, 31))).all()]
+            elif 'start' in filterSale and 'end' in filterSale:
+                sales = [getSale(sale) for sale in Sale.query.filter(Sale.date.between(
+                    filterSale['start'], filterSale['end'])).all()]
+            elif 'month' in filterSale and 'year' in filterSale:
+                sales = [getSale(sale) for sale in Sale.query.filter(Sale.date.between(
+                    datetime(int(filterSale['year']),
+                             int(filterSale['month']), 1),
+                    datetime(int(filterSale['year']), int(filterSale['month'])+1, 1) - timedelta(days=1))
+                ).all()]
+            else:
+                sales = None
+        else:
+            sales = None
+    except Exception as e:
+        logging.error(traceback.format_exc())
+        sales = None
+
+    return sales
