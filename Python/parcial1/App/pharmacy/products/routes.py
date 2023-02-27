@@ -36,26 +36,25 @@ def createProductDB():
 def getProductDB():
     '''This endpoint gets a product'''
 
+    jsonData = request.get_json()
+    data: list[dict[str, str]] = []
+    response: dict[str, str] = {}
+    error, code = None, None
+    keys = ['filter']
     if request.method == 'GET':
-        jsonData = request.get_json()
-        data: list[dict[str, str]] = []
-        response: dict[str, str] = {}
-        error, code = None, None
-        keys = ['id']
         if not jsonData:
             error, code = 'Empty Request', 400
         elif not all(key in jsonData for key in keys):
             error, code = f'Missing key: {", ".join(key for key in keys if key not in jsonData)}', 400
         else:
-            message, code = f'Product {jsonData["id"]} found', 200
-            data.append(getProduct(
-                Product.query.filter_by(id=jsonData['id']).first()))
+            data = filterProducts(jsonData['filter'])
+            message, code = f'{len(data)} Products found', 200
     else:
         error, code = 'Method not allowed', 405
 
     response.update({'sucess': True, 'message': message, 'Product': data, 'status_code': 200, 'error': error, 'code': code} if data and data != [] and data != [None] else {
         'sucess': False,  'message': 'Could not get content', 'status_code': 400, 'error': f'{error}', 'code': code})
-    return jsonify(data)
+    return jsonify(response)
 
 
 @product.route('/updateProduct', methods=['GET', 'PUT'])

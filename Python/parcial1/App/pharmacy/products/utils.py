@@ -1,6 +1,6 @@
 from pharmacy.models import Product, Laboratory
 from pharmacy import db
-from datetime import datetime
+from datetime import datetime, timedelta
 from pharmacy.laboratory.utils import createLaboratory
 import logging
 import traceback
@@ -79,3 +79,34 @@ def deleteProduct(id: Product) -> Product:
         product = Product.query.filter_by(id=id).first()
 
     return product
+
+
+def filterProducts(filterProduct: str) -> list[Product]:
+    """Filter products"""
+    try:
+        if isinstance(filterProduct, str):
+            if filterProduct == 'all':
+                products = [getProduct(
+                    product) for product in Product.query.filter_by(status=True).all()]
+            elif filterProduct == 'soonToExpire':
+                products = [getProduct(product) for product in Product.query.filter(
+                    Product.expireDate.between(datetime.now(), datetime.now() + timedelta(days=30))).all()]
+            elif filterProduct == 'expired':
+                products = [getProduct(product) for product in Product.query.filter(
+                    Product.expireDate < datetime.now()).all()]
+            else:
+                products = None
+        elif isinstance(filterProduct, dict):
+            if 'id' in filterProduct:
+                products = getProduct(Product.query.filter_by(
+                    id=filterProduct['id'], status=True).first())
+            else:
+                products = None
+        else:
+            products = None
+
+    except Exception:
+        logging.error(traceback.format_exc())
+        products = None
+
+    return products
