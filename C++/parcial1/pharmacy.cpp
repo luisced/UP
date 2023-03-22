@@ -296,6 +296,18 @@ public:
         }
     }
 
+    bool getProductByName(string name)
+    {
+        for (auto product : this->products)
+        {
+            if (product.name == name)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void SaleFilterByDateRange()
     {
         consoleClear();
@@ -475,37 +487,103 @@ static void displayInputBox(string prompt)
     cout << "Enter your option: ";
 }
 
-static void createProduct()
+// Helper function to validate and get a non-empty string input
+string getNonEmptyStringInput(const string &prompt)
 {
-    PaymMethod payment;
-    string name, presentation, laboratory, expirationDate, sku;
-    int stock, id;
-    float cost, price;
-    bool iva;
-    displayInputBox("Enter the product name");
-    cin >> name;
-    displayInputBox("Enter the product presentation");
-    cin >> presentation;
-    displayInputBox("Enter the product price");
-    cin >> price;
-    displayInputBox("Enter the product cost");
-    cin >> cost;
-    displayInputBox("Enter the product stock");
-    cin >> stock;
-    displayInputBox("Enter the laboratory");
-    cin >> laboratory;
-    displayInputBox("Enter the expiration date");
-    cin >> expirationDate;
-    displayInputBox("Is the product taxable? (y/n)");
-    string tax;
-    cin >> tax;
-    iva = true ? tax == "y" : false;
+    string input;
+    while (true)
+    {
+        displayInputBox(prompt);
+        cin >> input;
+        if (!input.empty())
+        {
+            break;
+        }
+        displayInputBox("Input cannot be empty");
+    }
+    return input;
+}
 
-    id = db.products.size() + 1;
-    sku = randomString();
+// Helper function to validate and get a positive float input
+float getPositiveFloatInput(const string &prompt)
+{
+    float input;
+    while (true)
+    {
+        displayInputBox(prompt);
+        if (cin >> input && input > 0)
+        {
+            break;
+        }
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        displayInputBox("Invalid input, please enter a positive number");
+    }
+    return input;
+}
+
+// Helper function to validate and get a non-negative integer input
+int getNonNegativeIntInput(const string &prompt)
+{
+    int input;
+    while (true)
+    {
+        displayInputBox(prompt);
+        if (cin >> input && input >= 0)
+        {
+            break;
+        }
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        displayInputBox("Invalid input, please enter a non-negative integer");
+    }
+    return input;
+}
+
+// Helper function to validate and get a yes/no boolean input
+bool getYesNoInput(const string &prompt)
+{
+    while (true)
+    {
+        displayInputBox(prompt);
+        string input;
+        cin >> input;
+        if (input == "y")
+        {
+            return true;
+        }
+        else if (input == "n")
+        {
+            return false;
+        }
+        displayInputBox("Invalid input, please enter y or n");
+    }
+}
+
+void createProduct()
+{
+    string name = getNonEmptyStringInput("Enter the product name");
+    if (db.getProductByName(name))
+    {
+        displayInputBox("Product already exists");
+        pressEnterToContinue();
+        return;
+    }
+    string presentation = getNonEmptyStringInput("Enter the product presentation");
+    float price = getPositiveFloatInput("Enter the product price");
+    float cost = getPositiveFloatInput("Enter the product cost");
+    int stock = getNonNegativeIntInput("Enter the product stock");
+    string laboratory = getNonEmptyStringInput("Enter the laboratory");
+    string expirationDate = getNonEmptyStringInput("Enter the expiration date");
+    bool iva = getYesNoInput("Is the product taxable? (y/n)");
+
+    int id = db.products.size() + 1;
+    string sku = randomString();
 
     Product product(id, sku, name, presentation, laboratory, stock, cost, price, expirationDate, iva);
     db.addProduct(product);
+
+    displayInputBox("Product added successfully");
 }
 
 static void createSale()
@@ -525,8 +603,9 @@ static void createSale()
 
     // Ask for the product name
     string productName;
-    displayInputBox("Enter the product name");
-    cin >> productName;
+    productName = getNonEmptyStringInput(
+        "Enter the product name or type 'exit' to exit");
+
     Product product = db.findProductByName(productName);
 
     while (product.id == 0)
@@ -551,12 +630,12 @@ static void createSale()
     }
     // Ask for the quantity, if the quantity is greater than the stock, show an error message
     int stockInventory;
-    displayInputBox("What quantity would you like to buy?");
-    cin >> stockInventory;
+    stockInventory = getNonNegativeIntInput(
+        "What quantity would you like to buy?");
     while (stockInventory > product.stock)
     {
-        displayInputBox("Not enough stock, What quantity would you like to buy?");
-        cin >> stockInventory;
+        stockInventory = getNonNegativeIntInput(
+            "What quantity would you like to buy?");
     }
     product.stock -= stockInventory;
     string anotherProduct;
