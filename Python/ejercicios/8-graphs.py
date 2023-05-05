@@ -25,8 +25,7 @@ class Subject:
 
 subjects = [
     # first variant
-    Subject(1, "Math", datetime(2021, 1, 1, 8, 30),
-            datetime(2021, 1, 1, 10, 0)),
+    Subject(1, "Math", datetime(2021, 1, 1, 8, 30),datetime(2021, 1, 1, 10, 0)),
     Subject(2, "English", datetime(2021, 1, 1, 10, 0),
             datetime(2021, 1, 1, 11, 30)),
     Subject(3, "Science", datetime(2021, 1, 1, 11, 30),
@@ -67,11 +66,6 @@ subjects = [
             datetime(2021, 1, 1, 17, 0)),
     Subject(20, "Economics", datetime(2021, 1, 1, 17, 0),
             datetime(2021, 1, 1, 18, 0)),
-
-
-
-
-
 
 
 ]
@@ -123,5 +117,5 @@ def find_valid_combinations():
 
 elapsed_time = timeit.timeit(find_valid_combinations, number=1)
 print(
-    f"Elapsed time: {elapsed_time:.4f} seconds, total valid combinations: 8 with 10 subjects and 2 groups")
+    f"Elapsed time: {elapsed_time:.4f}")
 plt.show()
