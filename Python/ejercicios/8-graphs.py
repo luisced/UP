@@ -11,50 +11,17 @@ import timeit
 
 @dataclass
 class Subject:
-    identifier: int
+    id: int
     name: str
     start_time: datetime  # H:M
     end_time: datetime  # H:M
 
     def __repr__(self) -> str:
-        return f"id: {self.identifier} {self.name} ({self.start_time.strftime('%H:%M')} - {self.end_time.strftime('%H:%M')})"
+        return f"id: {self.id} {self.name} ({self.start_time.strftime('%H:%M')} - {self.end_time.strftime('%H:%M')})"
 
 
 # create objects
-# subjects = [
-#     # first variante
-#     Subject(1, "Math", datetime(2021, 1, 1, 8, 30),
-#             datetime(2021, 1, 1, 10, 0)),
-#     Subject(2, "English", datetime(2021, 1, 1, 10, 0),
-#             datetime(2021, 1, 1, 11, 30)),
-#     Subject(3, "Science", datetime(2021, 1, 1, 11, 30),
-#             datetime(2021, 1, 1, 13, 0)),
-#     Subject(4, "History", datetime(2021, 1, 1, 13, 0),
-#             datetime(2021, 1, 1, 14, 30)),
-#     Subject(5, "Geography", datetime(2021, 1, 1, 14, 30),
-#             datetime(2021, 1, 1, 16, 0)),
-#     # second variant
-#     Subject(6, "Math", datetime(2021, 1, 1, 8, 0), datetime(2021, 1, 1, 9, 0)),
-#     Subject(7, "English", datetime(2021, 1, 1, 10, 0),
-#             datetime(2021, 1, 1, 11, 30)),
-#     Subject(8, "Science", datetime(2021, 1, 1, 10, 0),
-#             datetime(2021, 1, 1, 11, 0)),
-#     Subject(9, "History", datetime(2021, 1, 1, 11, 0),
-#             datetime(2021, 1, 1, 12, 0)),
-#     Subject(10, "Geography", datetime(2021, 1, 1, 12, 0),
-#             datetime(2021, 1, 1, 13, 0)),
-#     # third variant
-#     Subject(11, "Math", datetime(2021, 1, 1, 8, 0),
-#             datetime(2021, 1, 1, 9, 0)),
-#     Subject(12, "English", datetime(2021, 1, 1, 9, 0),
-#             datetime(2021, 1, 1, 10, 0)),
-#     Subject(13, "Science", datetime(2021, 1, 1, 10, 0),
-#             datetime(2021, 1, 1, 11, 0)),
-#     Subject(14, "History", datetime(2021, 1, 1, 11, 0),
-#             datetime(2021, 1, 1, 12, 0)),
-#     Subject(15, "Geography", datetime(2021, 1, 1, 12, 0),
-#             datetime(2021, 1, 1, 13, 0)),
-# ]
+
 
 subjects = [
     # first variant
@@ -101,17 +68,7 @@ subjects = [
     Subject(20, "Economics", datetime(2021, 1, 1, 17, 0),
             datetime(2021, 1, 1, 18, 0)),
 
-    # third variant
-    Subject(21, "Math", datetime(2021, 1, 1, 18, 0),
-            datetime(2021, 1, 1, 19, 0)),
-    Subject(22, "English", datetime(2021, 1, 1, 19, 0),
-            datetime(2021, 1, 1, 20, 0)),
-    Subject(23, "Science", datetime(2021, 1, 1, 20, 0),
-            datetime(2021, 1, 1, 21, 0)),
-    Subject(24, "History", datetime(2021, 1, 1, 21, 0),
-            datetime(2021, 1, 1, 22, 0)),
-    #     Subject(25, "Geography", datetime(2021, 1, 1, 22, 0),
-    #                 datetime(2021, 1, 1, 23, 0)),
+
 
 
 
@@ -120,7 +77,7 @@ subjects = [
 ]
 
 
-subject_dict = {subject.identifier: subject for subject in subjects}
+subject_dict = {subject.id: subject for subject in subjects}
 
 
 def subjects_overlap(id1: int, id2: int) -> bool:
@@ -133,7 +90,7 @@ def find_valid_combinations():
     G = nx.Graph()
 
     for subject in subjects:
-        G.add_node(subject.identifier, subject=subject)
+        G.add_node(subject.id, subject=subject)
 
     for id1, id2 in combinations(subject_dict.keys(), 2):
         if not subjects_overlap(id1, id2):
@@ -162,9 +119,9 @@ def find_valid_combinations():
     pos = nx.spring_layout(G)
     nx.draw(G, pos, with_labels=True, node_color="lightblue",
             font_size=8, node_size=2000)
-    plt.show()
 
 
 elapsed_time = timeit.timeit(find_valid_combinations, number=1)
 print(
-    f"Elapsed time: {elapsed_time:.6f} seconds, total valid combinations: 8 with 10 subjects and 3 groups")
+    f"Elapsed time: {elapsed_time:.4f} seconds, total valid combinations: 8 with 10 subjects and 2 groups")
+plt.show()
