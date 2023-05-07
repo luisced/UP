@@ -44,7 +44,7 @@ subjects = [
             datetime(2021, 1, 1, 20, 30)),
     Subject(9, "Literature", datetime(2021, 1, 1, 7, 0),
             datetime(2021, 1, 1, 8, 30)),
-    Subject(10, "Economics", datetime(2021, 1, 1, 20, 30),
+    Subject(10, "Economics", datetime(2021, 1, 1, 15, 30),
             datetime(2021, 1, 1, 22, 0)),
 
     # second variant
