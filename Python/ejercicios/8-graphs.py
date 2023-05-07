@@ -26,8 +26,7 @@ class Subject:
 
 subjects = [
     # first variant
-    Subject(1, "Math", datetime(2021, 1, 1, 8, 30),
-            datetime(2021, 1, 1, 10, 0)),
+    Subject(1, "Math", datetime(2021, 1, 1, 8, 30),datetime(2021, 1, 1, 10, 0)),
     Subject(2, "English", datetime(2021, 1, 1, 10, 0),
             datetime(2021, 1, 1, 11, 30)),
     Subject(3, "Science", datetime(2021, 1, 1, 11, 30),
