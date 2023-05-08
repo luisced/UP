@@ -138,14 +138,14 @@ public:
         Product(1, "123456789", "Paracetamol", "Tabletas", "Bayer", 100, 10, 15, "2019-12-31", true),
         Product(2, "123456789", "Ibuprofeno", "Tabletas", "Pfizer", 100, 10, 15, "2021-12-31", true),
         Product(3, "123456789", "Aspirina", "Tabletas", "Astra", 100, 10, 15, "2022-12-31", false),
-        Product(4, "123456789", "Cetirizina", "Tabletas", "Bayer", 100, 10, 15, "2023-02-10", true),
+        Product(4, "123456789", "Cetirizina", "Tabletas", "Bayer", 100, 10, 15, "2023-05-07", true),
     };
     vector<Sale> sales = {
         Sale(1, "2022-01-01", {{{"Product 1", 2}, {"Product 2", 1}}, {{"Product 3", 4}}}, 100.00, 115.00, "Credit Card", true),
         Sale(2, "2021-01-05", {{{"Product 2", 3}}, {{"Product 1", 1}, {"Product 3", 2}}}, 50.00, 58.50, "Cash", false),
         Sale(3, "2019-02-10", {{{"Product 3", 5}}}, 25.00, 28.75, "Debit Card", true),
         Sale(4, "2019-03-15", {{{"Product 1", 2}, {"Product 3", 1}}}, 75.00, 86.25, "Cash", false),
-        Sale(5, "2022-12-20", {{{"Product 2", 1}}, {{"Product 1", 3}, {"Product 3", 2}}}, 80.00, 92.00, "Credit Card", true)};
+        Sale(5, "2023-12-20", {{{"Product 2", 1}}, {{"Product 1", 3}, {"Product 3", 2}}}, 80.00, 92.00, "Credit Card", true)};
 
     vector<map<string, int>> temporaryProducts;
     void addProduct(Product product)

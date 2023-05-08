@@ -16,6 +16,7 @@ class Subject:
     name: str
     start_time: datetime  # H:M
     end_time: datetime  # H:M
+    days: dict[list[str]] # monday : startTime - endTime
 
     def __repr__(self) -> str:
         return f"id: {self.id} {self.name} ({self.start_time.strftime('%H:%M')} - {self.end_time.strftime('%H:%M')})"
@@ -137,3 +138,5 @@ elapsed_time = timeit.timeit(find_valid_combinations, number=1)
 print(
     f"Elapsed time: {elapsed_time:.4f} seconds")
 plt.show()
+
+
