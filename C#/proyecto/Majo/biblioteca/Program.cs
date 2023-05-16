@@ -12,11 +12,14 @@
 
             public bool status;
 
-            public Book(string name, string isbn_10, bool status)
+            public float price;
+
+            public Book(string name, string isbn_10, bool status, float price)
             {
                 this.name = name;
                 this.isbn_10 = isbn_10;
                 this.status = status;
+                this.price = price;
             }
 
         }
@@ -28,6 +31,8 @@
             public string rfc;
             public string adress;
             public string bill;
+
+            public float price;
 
             public Library(string rfc, string adress, string bill)
             {
@@ -69,9 +74,11 @@
             int books = Convert.ToInt32(Console.ReadLine());
             for (int i = 0; i < books; i++)
             {
-                Console.WriteLine("Book name: ");
+                Console.Write("Book name: ");
                 string name = Console.ReadLine();
-                Book book = new Book(name, generateISB(), true);
+                Console.Write("Enter the price: ");
+                float price = Convert.ToSingle(Console.ReadLine());
+                Book book = new Book(name, generateISB(), true, price);
                 bookDB.Add(book);
 
             }
@@ -85,13 +92,43 @@
                 Console.WriteLine("Book name: " + book.name);
                 Console.WriteLine("Book isbn: " + book.isbn_10);
                 Console.WriteLine("Book status: " + book.status);
+                Console.WriteLine("Book price: " + book.price);
             }
+        }
+
+        static void modifyInventoryByISB()
+        {
+            Console.WriteLine("Enter the ISBN of the book you want to modify: ");
+            string isbn = Console.ReadLine();
+
+            for (int i = 0; i < bookDB.Count; i++)
+            {
+                if (bookDB[i].isbn_10 == isbn)
+                {
+                    Console.Write("Enter the new name: ");
+                    string newName = Console.ReadLine();
+
+                    Console.Write("Enter the new status (true for available, false for not available): ");
+                    bool newStatus = Convert.ToBoolean(Console.ReadLine());
+
+                    Console.Write("Enter the new price: ");
+                    float newPrice = Convert.ToSingle(Console.ReadLine());
+
+                    Book newBook = new Book(newName, isbn, newStatus, newPrice);
+                    bookDB[i] = newBook;
+
+                    Console.WriteLine("Book updated successfully.");
+                    return;
+                }
+            }
+            Console.WriteLine("Book not found.");
         }
 
         static void Main(string[] args)
         {
             captureInventory();
             printInventory();
+            modifyInventoryByISB();
         }
     }
 }
