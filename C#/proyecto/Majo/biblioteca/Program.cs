@@ -124,11 +124,81 @@
             Console.WriteLine("Book not found.");
         }
 
+        static void printAvailableBooks()
+        {
+            Console.WriteLine("Available books");
+            foreach (Book book in bookDB)
+            {
+                if (book.status)
+                {
+                    Console.WriteLine("Book name: " + book.name);
+                    Console.WriteLine("Book isbn: " + book.isbn_10);
+                    Console.WriteLine("Book status: " + book.status);
+                    Console.WriteLine("Book price: " + book.price);
+                }
+            }
+        }
+
+        static void removeBook()
+        {
+            Console.WriteLine("Enter the ISBN of the book you want to remove: ");
+            string isbn = Console.ReadLine();
+
+            for (int i = 0; i < bookDB.Count; i++)
+            {
+                if (bookDB[i].isbn_10 == isbn)
+                {
+                    bookDB.RemoveAt(i);
+                    Console.WriteLine("Book removed successfully.");
+                    return;
+                }
+            }
+            Console.WriteLine("Book not found.");
+        }
+
+
+        static void purchaseBook()
+        {
+            Console.Write("How many books would you like to purchase?: ");
+            int books = Convert.ToInt32(Console.ReadLine());
+            float total = 0;
+            for (int i = 0; i < books; i++)
+            {
+                Console.Write("Enter the ISBN or Name of the book you want to purchase: ");
+                string isbn = Console.ReadLine();
+                for (int j = 0; j < bookDB.Count; j++)
+                {
+                    if (bookDB[j].isbn_10 == isbn || bookDB[j].name == isbn)
+                    {
+                        total += bookDB[j].price;
+                        bookDB.RemoveAt(j);
+                        Console.WriteLine("Book purchased successfully.");
+                        break;
+                    }
+                }
+            }
+
+            // Print a ticket containing all the books and the price:
+            Console.WriteLine("Ticket");
+            Console.WriteLine("Books purchased: " + books);
+            Console.WriteLine("Total: " + total);
+
+
+
+        }
+
         static void Main(string[] args)
         {
             captureInventory();
             printInventory();
             modifyInventoryByISB();
+            printInventory();
+            printAvailableBooks();
+            removeBook();
+            printInventory();
+            purchaseBook();
+            printInventory();
+
         }
     }
 }
