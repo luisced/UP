@@ -187,17 +187,97 @@
 
         }
 
+
+
+        static void Menu()
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to the library");
+            Console.WriteLine("1. Capture inventory");
+            Console.WriteLine("2. Adjust inventory");
+            Console.WriteLine("3. Book list report");
+            Console.WriteLine("4. Available books");
+            Console.WriteLine("5. Purchase a book");
+            Console.WriteLine("6. Captura library details");
+            Console.WriteLine("7. Exit");
+
+            Console.Write("Option: ");
+            int option = Convert.ToInt32(Console.ReadLine());
+            while (option < 7)
+            {
+                switch (option)
+                {
+                    case 1:
+                        Console.Clear();
+                        captureInventory();
+                        break;
+                    case 2:
+                        Console.Clear();
+
+                        Console.WriteLine("1. Modify inventory by ISBN");
+                        Console.WriteLine("2. Remove book");
+                        int option2 = Convert.ToInt32(Console.ReadLine());
+                        if (option2 == 1)
+                        {
+                            modifyInventoryByISB();
+                        }
+                        else if (option2 == 2)
+                        {
+                            removeBook();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid option");
+                        }
+                        break;
+                    case 3:
+                        Console.Clear();
+
+                        printInventory();
+                        break;
+                    case 4:
+                        Console.Clear();
+
+                        printAvailableBooks();
+                        break;
+                    case 5:
+                        Console.Clear();
+
+                        purchaseBook();
+                        break;
+                    case 6:
+                        Console.Clear();
+
+                        Console.WriteLine("Enter the RFC of the library: ");
+                        break;
+                    default:
+                        Console.Clear();
+
+                        Console.WriteLine("Invalid option");
+                        break;
+                }
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+                Console.Clear();
+                Console.WriteLine("Welcome to the library");
+                Console.WriteLine("1. Capture inventory");
+                Console.WriteLine("2. Adjust inventory");
+                Console.WriteLine("3. Book list report");
+                Console.WriteLine("4. Available books");
+                Console.WriteLine("5. Purchase a book");
+                Console.WriteLine("6. Captura library details");
+                Console.WriteLine("7. Exit");
+
+                Console.Write("Option: ");
+                option = Convert.ToInt32(Console.ReadLine());
+
+            }
+
+        }
+
         static void Main(string[] args)
         {
-            captureInventory();
-            printInventory();
-            modifyInventoryByISB();
-            printInventory();
-            printAvailableBooks();
-            removeBook();
-            printInventory();
-            purchaseBook();
-            printInventory();
+            Menu();
 
         }
     }
