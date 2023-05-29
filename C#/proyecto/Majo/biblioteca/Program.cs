@@ -41,16 +41,7 @@
                 this.bill = generateBill();
             }
 
-            public string generateBill()
-            {
-                string bill = "";
-                Random rnd = new Random();
-                for (int i = 0; i < 10; i++)
-                {
-                    bill += rnd.Next(0, 9);
-                }
-                return bill;
-            }
+
 
         }
 
@@ -58,13 +49,29 @@
 
         static string generateISB()
         {
-            string isbn = "";
+            const string alphanumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            Random random = new Random();
+
+            char[] isbn = new char[10];
+            for (int i = 0; i < 10; i++)
+            {
+                int randomIndex = random.Next(0, alphanumeric.Length);
+                isbn[i] = alphanumeric[randomIndex];
+            }
+
+            return new string(isbn);
+        }
+
+
+        static string generateBill()
+        {
+            string bill = "";
             Random rnd = new Random();
             for (int i = 0; i < 10; i++)
             {
-                isbn += rnd.Next(0, 9);
+                bill += rnd.Next(0, 9);
             }
-            return isbn;
+            return bill;
         }
 
         static void captureInventory()
@@ -81,6 +88,28 @@
                 Book book = new Book(name, generateISB(), true, price);
                 bookDB.Add(book);
 
+            }
+        }
+
+        static void captureLibraryDetails()
+        {
+            Console.WriteLine("Capture the library details");
+            Console.Write("Enter the RFC: ");
+            string rfc = Console.ReadLine();
+            Console.Write("Enter the adress: ");
+            string adress = Console.ReadLine();
+            Library library = new Library(rfc, adress, generateBill());
+            libraryDB.Add(library);
+        }
+
+        static void printLibraryDetails()
+        {
+            Console.WriteLine("Library details");
+            foreach (Library library in libraryDB)
+            {
+                Console.WriteLine("Library RFC: " + library.rfc);
+                Console.WriteLine("Library adress: " + library.adress);
+                Console.WriteLine("Library bill: " + library.bill);
             }
         }
 
@@ -247,8 +276,23 @@
                         break;
                     case 6:
                         Console.Clear();
+                        Console.WriteLine("1. Captura library details");
+                        Console.WriteLine("2. Print library details");
+                        int option3 = Convert.ToInt32(Console.ReadLine());
+                        if (option3 == 1)
+                        {
+                            captureLibraryDetails();
+                        }
+                        else if (option3 == 2)
+                        {
+                            printLibraryDetails();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid option");
+                        }
 
-                        Console.WriteLine("Enter the RFC of the library: ");
+
                         break;
                     default:
                         Console.Clear();
