@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QInputDialog, QMessageBox, QPlainTextEdit, QTableWidget, QTableWidgetItem
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QInputDialog, QMessageBox, QPlainTextEdit, QTableWidget, QTableWidgetItem, QInputDialog, QMessageBox
 from models import *
 import sys
 import pandas as pd
@@ -191,6 +191,23 @@ class MainWindow(QMainWindow):
         for i, sale in enumerate(sales_data_frame):
             for j, field in enumerate(sale):
                 self.sales_table_widget.setItem(
+                    i, j, QTableWidgetItem(str(field)))
+
+    def list_all_products(self):
+        products_df = []
+        for product in self.inventory:
+            products_df.append(
+                [product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost_value,
+                 product.sale_value, product.expiration_date, product.iva])
+
+        self.products_table_widget.setRowCount(len(products_df))
+        self.products_table_widget.setColumnCount(9)
+        self.products_table_widget.setHorizontalHeaderLabels(["sku", "name", "presentation", "laboratory", "stock", "cost_value", "sale_value",
+                                                              "expiration_date", "iva"])
+
+        for i, product in enumerate(products_df):
+            for j, field in enumerate(product):
+                self.products_table_widget.setItem(
                     i, j, QTableWidgetItem(str(field)))
 
 
