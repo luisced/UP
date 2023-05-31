@@ -8,10 +8,11 @@ import sys
 def main():
     app = QApplication(sys.argv)
 
-    welcome_screen = WelcomeScreen()
-    welcome_screen.show()
+    window = MainWindow()
+    window.show()
+
     app.exec()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
