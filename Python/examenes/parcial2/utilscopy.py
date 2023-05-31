@@ -1,14 +1,84 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QInputDialog, QMessageBox, QPlainTextEdit, QTableWidget, QTableWidgetItem, QInputDialog, QMessageBox
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget, QInputDialog, QMessageBox, QDialog, QTableWidget, QTableWidgetItem, QInputDialog, QMessageBox, QComboBox, QLineEdit, QLabel
 from models import *
 import sys
 import pandas as pd
 from datetime import datetime, timedelta
 
 
+class FilterSalesDialog(QDialog):
+    def __init__(self, parent=None):
+        super(FilterSalesDialog, self).__init__(parent)
+
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.field_label = QLabel("Select field to filter:")
+        self.layout.addWidget(self.field_label)
+
+        self.field_combo = QComboBox()
+        self.field_combo.addItems(
+            ["Order number", "Date", "Name", "Amount", "Subtotal", "Total", "Payment type", "Billed"])
+        self.layout.addWidget(self.field_combo)
+
+        self.field_label = QLabel("Select field to filter:")
+        self.layout.addWidget(self.field_label)
+
+        self.field_combo = QComboBox()
+        self.field_combo.addItems(
+            ["Order number", "Date", "Name", "Amount", "Subtotal", "Total", "Payment type", "Billed"])
+        self.layout.addWidget(self.field_combo)
+
+        self.value_label = QLabel("Enter value to filter:")
+        self.layout.addWidget(self.value_label)
+
+        self.value_line_edit = QLineEdit()
+        self.layout.addWidget(self.value_line_edit)
+
+        self.filter_button = QPushButton("Filter")
+        self.filter_button.clicked.connect(self.filter_sales)
+        self.layout.addWidget(self.filter_button)
+
+    def filter_sales(self):
+        field = self.field_combo.currentText()
+        value = self.value_line_edit.text()
+        self.parent().list_all_the_sales_filtered(field, value)
+
+
+class ReportsDialog(QDialog):
+    def __init__(self, parent=None):
+        super(ReportsDialog, self).__init__(parent)
+
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.product_info_button = QPushButton(
+            "See Specific Product Information")
+        self.product_info_button.clicked.connect(
+            self.parent().see_specific_product_information)
+        self.layout.addWidget(self.product_info_button)
+
+        self.sale_info_button = QPushButton("See Specific Sale Information")
+        self.sale_info_button.clicked.connect(
+            self.parent().see_specific_sale_information)
+        self.layout.addWidget(self.sale_info_button)
+
+        self.expiry_button = QPushButton("List Products Soon to Expiry")
+        self.expiry_button.clicked.connect(
+            self.parent().list_products_soon_to_expiry)
+        self.layout.addWidget(self.expiry_button)
+
+    def open_filter_sales_dialog(self):
+        self.filter_sales_dialog = FilterSalesDialog(self)
+        self.filter_sales_dialog.show()
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Product and Sales Management")
+        self.setWindowTitle(
+            "Product and Sales Management: Valeria, Itzayana, Dani")
+
+        self.resize(1200, 800)
 
         self.main_widget = QWidget()
         self.setCentralWidget(self.main_widget)
@@ -42,7 +112,35 @@ class MainWindow(QMainWindow):
 
         pd.set_option('display.max_rows', None)
         pd.set_option('display.max_columns', None)
-        pd.options.display.width = 0
+        pd.options.display.width = 100
+
+        # Filtered sales
+
+        # self.filter_field_label = QLabel("Select field to filter sale:")
+        # self.layout.addWidget(self.filter_field_label)
+
+        # self.filter_field_combo_box = QComboBox()
+        # self.filter_field_combo_box.addItems(["order_number", "date", "name", "amount",
+        #                                       "subtotal", "total", "payment_type", "billed"])
+        # self.layout.addWidget(self.filter_field_combo_box)
+
+        # self.filter_input_label = QLabel("Enter value to filter:")
+        # self.layout.addWidget(self.filter_input_label)
+
+        # self.filter_input_line_edit = QLineEdit()
+        # self.layout.addWidget(self.filter_input_line_edit)
+
+        # self.filter_button = QPushButton("Filter Sales")
+        # self.filter_button.clicked.connect(self.list_all_the_sales_filtered)
+        # self.layout.addWidget(self.filter_button)
+
+        self.update_button = QPushButton("Update Excel")
+        self.update_button.clicked.connect(self.update_excel)
+        self.layout.addWidget(self.update_button)
+
+        self.reports_button = QPushButton("Reports")
+        self.reports_button.clicked.connect(self.open_reports_dialog)
+        self.layout.addWidget(self.reports_button)
 
         inventory_df = pd.read_excel(
             "DB/Inventory.xlsx", sheet_name="Inventory")
@@ -52,9 +150,9 @@ class MainWindow(QMainWindow):
         self.sales = sales_df.values.tolist()
 
         for i in range(len(self.inventory)):
-            self.inventory[i] = Product(name=str(self.inventory[i][2]), presentation=self.inventory[i][3], laboratory=self.inventory[i][4],
-                                        stock=self.inventory[i][5], cost_value=self.inventory[i][6], sale_value=self.inventory[i][7],
-                                        expiration_date=self.inventory[i][8], iva=self.inventory[i][9])
+            self.inventory[i] = Product(name=str(self.inventory[i][1]), presentation=self.inventory[i][2], laboratory=self.inventory[i][3],
+                                        stock=self.inventory[i][4], cost_value=self.inventory[i][5], sale_value=self.inventory[i][6],
+                                        expiration_date=self.inventory[i][7], iva=self.inventory[i][8])
         for i in range(len(self.sales)):
             self.sales[i] = Sale(order_number=self.sales[i][1], products=self.sales[i][3], amount=self.sales[i][4], subtotal=self.sales[i][5],
                                  total=self.sales[i][6], payment_type=self.sales[i][7], billed=self.sales[i][8])
@@ -209,6 +307,82 @@ class MainWindow(QMainWindow):
             for j, field in enumerate(product):
                 self.products_table_widget.setItem(
                     i, j, QTableWidgetItem(str(field)))
+
+    def list_all_sales(self):
+        sales_data_frame = []
+        for sale in self.sales:
+            sales_data_frame.append(
+                [sale.order_number, sale.date, sale.products, sale.amount, sale.subtotal, sale.total,
+                 sale.payment_type, sale.billed])
+
+        self.sales_table_widget.setRowCount(len(sales_data_frame))
+        self.sales_table_widget.setColumnCount(8)
+        self.sales_table_widget.setHorizontalHeaderLabels(["order_number", "date", "name", "amount",
+                                                           "subtotal", "total", "payment_type", "billed"])
+
+        for i, sale in enumerate(sales_data_frame):
+            for j, field in enumerate(sale):
+                self.sales_table_widget.setItem(
+                    i, j, QTableWidgetItem(str(field)))
+
+    def list_all_the_sales_filtered(self):
+        field = self.filter_field_combo_box.currentText()
+        value = self.filter_input_line_edit.text()
+
+        sales_df = pd.DataFrame([vars(sale) for sale in self.sales])
+        filtered_sales_df = sales_df.loc[sales_df[field] == value]
+
+        self.sales_table_widget.setRowCount(len(filtered_sales_df))
+        for i, sale in filtered_sales_df.iterrows():
+            for j, field in enumerate(sale):
+                self.sales_table_widget.setItem(
+                    i, j, QTableWidgetItem(str(field)))
+
+        self.filter_input_line_edit.clear()
+
+    def see_specific_product_information(self):
+        field = QInputDialog.getItem(self, "Select Field", "Field:", [
+                                     "sku", "name", "presentation", "laboratory", "stock", "cost_value", "sale_value", "expiration_date", "iva"], 0, False)
+        if field[1]:
+            products_df = pd.DataFrame([vars(product)
+                                       for product in self.inventory])
+            QMessageBox.information(
+                self, "Product Information", str(products_df[field[0]]))
+
+    def see_specific_sale_information(self):
+        field = QInputDialog.getItem(self, "Select Field", "Field:", [
+                                     "order_number", "date", "name", "amount", "subtotal", "total", "payment_type", "billed"], 0, False)
+        if field[1]:
+            sales_df = pd.DataFrame([vars(sale) for sale in self.sales])
+            QMessageBox.information(
+                self, "Sale Information", str(sales_df[field[0]]))
+
+    def list_products_soon_to_expiry(self):
+        products_df = pd.DataFrame([vars(product)
+                                   for product in self.inventory])
+        soon_to_expiry_df = products_df.loc[products_df["expiration_date"] <= datetime.now(
+        ) + timedelta(days=60)]
+        QMessageBox.information(
+            self, "Products Soon to Expiry", str(soon_to_expiry_df))
+
+    def update_excel(self):
+        sales_df = pd.DataFrame([vars(sale) for sale in self.sales])
+        sales_df["date"] = sales_df["date"].apply(
+            lambda x: x.strftime("%d/%m/%Y"))
+        sales_df.to_excel("DB/Sales.xlsx", sheet_name="Sales")
+
+        inventory_df = pd.DataFrame([vars(product)
+                                    for product in self.inventory])
+        inventory_df["expiration_date"] = inventory_df["expiration_date"].apply(
+            lambda x: x.strftime("%d/%m/%Y"))
+        inventory_df.to_excel("DB/Inventory.xlsx", sheet_name="Inventory")
+
+        QMessageBox.information(self, "Update Excel",
+                                "Excel files have been updated.")
+
+    def open_reports_dialog(self):
+        self.reports_dialog = ReportsDialog(self)
+        self.reports_dialog.show()
 
 
 app = QApplication(sys.argv)
