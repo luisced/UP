@@ -4,6 +4,27 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 
+class WelcomeScreen(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Welcome to Farmacia San Pablo")
+
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.welcome_label = QLabel("Welcome to Farmacia San Pablo")
+        self.layout.addWidget(self.welcome_label)
+
+        self.start_button = QPushButton("Start")
+        self.start_button.clicked.connect(self.start)
+        self.layout.addWidget(self.start_button)
+
+    def start(self):
+        self.close()
+        self.main_window = MainWindow()
+        self.main_window.show()
+
+
 class FilterSalesDialog(QDialog):
     def __init__(self, parent=None):
         super(FilterSalesDialog, self).__init__(parent)
@@ -75,7 +96,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle(
-            "Product and Sales Management: Valeria, Itzayana, Dani")
+            "San Pablo:")
 
         self.resize(1200, 800)
 
@@ -85,17 +106,9 @@ class MainWindow(QMainWindow):
         self.layout = QVBoxLayout()
         self.main_widget.setLayout(self.layout)
 
-        self.table_widget = QTableWidget()
-        self.layout.addWidget(self.table_widget)
-
-        self.sales_table_widget = QTableWidget()
-        self.layout.addWidget(self.sales_table_widget)
-
         self.add_product_button = QPushButton("Add product")
         self.add_product_button.clicked.connect(self.add_product)
         self.layout.addWidget(self.add_product_button)
-
-        # Add more buttons for the other options in your menu
 
         self.create_sale_button = QPushButton("Create sale")
         self.create_sale_button.clicked.connect(self.create_sale)
@@ -107,6 +120,7 @@ class MainWindow(QMainWindow):
 
         self.show_all_sales_button = QPushButton("Show all sales")
         self.show_all_sales_button.clicked.connect(self.list_all_sales)
+        self.layout.addWidget(self.show_all_sales_button)
         self.layout.addWidget(self.show_all_sales_button)
 
         pd.set_option('display.max_rows', None)
@@ -258,20 +272,24 @@ class MainWindow(QMainWindow):
             self.sales.append(final_sale)
 
     def show_all_products(self):
+        self.products_table_window = TableWindow()
+        self.products_table_window.show()
+
         products = []
         for product in self.inventory:
             products.append(
                 [product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost_value,
                  product.sale_value, product.expiration_date, product.iva])
 
-        self.table_widget.setRowCount(len(products))
-        self.table_widget.setColumnCount(9)
-        self.table_widget.setHorizontalHeaderLabels(["sku", "name", "presentation", "laboratory", "stock", "cost_value", "sale_value",
-                                                     "expiration_date", "iva"])
+        self.products_table_window.table_widget.setRowCount(len(products))
+        self.products_table_window.table_widget.setColumnCount(9)
+        self.products_table_window.table_widget.setHorizontalHeaderLabels(["sku", "name", "presentation", "laboratory", "stock", "cost_value", "sale_value",
+                                                                           "expiration_date", "iva"])
 
         for i, product in enumerate(products):
             for j, field in enumerate(product):
-                self.table_widget.setItem(i, j, QTableWidgetItem(str(field)))
+                self.products_table_window.table_widget.setItem(
+                    i, j, QTableWidgetItem(str(field)))
 
     def list_all_sales(self):
         sales_data_frame = []
@@ -308,20 +326,23 @@ class MainWindow(QMainWindow):
                     i, j, QTableWidgetItem(str(field)))
 
     def list_all_sales(self):
+        self.sales_table_window = TableWindow()
+        self.sales_table_window.show()
+
         sales_data_frame = []
         for sale in self.sales:
             sales_data_frame.append(
                 [sale.order_number, sale.date, sale.products, sale.amount, sale.subtotal, sale.total,
                  sale.payment_type, sale.billed])
 
-        self.sales_table_widget.setRowCount(len(sales_data_frame))
-        self.sales_table_widget.setColumnCount(8)
-        self.sales_table_widget.setHorizontalHeaderLabels(["order_number", "date", "name", "amount",
-                                                           "subtotal", "total", "payment_type", "billed"])
+        self.sales_table_window.table_widget.setRowCount(len(sales_data_frame))
+        self.sales_table_window.table_widget.setColumnCount(8)
+        self.sales_table_window.table_widget.setHorizontalHeaderLabels(["order_number", "date", "name", "amount",
+                                                                        "subtotal", "total", "payment_type", "billed"])
 
         for i, sale in enumerate(sales_data_frame):
             for j, field in enumerate(sale):
-                self.sales_table_widget.setItem(
+                self.sales_table_window.table_widget.setItem(
                     i, j, QTableWidgetItem(str(field)))
 
     def list_all_the_sales_filtered(self):
@@ -382,3 +403,15 @@ class MainWindow(QMainWindow):
     def open_reports_dialog(self):
         self.reports_dialog = ReportsDialog(self)
         self.reports_dialog.show()
+
+
+class TableWindow(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Table")
+
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.table_widget = QTableWidget()
+        self.layout.addWidget(self.table_widget)
