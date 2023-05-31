@@ -1,335 +1,384 @@
+from PyQt6.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget, QInputDialog, QMessageBox, QDialog, QTableWidget, QTableWidgetItem, QInputDialog, QMessageBox, QComboBox, QLineEdit, QLabel
 from models import *
-
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_columns', None)
-pd.options.display.width = 0
-
-# We need to create 2 data frames, one for the inventory and one for the sales
-# We wil use the file named "data.xlsx" to store the data
-
-# We will start by reading the first sheet of the file, which contains the inventory
-inventory_df = pd.read_excel("DB/Inventory.xlsx", sheet_name="Inventory")
-# We will read the second sheet of the file, which contains the sales
-sales_df = pd.read_excel("DB/Sales.xlsx", sheet_name="Sales")
-
-# We want to convert the data frame into a list of lists, so we can work with it
-inventory = inventory_df.values.tolist()
-sales = sales_df.values.tolist()
+import pandas as pd
+from datetime import datetime, timedelta
 
 
-# We want to convert the inventory and sales lists into lists of objects
-for i in range(len(inventory)):
-    inventory[i] = Product(name=str(inventory[i][2]), presentation=inventory[i][3], laboratory=inventory[i][4],
-                           stock=inventory[i][5], cost_value=inventory[i][6], sale_value=inventory[i][7],
-                           expiration_date=inventory[i][8], iva=inventory[i][9])
-for i in range(len(sales)):
-    sales[i] = Sale(order_number=sales[i][1], products=sales[i][3], amount=sales[i][4], subtotal=sales[i][5],
-                    total=sales[i][6], payment_type=sales[i][7], billed=sales[i][8])
+class FilterSalesDialog(QDialog):
+    def __init__(self, parent=None):
+        super(FilterSalesDialog, self).__init__(parent)
+
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.field_label = QLabel("Select field to filter:")
+        self.layout.addWidget(self.field_label)
+
+        self.field_combo = QComboBox()
+        self.field_combo.addItems(
+            ["Order number", "Date", "Name", "Amount", "Subtotal", "Total", "Payment type", "Billed"])
+        self.layout.addWidget(self.field_combo)
+
+        self.field_label = QLabel("Select field to filter:")
+        self.layout.addWidget(self.field_label)
+
+        self.field_combo = QComboBox()
+        self.field_combo.addItems(
+            ["Order number", "Date", "Name", "Amount", "Subtotal", "Total", "Payment type", "Billed"])
+        self.layout.addWidget(self.field_combo)
+
+        self.value_label = QLabel("Enter value to filter:")
+        self.layout.addWidget(self.value_label)
+
+        self.value_line_edit = QLineEdit()
+        self.layout.addWidget(self.value_line_edit)
+
+        self.filter_button = QPushButton("Filter")
+        self.filter_button.clicked.connect(self.filter_sales)
+        self.layout.addWidget(self.filter_button)
+
+    def filter_sales(self):
+        field = self.field_combo.currentText()
+        value = self.value_line_edit.text()
+        self.parent().list_all_the_sales_filtered(field, value)
 
 
-def add_product():
-    name = input("Please enter the product name: ")
-    presentation = input("Please enter the product presentation: ")
-    laboratory = input("Please enter the laboratory: ")
-    stock = input("Please enter the stock: ")
-    cost_value = input("Please enter the cost value: ")
-    sale_value = input("Please enter the sale value: ")
-    expiration_date = input("Please enter the expiration date (dd/mm/yyyy): ")
-    iva = input("The product has taxes? (y/n):")
-    if iva == "y":
-        iva = True
-    else:
-        iva = False
-    product = Product(name, presentation, laboratory, int(stock), float(cost_value), float(sale_value), expiration_date,
-                      iva)
-    inventory.append(product)
-    print("Product added successfully!")
+class ReportsDialog(QDialog):
+    def __init__(self, parent=None):
+        super(ReportsDialog, self).__init__(parent)
+
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.product_info_button = QPushButton(
+            "See Specific Product Information")
+        self.product_info_button.clicked.connect(
+            self.parent().see_specific_product_information)
+        self.layout.addWidget(self.product_info_button)
+
+        self.sale_info_button = QPushButton("See Specific Sale Information")
+        self.sale_info_button.clicked.connect(
+            self.parent().see_specific_sale_information)
+        self.layout.addWidget(self.sale_info_button)
+
+        self.expiry_button = QPushButton("List Products Soon to Expiry")
+        self.expiry_button.clicked.connect(
+            self.parent().list_products_soon_to_expiry)
+        self.layout.addWidget(self.expiry_button)
+
+    def open_filter_sales_dialog(self):
+        self.filter_sales_dialog = FilterSalesDialog(self)
+        self.filter_sales_dialog.show()
 
 
-def create_sale():
-    if len(inventory) == 0:
-        print("There are no products in the inventory, please add a product first.")
-        return
-    else:
-        sales_bought = []
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle(
+            "Product and Sales Management: Valeria, Itzayana, Dani")
 
-        show_all_products()
-        order_number = input(
-            "Please enter the ids of the products to sell separated by comas: ")
-        order_number = order_number.split(",")
-        products = []
-        for order in order_number:
-            products.append(inventory[int(order) - 1])
+        self.resize(1200, 800)
 
-        for product in products:
-            print(f"Product selected: {product.name}")
-            amount = int(
-                input("Please enter the amount of the product to sell: "))
-            if amount > product.stock:
-                print("There is not enough stock of the product.")
+        self.main_widget = QWidget()
+        self.setCentralWidget(self.main_widget)
+
+        self.layout = QVBoxLayout()
+        self.main_widget.setLayout(self.layout)
+
+        self.table_widget = QTableWidget()
+        self.layout.addWidget(self.table_widget)
+
+        self.sales_table_widget = QTableWidget()
+        self.layout.addWidget(self.sales_table_widget)
+
+        self.add_product_button = QPushButton("Add product")
+        self.add_product_button.clicked.connect(self.add_product)
+        self.layout.addWidget(self.add_product_button)
+
+        # Add more buttons for the other options in your menu
+
+        self.create_sale_button = QPushButton("Create sale")
+        self.create_sale_button.clicked.connect(self.create_sale)
+        self.layout.addWidget(self.create_sale_button)
+
+        self.show_all_products_button = QPushButton("Show all products")
+        self.show_all_products_button.clicked.connect(self.show_all_products)
+        self.layout.addWidget(self.show_all_products_button)
+
+        self.show_all_sales_button = QPushButton("Show all sales")
+        self.show_all_sales_button.clicked.connect(self.list_all_sales)
+        self.layout.addWidget(self.show_all_sales_button)
+
+        pd.set_option('display.max_rows', None)
+        pd.set_option('display.max_columns', None)
+        pd.options.display.width = 100
+
+        # Filtered sales
+
+        # self.filter_field_label = QLabel("Select field to filter sale:")
+        # self.layout.addWidget(self.filter_field_label)
+
+        # self.filter_field_combo_box = QComboBox()
+        # self.filter_field_combo_box.addItems(["order_number", "date", "name", "amount",
+        #                                       "subtotal", "total", "payment_type", "billed"])
+        # self.layout.addWidget(self.filter_field_combo_box)
+
+        # self.filter_input_label = QLabel("Enter value to filter:")
+        # self.layout.addWidget(self.filter_input_label)
+
+        # self.filter_input_line_edit = QLineEdit()
+        # self.layout.addWidget(self.filter_input_line_edit)
+
+        # self.filter_button = QPushButton("Filter Sales")
+        # self.filter_button.clicked.connect(self.list_all_the_sales_filtered)
+        # self.layout.addWidget(self.filter_button)
+
+        self.update_button = QPushButton("Update Excel")
+        self.update_button.clicked.connect(self.update_excel)
+        self.layout.addWidget(self.update_button)
+
+        self.reports_button = QPushButton("Reports")
+        self.reports_button.clicked.connect(self.open_reports_dialog)
+        self.layout.addWidget(self.reports_button)
+
+        inventory_df = pd.read_excel(
+            "DB/Inventory.xlsx", sheet_name="Inventory")
+        sales_df = pd.read_excel("DB/Sales.xlsx", sheet_name="Sales")
+
+        self.inventory = inventory_df.values.tolist()
+        self.sales = sales_df.values.tolist()
+
+        for i in range(len(self.inventory)):
+            self.inventory[i] = Product(name=str(self.inventory[i][1]), presentation=self.inventory[i][2], laboratory=self.inventory[i][3],
+                                        stock=self.inventory[i][4], cost_value=self.inventory[i][5], sale_value=self.inventory[i][6],
+                                        expiration_date=self.inventory[i][7], iva=self.inventory[i][8])
+        for i in range(len(self.sales)):
+            self.sales[i] = Sale(order_number=self.sales[i][1], products=self.sales[i][3], amount=self.sales[i][4], subtotal=self.sales[i][5],
+                                 total=self.sales[i][6], payment_type=self.sales[i][7], billed=self.sales[i][8])
+
+    def add_product(self):
+        name, ok = QInputDialog.getText(
+            self, 'Add product', 'Please enter the product name:')
+        if ok:
+            presentation, ok = QInputDialog.getText(
+                self, 'Add product', 'Please enter the product presentation:')
+            if ok:
+                laboratory, ok = QInputDialog.getText(
+                    self, 'Add product', 'Please enter the laboratory:')
+                if ok:
+                    stock, ok = QInputDialog.getInt(
+                        self, 'Add product', 'Please enter the stock:')
+                    if ok:
+                        cost_value, ok = QInputDialog.getDouble(
+                            self, 'Add product', 'Please enter the cost value:')
+                        if ok:
+                            sale_value, ok = QInputDialog.getDouble(
+                                self, 'Add product', 'Please enter the sale value:')
+                            if ok:
+                                expiration_date, ok = QInputDialog.getText(
+                                    self, 'Add product', 'Please enter the expiration date (dd/mm/yyyy):')
+                                if ok:
+                                    iva, ok = QInputDialog.getItem(
+                                        self, 'Add product', 'The product has taxes?', ['y', 'n'], 0, False)
+                                    if ok:
+                                        if iva == "y":
+                                            iva = True
+                                        else:
+                                            iva = False
+                                        product = Product(name, presentation, laboratory, int(stock), float(
+                                            cost_value), float(sale_value), expiration_date, iva)
+                                        self.inventory.append(product)
+                                        QMessageBox.information(
+                                            self, 'Product added', 'Product added successfully!')
+
+    def create_sale(self):
+        if len(self.inventory) == 0:
+            QMessageBox.warning(
+                self, 'No products', 'There are no products in the inventory, please add a product first.')
+            return
+        else:
+            sales_bought = []
+
+            self.show_all_products()
+            order_number, ok = QInputDialog.getText(
+                self, 'Create sale', 'Please enter the ids of the products to sell separated by comas:')
+            if not ok:
                 return
-            product.stock -= amount
-            subtotal = product.sale_value * amount
-            if product.iva:
-                total = subtotal * 1.16
-            else:
-                total = subtotal
-            payment_type = input("Please enter the payment type (cash/card): ")
-            billed = input("Was the order billed? (y/n): ")
-            if billed == "y":
-                billed = True
-            else:
-                billed = False
-            order_number = len(sales) + 1
-            sale = Sale(order_number, product, amount,
-                        subtotal, total, payment_type, billed)
-            sales_bought.append(sale)
-            print("Sale created successfully!")
-            print(f"Total to pay: {total}")
-            print(f"Total taxes: {total - subtotal}")
+            order_number = order_number.split(",")
+            products = []
+            for order in order_number:
+                products.append(self.inventory[int(order) - 1])
 
-        products_names = ', '.join([product.name for product in products])
-        amounts = ', '.join([str(sale.amount) for sale in sales_bought])
-        subtotal = sum([sale.subtotal for sale in sales_bought])
-        total = sum([sale.total for sale in sales_bought])
-        payment_type = sales_bought[0].payment_type
-        billed = sales_bought[0].billed
+            for product in products:
+                QMessageBox.information(
+                    self, 'Product selected', f'Product selected: {product.name}')
+                amount, ok = QInputDialog.getInt(
+                    self, 'Create sale', 'Please enter the amount of the product to sell:')
+                if not ok or amount > product.stock:
+                    QMessageBox.warning(
+                        self, 'Not enough stock', 'There is not enough stock of the product.')
+                    return
+                product.stock -= amount
+                subtotal = product.sale_value * amount
+                if product.iva:
+                    total = subtotal * 1.16
+                else:
+                    total = subtotal
+                payment_type, ok = QInputDialog.getText(
+                    self, 'Create sale', 'Please enter the payment type (cash/card):')
+                if not ok:
+                    return
+                billed, ok = QInputDialog.getItem(
+                    self, 'Create sale', 'Was the order billed?', ['y', 'n'], 0, False)
+                if not ok:
+                    return
+                order_number = len(self.sales) + 1
+                sale = Sale(order_number, product, amount,
+                            subtotal, total, payment_type, billed == 'y')
+                sales_bought.append(sale)
+                QMessageBox.information(self, 'Sale created', 'Sale created successfully!\n' +
+                                        f'Total to pay: {total}\n' +
+                                        f'Total taxes: {total - subtotal}')
 
-        final_sale = Sale(len(sales) + 1,
-                          products_names,
-                          amounts,
-                          subtotal,
-                          total,
-                          payment_type,
-                          billed)
+            products_names = ', '.join([product.name for product in products])
+            amounts = ', '.join([str(sale.amount) for sale in sales_bought])
+            subtotal = sum([sale.subtotal for sale in sales_bought])
+            total = sum([sale.total for sale in sales_bought])
+            payment_type = sales_bought[0].payment_type
+            billed = sales_bought[0].billed
 
-        sales.append(final_sale)
+            final_sale = Sale(len(self.sales) + 1,
+                              products_names,
+                              amounts,
+                              subtotal,
+                              total,
+                              payment_type,
+                              billed)
 
+            self.sales.append(final_sale)
 
-def show_all_products():
-    products = []
-    for product in inventory:
-        products.append(
-            [product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost_value,
-             product.sale_value, product.expiration_date, product.iva])
-    df = pd.DataFrame(products,
-                      columns=["sku", "name", "presentation", "laboratory", "stock", "cost_value", "sale_value",
-                               "expiration_date", "iva"], index=None)
-    print(f"\n{df}\n")
+    def show_all_products(self):
+        products = []
+        for product in self.inventory:
+            products.append(
+                [product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost_value,
+                 product.sale_value, product.expiration_date, product.iva])
 
+        self.table_widget.setRowCount(len(products))
+        self.table_widget.setColumnCount(9)
+        self.table_widget.setHorizontalHeaderLabels(["sku", "name", "presentation", "laboratory", "stock", "cost_value", "sale_value",
+                                                     "expiration_date", "iva"])
 
-def list_all_sales():
-    sales_data_frame = []
-    for sale in sales:
-        sales_data_frame.append(
-            [sale.order_number, sale.date, sale.products, sale.amount, sale.subtotal, sale.total,
-             sale.payment_type, sale.billed])
-    df = pd.DataFrame(sales_data_frame,
-                      columns=["order_number", "date", "name", "amount",
-                               "subtotal", "total", "payment_type", "billed"],
-                      index=None)
-    return df
+        for i, product in enumerate(products):
+            for j, field in enumerate(product):
+                self.table_widget.setItem(i, j, QTableWidgetItem(str(field)))
 
+    def list_all_sales(self):
+        sales_data_frame = []
+        for sale in self.sales:
+            sales_data_frame.append(
+                [sale.order_number, sale.date, sale.products, sale.amount, sale.subtotal, sale.total,
+                 sale.payment_type, sale.billed])
 
-def list_all_products():
-    products_df = []
-    for product in inventory:
-        products_df.append(
-            [product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost_value,
-             product.sale_value, product.expiration_date, product.iva])
-    df = pd.DataFrame(products_df,
-                      columns=["sku", "name", "presentation", "laboratory", "stock", "cost_value", "sale_value",
-                               "expiration_date", "iva"], index=None)
-    return df
+        self.sales_table_widget.setRowCount(len(sales_data_frame))
+        self.sales_table_widget.setColumnCount(8)
+        self.sales_table_widget.setHorizontalHeaderLabels(["order_number", "date", "name", "amount",
+                                                           "subtotal", "total", "payment_type", "billed"])
 
+        for i, sale in enumerate(sales_data_frame):
+            for j, field in enumerate(sale):
+                self.sales_table_widget.setItem(
+                    i, j, QTableWidgetItem(str(field)))
 
-def list_all_the_sales_filtered():
-    sales_data_frame = list_all_sales()
-    print(f"What information would you like to see?")
-    print("1. Order number")
-    print("2. Date")
-    print("3. Name")
-    print("4. Amount")
-    print("5. Subtotal")
-    print("6. Total")
-    print("7. Payment type")
-    print("8. Billed")
-    option = input("Please enter the option number: ")
-    if option == "1":
-        order_number = int(input("Please enter the order number: "))
-        print(
-            sales_data_frame.loc[sales_data_frame["order_number"] == order_number])
-    elif option == "2":
-        Date = input("Please enter the date (dd/mm/yyyy): ")
-        print(sales_data_frame.loc[sales_data_frame["date"]
-              == datetime.strptime(Date, "%d/%m/%Y")])
-    elif option == "3":
-        name = int(input("Please enter the name: "))
-        print(sales_data_frame.loc[sales_data_frame["name"] == name])
-    elif option == "4":
-        amount = int(input("Please enter the amount: "))
-        print(sales_data_frame.loc[sales_data_frame["amount"] == amount])
-    elif option == "5":
-        subtotal = float(input("Please enter the subtotal: "))
-        print(sales_data_frame.loc[sales_data_frame["subtotal"] == subtotal])
-    elif option == "6":
-        total = float(input("Please enter the total: "))
-        print(sales_data_frame.loc[sales_data_frame["total"] == total])
-    elif option == "7":
-        payment_type = input("Please enter the payment type: ")
-        print(
-            sales_data_frame.loc[sales_data_frame["payment_type"] == payment_type])
-    elif option == "8":
-        billed = input("Please enter the billed (y/n): ")
-        if billed == "y":
-            billed = True
-        else:
-            billed = False
-        print(sales_data_frame.loc[sales_data_frame["billed"] == billed])
+    def list_all_products(self):
+        products_df = []
+        for product in self.inventory:
+            products_df.append(
+                [product.sku, product.name, product.presentation, product.laboratory, product.stock, product.cost_value,
+                 product.sale_value, product.expiration_date, product.iva])
 
+        self.products_table_widget.setRowCount(len(products_df))
+        self.products_table_widget.setColumnCount(9)
+        self.products_table_widget.setHorizontalHeaderLabels(["sku", "name", "presentation", "laboratory", "stock", "cost_value", "sale_value",
+                                                              "expiration_date", "iva"])
 
-def see_specific_product_information():
-    df = list_all_products()
-    print(f"What information would you like to see?")
-    print("1. SKU")
-    print("2. Name")
-    print("3. Presentation")
-    print("4. Laboratory")
-    print("5. Stock")
-    print("6. Cost value")
-    print("7. Sale value")
-    print("8. Expiration date")
-    print("9. IVA")
-    option = input("Please enter the option number: ")
-    if option == "1":
-        print(df["sku"])
-    elif option == "2":
-        print(df["name"])
-    elif option == "3":
-        print(df["presentation"])
-    elif option == "4":
-        print(df["laboratory"])
-    elif option == "5":
-        print(df["stock"])
-    elif option == "6":
-        print(df["cost_value"])
-    elif option == "7":
-        print(df["sale_value"])
-    elif option == "8":
-        print(df["expiration_date"])
-    elif option == "9":
-        print(df["iva"])
+        for i, product in enumerate(products_df):
+            for j, field in enumerate(product):
+                self.products_table_widget.setItem(
+                    i, j, QTableWidgetItem(str(field)))
 
+    def list_all_sales(self):
+        sales_data_frame = []
+        for sale in self.sales:
+            sales_data_frame.append(
+                [sale.order_number, sale.date, sale.products, sale.amount, sale.subtotal, sale.total,
+                 sale.payment_type, sale.billed])
 
-def see_specific_sale_information():
-    df = list_all_sales()
-    print(f"What information would you like to see?")
-    print("1. Order number")
-    print("2. Date")
-    print("3. Name")
-    print("4. Amount")
-    print("5. Subtotal")
-    print("6. Total")
-    print("7. Payment type")
-    print("8. Billed")
-    option = input("Please enter the option number: ")
-    if option == "1":
-        print(df["order_number"])
-    elif option == "2":
-        print(df["date"])
-    elif option == "3":
-        print(df["name"])
-    elif option == "4":
-        print(df["amount"])
-    elif option == "5":
-        print(df["subtotal"])
-    elif option == "6":
-        print(df["total"])
-    elif option == "7":
-        print(df["payment_type"])
-    elif option == "8":
-        print(df["billed"])
+        self.sales_table_widget.setRowCount(len(sales_data_frame))
+        self.sales_table_widget.setColumnCount(8)
+        self.sales_table_widget.setHorizontalHeaderLabels(["order_number", "date", "name", "amount",
+                                                           "subtotal", "total", "payment_type", "billed"])
 
+        for i, sale in enumerate(sales_data_frame):
+            for j, field in enumerate(sale):
+                self.sales_table_widget.setItem(
+                    i, j, QTableWidgetItem(str(field)))
 
-def list_products_soon_to_expiry():
-    # List products in the inventory that are soon to expiry (2 months or less)
-    df = list_all_products()
-    print(df.loc[df["expiration_date"] <= datetime.now() + timedelta(days=60)])
+    def list_all_the_sales_filtered(self):
+        field = self.filter_field_combo_box.currentText()
+        value = self.filter_input_line_edit.text()
 
+        sales_df = pd.DataFrame([vars(sale) for sale in self.sales])
+        filtered_sales_df = sales_df.loc[sales_df[field] == value]
 
-def update_excel():
-    # First, we need to modify all the dates to strings, so they can be saved in the Excel file
-    sales_data_frame = list_all_sales()
-    sales_data_frame["date"] = sales_data_frame["date"].apply(
-        lambda x: x.strftime("%d/%m/%Y"))
-    products_data_frame = list_all_products()
-    products_data_frame["expiration_date"] = products_data_frame["expiration_date"].apply(
-        lambda x: x.strftime("%d/%m/%Y"))
+        self.sales_table_widget.setRowCount(len(filtered_sales_df))
+        for i, sale in filtered_sales_df.iterrows():
+            for j, field in enumerate(sale):
+                self.sales_table_widget.setItem(
+                    i, j, QTableWidgetItem(str(field)))
 
-    # Now we do the same for the inventory
-    inventory_data_frame = list_all_products()
-    inventory_data_frame["expiration_date"] = inventory_data_frame["expiration_date"].apply(
-        lambda x: x.strftime("%d/%m/%Y"))
+        self.filter_input_line_edit.clear()
 
-    # Now we save the sales dataframes in the Excel file
-    with pd.ExcelWriter("DB/Sales.xlsx") as writer:
-        sales_data_frame.to_excel(writer, sheet_name="Sales")
+    def see_specific_product_information(self):
+        field = QInputDialog.getItem(self, "Select Field", "Field:", [
+                                     "sku", "name", "presentation", "laboratory", "stock", "cost_value", "sale_value", "expiration_date", "iva"], 0, False)
+        if field[1]:
+            products_df = pd.DataFrame([vars(product)
+                                       for product in self.inventory])
+            QMessageBox.information(
+                self, "Product Information", str(products_df[field[0]]))
 
-    # Now we save the inventory dataframes in the Excel file
-    with pd.ExcelWriter("DB/Inventory.xlsx") as writer:
-        inventory_data_frame.to_excel(writer, sheet_name="Inventory")
+    def see_specific_sale_information(self):
+        field = QInputDialog.getItem(self, "Select Field", "Field:", [
+                                     "order_number", "date", "name", "amount", "subtotal", "total", "payment_type", "billed"], 0, False)
+        if field[1]:
+            sales_df = pd.DataFrame([vars(sale) for sale in self.sales])
+            QMessageBox.information(
+                self, "Sale Information", str(sales_df[field[0]]))
 
+    def list_products_soon_to_expiry(self):
+        products_df = pd.DataFrame([vars(product)
+                                   for product in self.inventory])
+        soon_to_expiry_df = products_df.loc[products_df["expiration_date"] <= datetime.now(
+        ) + timedelta(days=60)]
+        QMessageBox.information(
+            self, "Products Soon to Expiry", str(soon_to_expiry_df))
 
-def reports():
-    while True:
-        print("Please select an option:")
-        print("1. See specific sale information")
-        print("2. List all the sales")
-        print("3. List all the sales filtered")
-        print("4. See specific product information")
-        print("5. List all the inventory")
-        print("6. List products soon to expiry")
-        print("7. Exit")
-        option = input("Please enter the option number: ")
-        print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-        if option == "1":
-            see_specific_sale_information()
-        elif option == "2":
-            print(list_all_sales())
-        elif option == "3":
-            list_all_the_sales_filtered()
-        elif option == "4":
-            see_specific_product_information()
-        elif option == "5":
-            print(list_all_products())
-        elif option == "6":
-            list_products_soon_to_expiry()
-        elif option == "7":
-            break
+    def update_excel(self):
+        sales_df = pd.DataFrame([vars(sale) for sale in self.sales])
+        sales_df["date"] = sales_df["date"].apply(
+            lambda x: x.strftime("%d/%m/%Y"))
+        sales_df.to_excel("DB/Sales.xlsx", sheet_name="Sales")
 
+        inventory_df = pd.DataFrame([vars(product)
+                                    for product in self.inventory])
+        inventory_df["expiration_date"] = inventory_df["expiration_date"].apply(
+            lambda x: x.strftime("%d/%m/%Y"))
+        inventory_df.to_excel("DB/Inventory.xlsx", sheet_name="Inventory")
 
-def main_menu():
-    while True:
-        print("Please select an option:")
-        print("1. Add product")
-        print("2. Create sale")
-        print("3. Reports")
-        print("4. Sales reports")
-        print("5. Update Database")
-        print("6. Exit")
-        option = input("Please enter the option number: ")
-        print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-        if option == "1":
-            add_product()
-        elif option == "2":
-            create_sale()
-        elif option == "3":
-            reports()
-        elif option == "4":
-            pass
-        elif option == "5":
-            update_excel()
-        elif option == "6":
-            break
-        else:
-            print("Invalid option!")
+        QMessageBox.information(self, "Update Excel",
+                                "Excel files have been updated.")
+
+    def open_reports_dialog(self):
+        self.reports_dialog = ReportsDialog(self)
+        self.reports_dialog.show()
