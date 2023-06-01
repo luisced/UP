@@ -5,6 +5,6 @@
 
 #include "db.h"
 
-extern DB db; // Declaration of the dbInstance object
+static DB db; // Declaration of the dbInstance object
 
 #endif // DBMANAGER_H

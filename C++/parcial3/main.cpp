@@ -14,6 +14,10 @@ using namespace std;
 
 int main()
 {
+    DB db;
+
+    // Load data from CSV file if it exists
+    loadDataFromCSV("data.csv", db);
 
     vector<string> options = {"Create Product", "Create Sale", "Generate Report", "Exit"};
     vector<string> options2 = {"See specific sale information", "List all the sales", "S.filtered by date", "S. by payment method", "S. by lab", "S. by bill", "P. information", "P. by Laboratory", "P. soon to expire", "All Products",
@@ -39,7 +43,6 @@ int main()
                 switch (choice2)
                 {
                 case 1:
-
                     db.SaleFilterByOrderNumber();
                     pressEnterToContinue();
                     break;
@@ -64,7 +67,6 @@ int main()
                     break;
                 case 7:
                     db.ProductFilterByName();
-
                     pressEnterToContinue();
                     break;
                 case 8:
@@ -86,5 +88,9 @@ int main()
         }
         choice = menu.display();
     }
+
+    // Save data to CSV file before exiting
+    saveDataToCSV("data.csv", db);
+
     return 0;
 }

@@ -1,0 +1,5 @@
+Product ID,SKU,Name,Presentation,Laboratory,Stock,Cost,Price,Expiration Date,IVA
+3,123456789,Aspirina,Tabletas,Astra,100,10,15,2022-12-31,false
+4,123456789,Cetirizina,Tabletas,Bayer,100,10,15,2023-05-07,true
+
+Order Number,Date,Product List,Subtotal,Total,Payment Method,Bill

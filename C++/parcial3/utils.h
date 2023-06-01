@@ -6,6 +6,7 @@
 #include <chrono>
 #include "models.h"
 #include "db_instance.h"
+#include <fstream>
 #include <sstream>
 #include <map>
 
@@ -337,4 +338,160 @@ static void filterbydate()
     case 4:
         return;
     }
+}
+
+void saveDataToCSV(const string &filename, const DB &db)
+{
+    ofstream file(filename);
+    if (!file.is_open())
+    {
+        cout << "Error opening file for writing." << endl;
+        return;
+    }
+
+    // Write product data to CSV
+    file << "Product ID,SKU,Name,Presentation,Laboratory,Stock,Cost,Price,Expiration Date,IVA" << endl;
+    for (const auto &product : db.products)
+    {
+        file << product.id << "," << product.sku << "," << product.name << "," << product.presentation << ","
+             << product.laboratory << "," << product.stock << "," << product.cost << "," << product.price << ","
+             << product.expirationDate << "," << (product.iva ? "true" : "false") << endl;
+    }
+
+    file << endl;
+
+    // Write sale data to CSV
+    file << "Order Number,Date,Product List,Subtotal,Total,Payment Method,Bill" << endl;
+    for (const auto &sale : db.sales)
+    {
+        file << sale.orderNumber << "," << sale.date << ",";
+        for (const auto &productMap : sale.productList)
+        {
+            for (const auto &product : productMap)
+            {
+                file << product.first << ":" << product.second << ";";
+            }
+        }
+        file << "," << sale.subtotal << "," << sale.total << "," << sale.paymentMethod << "," << (sale.bill ? "true" : "false") << endl;
+    }
+
+    file.close();
+    cout << "Data saved to " << filename << " successfully." << endl;
+}
+
+void loadDataFromCSV(const string &filename, DB &db)
+{
+    ifstream file(filename);
+    if (!file.is_open())
+    {
+        cout << "Error opening file for reading." << endl;
+        return;
+    }
+
+    // Skip the header lines
+    string line;
+    getline(file, line);
+    getline(file, line);
+
+    // Read product data from CSV
+    db.products.clear();
+    int lineCount = 3; // Start from line 3 (after the header lines)
+    while (getline(file, line) && !line.empty())
+    {
+        stringstream ss(line);
+        string field;
+        vector<string> fields;
+        while (getline(ss, field, ','))
+        {
+            fields.push_back(field);
+        }
+
+        if (fields.size() == 10)
+        {
+            try
+            {
+                int id = stoi(fields[0]);
+                string sku = fields[1];
+                string name = fields[2];
+                string presentation = fields[3];
+                string laboratory = fields[4];
+                int stock = stoi(fields[5]);
+                float cost = stof(fields[6]);
+                float price = stof(fields[7]);
+                string expirationDate = fields[8];
+                bool iva = (fields[9] == "true");
+
+                Product product(id, sku, name, presentation, laboratory, stock, cost, price, expirationDate, iva);
+                db.products.push_back(product);
+            }
+            catch (const exception &e)
+            {
+                cerr << "Error parsing product data at line " << lineCount << ": " << e.what() << endl;
+                file.close();
+                return;
+            }
+        }
+
+        lineCount++;
+    }
+
+    // Skip the empty line between product and sale data
+    getline(file, line);
+
+    // Read sale data from CSV
+    db.sales.clear();
+    lineCount++; // Increment line count for the empty line
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+        string field;
+        vector<string> fields;
+        while (getline(ss, field, ','))
+        {
+            fields.push_back(field);
+        }
+
+        if (fields.size() == 7)
+        {
+            try
+            {
+                int orderNumber = stoi(fields[0]);
+                string date = fields[1];
+
+                vector<map<string, int>> productList;
+                stringstream productListStream(fields[2]);
+                string productStr;
+                while (getline(productListStream, productStr, ';'))
+                {
+                    stringstream productStream(productStr);
+                    string productName;
+                    getline(productStream, productName, ':');
+                    int productQuantity = stoi(productStream.str());
+
+                    map<string, int> productMap;
+                    productMap.insert({productName, productQuantity});
+                    productList.push_back(productMap);
+                }
+
+                float subtotal = stof(fields[3]);
+                float total = stof(fields[4]);
+                string paymentMethod = fields[5];
+                bool bill = (fields[6] == "true");
+
+                Sale sale(orderNumber, date, productList, subtotal, total, paymentMethod, bill);
+                db.sales.push_back(sale);
+            }
+            catch (const exception &e)
+            {
+                cerr << "Error parsing sale data at line " << lineCount << ": " << e.what() << endl;
+                file.close();
+                return;
+            }
+        }
+
+        lineCount++;
+    }
+
+    file.close();
+    cout << "Data loaded from " << filename << " successfully." << endl;
 }
