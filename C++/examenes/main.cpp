@@ -12,14 +12,23 @@ public:
     std::string titulo;
     std::string autor;
     std::string genero;
-    // Agrega más atributos según los campos del archivo CSV que deseas incluir
+    std::string isbn;
+    std::string isbn13;
+    std::string language_code;
+    int num_pages;
+    int ratings_count;
+    int text_reviews_count;
+    std::string publication_date;
+    std::string publisher;
 
     Libro()
     {
         bookID = 0;
+        num_pages = 0;
+        ratings_count = 0;
+        text_reviews_count = 0;
     }
 };
-
 void dividirLineaCSV(const std::string &linea, Libro &libro)
 {
     std::stringstream ss(linea);
@@ -35,12 +44,34 @@ void dividirLineaCSV(const std::string &linea, Libro &libro)
     std::getline(ss, campo, ',');
     libro.autor = campo;
 
+    // Omitir el campo average_rating
+
     std::getline(ss, campo, ',');
-    libro.genero = campo;
+    libro.isbn = campo;
+
+    std::getline(ss, campo, ',');
+    libro.isbn13 = campo;
+
+    std::getline(ss, campo, ',');
+    libro.language_code = campo;
+
+    std::getline(ss, campo, ',');
+    libro.num_pages = std::stoi(campo);
+
+    std::getline(ss, campo, ',');
+    libro.ratings_count = std::stoi(campo);
+
+    std::getline(ss, campo, ',');
+    libro.text_reviews_count = std::stoi(campo);
+
+    std::getline(ss, campo, ',');
+    libro.publication_date = campo;
+
+    std::getline(ss, campo, ',');
+    libro.publisher = campo;
 
     // Agrega más líneas para leer los atributos adicionales del libro
 }
-
 void crearArchivoBiblioteca(const std::string &archivoCSV, const std::string &archivoBiblioteca)
 {
     std::ifstream archivoEntrada(archivoCSV);
