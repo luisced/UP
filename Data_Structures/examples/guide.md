@@ -22,7 +22,8 @@ Example:
 int arr[5] = {1, 2, 3, 4, 5};
 ```
 
-Linked List
+# Linked List
+
 Dynamically store a sequence of elements.
 
 Example:
@@ -156,11 +157,8 @@ The notation is expressed as `O(f(n))`, where `f(n)` represents the **worst-case
 ## Key Concepts
 
 - **Upper Bound**: Big O notation represents an **upper bound** on the algorithm's performance. It characterizes how the algorithm's execution time or space usage scales as the input size grows.
-
 - **Asymptotic Analysis**: Big O notation focuses on the **asymptotic behavior** of an algorithm, which means it considers the algorithm's performance for **large input sizes**. It helps us understand the long-term trends rather than the precise execution time for specific inputs.
-
 - **Worst-Case Scenario**: Big O notation describes the algorithm's behavior in the **worst-case scenario**. It considers the input that causes the algorithm to perform the most work, providing a **guarantee** on the algorithm's performance.
-
 - **Simplified Representation**: Big O notation simplifies the analysis by ignoring constant factors and lower-order terms. It focuses on the dominant factor that influences the growth rate of the algorithm.
 
 ## Common Notations
@@ -168,15 +166,10 @@ The notation is expressed as `O(f(n))`, where `f(n)` represents the **worst-case
 Here are some commonly used Big O notations and their corresponding growth rates:
 
 - **O(1)**: Constant time complexity. The algorithm's performance remains constant, regardless of the input size.
-
 - **O(log n)**: Logarithmic time complexity. The algorithm's performance grows logarithmically with the input size.
-
 - **O(n)**: Linear time complexity. The algorithm's performance scales linearly with the input size.
-
 - **O(n log n)**: Log-linear time complexity. The algorithm's performance grows in proportion to the input size multiplied by its logarithm.
-
 - **O(n^2)**: Quadratic time complexity. The algorithm's performance grows quadratically with the input size.
-
 - **O(2^n)**: Exponential time complexity. The algorithm's performance doubles with each increase in the input size.
 
 ## Examples
