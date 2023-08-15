@@ -18,6 +18,8 @@ public:
     void multiply();
 
     void sum();
+
+    void mean_array(int *array, int size);
 };
 
 class Student

@@ -23,3 +23,17 @@ void util::sum()
     result = num1 + num2;
     cout << "resultado suma: " << result << endl;
 }
+
+void util::mean_array(int *array, int size)
+{
+
+    int counter = 0;
+    double mean = 0;
+    for (size_t i = 0; i < sizeof(*array); ++i)
+    {
+        counter += array[i];
+    }
+    mean = counter / size;
+
+    cout << "promedio: " << mean << endl;
+}

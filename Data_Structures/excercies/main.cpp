@@ -37,10 +37,10 @@ int main()
 {
     // excercise get 2 numbers
     util my_util; // create an instance of the util class
-
+    int array[10] = {45, 78, 34, 56, 12, 9, 67, 43, 90, 23};
     while (true)
     {
-        cout << "Ingrese una opción: \n1. Suma\n2. Multiply\n3. Salir";
+        cout << "Ingrese una opción: \n1. Suma\n2. Multiply\n3. Salir\n4. Promediar números";
         int option;
         cin >> option;
         switch (option)
@@ -55,6 +55,8 @@ int main()
             break;
         case 3:
             return EXIT_SUCCESS;
+        case 4:
+            my_util.mean_array(array, sizeof(array) / sizeof(array[0]));
         default:
             cout << "Opción inválida";
             break;
