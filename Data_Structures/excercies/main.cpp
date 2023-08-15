@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include "util.cpp"
 
 // Excercise 1
 // Write a program that asks the user to type 10 integers of an array and an integer value V.
@@ -27,9 +28,36 @@ static void excercise1()
     cout << "The number " << v << " is not in the array" << endl;
 }
 
+void modify(int *value)
+{
+    *value *= 5;
+}
+
 int main()
 {
-    excercise1();
-    // cout << "Hello, World!" << endl;
-    return EXIT_SUCCESS;
+    // excercise get 2 numbers
+    util my_util; // create an instance of the util class
+
+    while (true)
+    {
+        cout << "Ingrese una opción: \n1. Suma\n2. Multiply\n3. Salir";
+        int option;
+        cin >> option;
+        switch (option)
+        {
+        case 1:
+            my_util.get_numbers();
+            my_util.sum();
+            break;
+        case 2:
+            my_util.get_numbers();
+            my_util.multiply();
+            break;
+        case 3:
+            return EXIT_SUCCESS;
+        default:
+            cout << "Opción inválida";
+            break;
+        }
+    }
 }
