@@ -1,6 +1,20 @@
 #include "search.h"
 
-static vector<Movie *> movieVector;
+void clearConsole()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+void pressEnterToContinue()
+{
+    cout << "Press Enter to continue...";
+    cin.ignore();
+    cin.get();
+}
 
 void addMovieToVector(const Movie &m)
 {
@@ -18,41 +32,109 @@ void print_vector()
 
 void create_movie()
 {
+    cin.ignore();
     string name, director, genre;
     int year;
     cout << "Enter the name: ";
-    cin >> name;
+    getline(cin, name);
     cout << "Enter the director: ";
-    cin >> director;
+    getline(cin, director);
     cout << "Enter the year: ";
     cin >> year;
     cout << "Enter the genre: ";
-    cin >> genre;
+    getline(cin, genre);
 
     // Add two vector
     Movie newMovie(name, director, year, genre);
     addMovieToVector(newMovie);
 };
-
 void search_menu()
 {
-    cout << "1. Search by Name" << endl;
-    cout << "2. Search by Director" << endl;
-    cout << "3. Search by Year" << endl;
-    cout << "4. Search by Genre" << endl;
-    cout << "5. Exit" << endl;
-
-    cout << "Enter your choice: ";
-    int option = 0;
-    cin >> option;
-    while (option != 5)
+    while (true)
     {
+        clearConsole();
+
+        cout << "1. Search by Name" << endl;
+        cout << "2. Search by Director" << endl;
+        cout << "3. Search by Year" << endl;
+        cout << "4. Search by Genre" << endl;
+        cout << "5. All movies" << endl;
+        cout << "6. Exit" << endl;
+
+        cout << "Enter your choice: ";
+        int option = 0;
+        cin >> option;
+        cin.ignore();
+
         switch (option)
         {
         case 1:
-            print_vector();
+        {
+            clearConsole();
+            string name;
+            cout << "Enter the name to search: ";
+            getline(cin, name);
+            vector<Movie *> results = Search::searchByName(name);
+            for (Movie *movie : results)
+            {
+                movie->print();
+            }
+            pressEnterToContinue();
             break;
+        }
+        case 2:
+        {
+            clearConsole();
+            string director;
+            cout << "Enter the director to search: ";
+            getline(cin, director);
+            vector<Movie *> results = Search::searchByDirector(director);
+            for (Movie *movie : results)
+            {
+                movie->print();
+            }
+            pressEnterToContinue();
+            break;
+        }
+        case 3:
+        {
+            clearConsole();
+            int year;
+            cout << "Enter the year to search: ";
+            cin >> year;
+            cin.ignore(); // Clear the newline character from the input buffer
+            vector<Movie *> results = Search::searchByYear(year);
+            for (Movie *movie : results)
+            {
+                movie->print();
+            }
+            pressEnterToContinue();
+            break;
+        }
+        case 4:
+        {
+            clearConsole();
+            string genre;
+            cout << "Enter the genre to search: ";
+            getline(cin, genre);
+            vector<Movie *> results = Search::searchByGenre(genre);
+            for (Movie *movie : results)
+            {
+                movie->print();
+            }
+            pressEnterToContinue();
+            break;
+        }
+        case 5:
+            clearConsole();
+            print_vector();
+            pressEnterToContinue();
+            return;
+        case 6:
+            clearConsole();
+            return;
         default:
+            cout << "Invalid option. Please choose again." << endl;
             break;
         }
     }
@@ -60,23 +142,42 @@ void search_menu()
 
 void menu()
 {
-    cout << "1. Add movie" << endl;
-    cout << "2. Search movie" << endl;
-    cout << "3. Remove movie" << endl;
-    cout << "4. Exit" << endl;
-
-    cout << "Enter your choice: ";
-    int option = 0;
-    cin >> option;
-    switch (option)
+    while (true)
     {
-    case 1:
-        create_movie();
-        break;
-    case 2:
-        search_menu();
-        break;
-    default:
-        break;
+        clearConsole();
+        cout << "1. Add movie" << endl;
+        cout << "2. Search movie" << endl;
+        cout << "3. Exit" << endl;
+
+        cout << "Enter your choice: ";
+        int option = 0;
+        cin >> option;
+
+        switch (option)
+        {
+        case 1:
+            clearConsole();
+            create_movie();
+            break;
+        case 2:
+            clearConsole();
+            search_menu();
+            break;
+        case 3:
+            clearConsole();
+            return;
+        default:
+            cout << "Invalid option. Please choose again." << endl;
+            break;
+        }
     }
-};
+}
+
+void Movie::populateMovieVector()
+{
+    movieVector.push_back(new Movie("Movie 1", "Director A", 2000, "Action"));
+    movieVector.push_back(new Movie("Movie 2", "Director B", 2005, "Comedy"));
+    movieVector.push_back(new Movie("Movie 3", "Director C", 2010, "Drama"));
+    movieVector.push_back(new Movie("Movie 4", "Director A", 2015, "Science Fiction"));
+    movieVector.push_back(new Movie("Movie 5", "Director D", 2020, "Horror"));
+}
