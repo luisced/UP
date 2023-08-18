@@ -172,12 +172,3 @@ void menu()
         }
     }
 }
-
-void Movie::populateMovieVector()
-{
-    movieVector.push_back(new Movie("Movie 1", "Director A", 2000, "Action"));
-    movieVector.push_back(new Movie("Movie 2", "Director B", 2005, "Comedy"));
-    movieVector.push_back(new Movie("Movie 3", "Director C", 2010, "Drama"));
-    movieVector.push_back(new Movie("Movie 4", "Director A", 2015, "Science Fiction"));
-    movieVector.push_back(new Movie("Movie 5", "Director D", 2020, "Horror"));
-}
