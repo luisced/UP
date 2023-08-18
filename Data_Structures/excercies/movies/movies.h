@@ -27,7 +27,6 @@ public:
         cout << "Year: " << year << endl;
         cout << "Genre: " << genre << endl;
     };
-    void populateMovieVector();
 };
 
 static vector<Movie *> movieVector = {
