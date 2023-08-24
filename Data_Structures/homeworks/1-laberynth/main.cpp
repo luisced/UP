@@ -3,7 +3,9 @@
 
 int main()
 {
-    Laberynth lab(21, 21);
+    // Laberynth lab(51, 101);
+
+    Laberynth lab(11, 21);
 
     Robot robot;
     auto path = robot.solve(lab.get_map(), lab.get_width(), lab.get_height());

@@ -107,15 +107,13 @@ public:
                 }
                 else if (map[i][j] == 2)
                 {
-                    // change color to red
-                    cout << "\033[1;31m";
-                    cout << "R";
-                    // change color to white
-                    cout << "\033[0m";
+                    cout << "\033[1;31m"
+                         << "◍"
+                         << "\033[0m"; // Red robot
                 }
                 else
                 {
-                    cout << "#";
+                    cout << "■";
                 }
             }
             cout << "│\n";
