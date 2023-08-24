@@ -121,5 +121,5 @@ public:
         return (path[0] == start) ? path : vector<pair<int, int>>{};
     }
 };
-
+//                                                  UP      DOWN    LEFT    RIGHT
 const vector<pair<int, int>> Robot::DIRECTIONS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};

@@ -3,8 +3,9 @@
 
 int main()
 {
-    // Laberynth lab(51, 101);
-    Laberynth maze(11, 21);
+
+    Laberynth maze(51, 101);
+    // Laberynth maze(11, 21);
 
     Robot robot;
     vector<pair<int, int>> path = robot.solve(maze.get_map(), maze.get_width(), maze.get_height());

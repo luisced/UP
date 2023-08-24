@@ -14,6 +14,19 @@ private:
     const vector<int> DIR_X = {0, 0, -1, 1};
     const vector<int> DIR_Y = {-1, 1, 0, 0};
 
+    // Este método se encarga de generar el laberinto. Devuelve un puntero a una matriz bidimensional de enteros (int **).
+
+    // Inicialmente, crea una matriz bidimensional (maze) y la llena con ceros. Un cero indica una celda no transitable (una pared).
+    // Establece la celda en la posición (0,0) como transitable (representada por el valor 1).
+    // Crea un vector cellsToExplore para almacenar las celdas que todavía deben ser exploradas y lo inicializa con la celda (0,0).
+    // Utiliza un generador de números aleatorios (default_random_engine) para aleatorizar la elección de direcciones a explorar.
+    // Utiliza un bucle while para recorrer y modificar el laberinto:
+    // Toma la última celda de cellsToExplore para explorarla y la elimina del vector.
+    // Aleatoriza las direcciones posibles a explorar con shuffle.
+    // Por cada dirección posible, calcula la nueva posición (que es dos pasos en una dirección dada).
+    // Si la nueva posición está dentro del laberinto y no ha sido explorada, se marca como transitable y se añade a cellsToExplore. También se marca la celda intermedia como transitable.
+    // Finalmente, devuelve el laberinto generado.
+
     int **generate_map()
     {
         int **maze = new int *[width];
