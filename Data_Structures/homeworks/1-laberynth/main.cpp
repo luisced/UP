@@ -1,21 +1,20 @@
-#include "player.h"
+#include "robot.h"
 #include "laberynth.h"
 
 int main()
 {
     // Laberynth lab(51, 101);
-
-    Laberynth lab(11, 21);
+    Laberynth maze(11, 21);
 
     Robot robot;
-    auto path = robot.solve(lab.get_map(), lab.get_width(), lab.get_height());
+    vector<pair<int, int>> path = robot.solve(maze.get_map(), maze.get_width(), maze.get_height());
 
-    for (const auto &pos : path)
+    for (const pair<int, int> &pos : path)
     {
-        lab.get_map()[pos.first][pos.second] = 2;
+        maze.get_map()[pos.first][pos.second] = 2;
     }
 
-    lab.print_map();
+    maze.print_map();
 
     return 0;
 }
