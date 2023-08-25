@@ -34,15 +34,29 @@ void give_maze_to_robot(const int x, const int y, bool visualize_robot = false)
 
     Laberynth maze(x, y);
     Robot robot;
+    vector<pair<int, int>> path;
 
-    vector<pair<int, int>> path = robot.solve(maze.get_map(), maze.get_width(), maze.get_height());
-
-    for (const pair<int, int> &pos : path)
+    if (visualize_robot)
     {
-        maze.get_map()[pos.first][pos.second] = 2;
+        path = robot.solve(maze.get_map(), maze.get_width(), maze.get_height(), true);
+        for (const pair<int, int> &pos : path)
+        {
+            maze.get_map()[pos.first][pos.second] = 2;
+        }
+
+        // maze.print_map();
+    }
+    else
+    {
+        path = robot.solve(maze.get_map(), maze.get_width(), maze.get_height());
+        for (const pair<int, int> &pos : path)
+        {
+            maze.get_map()[pos.first][pos.second] = 2;
+        }
+
+        maze.print_map();
     }
 
-    maze.print_map();
     pressEnterToContinue();
 }
 
