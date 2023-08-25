@@ -43,8 +43,6 @@ void give_maze_to_robot(const int x, const int y, bool visualize_robot = false)
         {
             maze.get_map()[pos.first][pos.second] = 2;
         }
-
-        // maze.print_map();
     }
     else
     {
