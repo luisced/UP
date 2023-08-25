@@ -45,7 +45,7 @@ private:
     }
 
 public:
-    vector<pair<int, int>> solve(int **maze, int width, int height)
+    vector<pair<int, int>> solve(int **maze, int width, int height, bool shouldDisplayMaze = false)
     {
         vector<vector<bool>> visited(width, vector<bool>(height, false));
 
@@ -103,7 +103,10 @@ public:
                 // entonces se agrega la nueva posicion a la pila, se marca como visitada y se guarda la posicion anterior
             }
             // Uncomment the below line to display maze while solving
-            // displayMaze(maze, width, height, x, y);
+            // bool shouldDisplayMaze = true; // Set this to false if you don't want to display the maze
+
+            if (shouldDisplayMaze)
+                displayMaze(maze, width, height, x, y);
         }
 
         vector<pair<int, int>> path; // Almacena un vector de pares de enteros que representan el camino
