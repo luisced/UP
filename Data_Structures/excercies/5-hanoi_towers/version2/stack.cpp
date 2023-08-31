@@ -34,3 +34,8 @@ int Stack::top()
         return pop_v;
     }
 }
+
+// bool Stack::is_empty()
+// {
+
+// }

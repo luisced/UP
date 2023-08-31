@@ -16,6 +16,14 @@ public:
     void push(int i);
     int pop();
     int top();
+    bool is_empty()
+    {
+        if (heap < base)
+        {
+            return true;
+        }
+        return false;
+    };
 
 private:
     int array[5];
