@@ -1,0 +1,53 @@
+-- create table for entertainment_items
+
+create table
+    entertainment_items (
+        item_id integer primary key autoincrement,
+        name text not null,
+        category text not null,
+        price real not null,
+        stock_quantity integer not null
+    );
+
+-- create table for distribution_centers
+
+create table
+    distribution_centers (
+        center_id integer primary key autoincrement,
+        location text not null,
+        capacity integer not null
+    );
+
+-- create table for suppliers
+
+create table
+    suppliers (
+        supplier_id integer primary key autoincrement,
+        name text not null,
+        contact_info text
+    );
+
+-- create table for transactions
+
+create table
+    transactions (
+        transaction_id integer primary key autoincrement,
+        center_id integer not null,
+        supplier_id integer,
+        transaction_date text not null,
+        foreign key (center_id) references distribution_centers(center_id),
+        foreign key (supplier_id) references suppliers(supplier_id)
+    );
+
+-- create junction table for transaction_items
+
+create table
+    transaction_items (
+        transaction_id integer,
+        item_id integer,
+        quantity_sold integer not null,
+        total_price real not null,
+        foreign key (transaction_id) references transactions(transaction_id),
+        foreign key (item_id) references entertainment_items(item_id),
+        primary key (transaction_id, item_id)
+    );
