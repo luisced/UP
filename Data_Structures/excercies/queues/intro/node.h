@@ -10,13 +10,37 @@ private:
 public:
     char value;
     Node *next;
-    void get_i();
-    char get_c();
-    float get_f();
-    std::string get_s();
+    int get_i()
+    {
+        return val_int;
+    }
+    char get_c()
+    {
+        return val_char;
+    }
+    float get_f()
+    {
+        return val_float;
+    }
+    std::string get_s()
+    {
+        return val_string;
+    }
 
-    void set_i(int val);
-    void set_c(char val);
-    void set_f(float val);
-    void set_s(std::string val);
+    void set(int val)
+    {
+        val_int = val;
+    }
+    void set(char val)
+    {
+        val_char = val;
+    }
+    void set(float val)
+    {
+        val_float = val;
+    }
+    void set(std::string val)
+    {
+        val_string = val;
+    }
 };
