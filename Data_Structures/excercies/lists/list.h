@@ -34,8 +34,13 @@ void List::insert(char val, int index)
         return;
     }
     Node *counter;
+    if (index == 0)
+    {
+        insert(val);
+        return;
+    }
     counter = bottom;
-    for (int i = 0; i < index; i++)
+    for (int i = 1; i <= index; i++)
     {
         counter = counter->next;
     }
