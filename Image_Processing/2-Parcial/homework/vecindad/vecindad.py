@@ -20,7 +20,12 @@ class Neighborhood:
 
     def _get_neighbors(self, i: int, j: int, directions: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
         """Get neighbors of a cell (i, j) based on the given directions."""
-        return [(i + dx, j + dy) for dx, dy in directions if self.is_within_boundaries(i + dx, j + dy)]
+        neighbors = []
+        for dx, dy in directions:
+            new_i, new_j = i + dx, j + dy
+            if self.is_within_boundaries(new_i, new_j) and self.matrix[new_i, new_j] > 0:
+                neighbors.append((new_i, new_j))
+        return neighbors
 
     def get_four_neighbors(self, i: int, j: int) -> Dict[str, List[Tuple[int, int]]]:
         """Calculate the 4-neighborhood of the cell at position (i, j)."""
@@ -38,4 +43,4 @@ neighborhood = Neighborhood(matrix)
 four_neighbors = neighborhood.get_four_neighbors(1, 1)
 eight_neighbors = neighborhood.get_eight_neighbors(1, 1)
 
-print(four_neighbors,eight_neighbors, sep="\n")
+print(four_neighbors, eight_neighbors, sep="\n")
