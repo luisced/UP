@@ -18,7 +18,7 @@ class Neighborhood:
         """Check if the indices (i, j) are within the matrix boundaries."""
         return 0 <= i < self.rows and 0 <= j < self.cols
 
-    def _get_neighbors(self, i: int, j: int, directions: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
+    def __get_neighbors(self, i: int, j: int, directions: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
         """Get neighbors of a cell (i, j) based on the given directions."""
         neighbors = []
         for dx, dy in directions:
@@ -29,11 +29,11 @@ class Neighborhood:
 
     def get_four_neighbors(self, i: int, j: int) -> Dict[str, List[Tuple[int, int]]]:
         """Calculate the 4-neighborhood of the cell at position (i, j)."""
-        return {'4-Neighborhood': self._get_neighbors(i, j, self.FOUR_NEIGHBORS)}
+        return {'4-Neighborhood': self.__get_neighbors(i, j, self.FOUR_NEIGHBORS)}
 
     def get_eight_neighbors(self, i: int, j: int) -> Dict[str, List[Tuple[int, int]]]:
         """Calculate the 8-neighborhood of the cell at position (i, j)."""
-        return {'8-Neighborhood': self._get_neighbors(i, j, self.EIGHT_NEIGHBORS)}
+        return {'8-Neighborhood': self.__get_neighbors(i, j, self.EIGHT_NEIGHBORS)}
 
 # Create an instance of the class with the given matrix
 matrix = np.identity(3)
