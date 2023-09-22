@@ -1,46 +1,34 @@
-#include <string>
+#pragma once
+
+template <typename T>
 class Node
 {
 private:
-    int val_int;
-    char val_char;
-    float val_float;
-    std::string val_string;
+    T value;
+    Node *next;
 
 public:
-    char value;
-    Node *next;
-    int get_i()
+    Node() : value(T()), next(nullptr) {}
+
+    Node(const T &val) : value(val), next(nullptr) {}
+
+    T get_value() const
     {
-        return val_int;
-    }
-    char get_c()
-    {
-        return val_char;
-    }
-    float get_f()
-    {
-        return val_float;
-    }
-    std::string get_s()
-    {
-        return val_string;
+        return value;
     }
 
-    void set(int val)
+    void set_value(const T &val)
     {
-        val_int = val;
+        value = val;
     }
-    void set(char val)
+
+    Node *get_next() const
     {
-        val_char = val;
+        return next;
     }
-    void set(float val)
+
+    void set_next(Node *n)
     {
-        val_float = val;
-    }
-    void set(std::string val)
-    {
-        val_string = val;
+        next = n;
     }
 };
