@@ -53,4 +53,13 @@ public:
     {
         return (top < 0);
     }
+
+    int peek()
+    {
+        if (top < 0)
+        {
+            return 0;
+        }
+        return arr[top];
+    }
 };
