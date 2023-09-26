@@ -40,24 +40,18 @@ std::string infixToPostfix(const std::string &infix)
         else if (c == ')')
         {
             while (!s.isEmpty() && s.peek() != '(')
-            {
                 postfix += s.pop();
-            }
             s.pop(); // Eliminar '(' de la pila
         }
         else if (isOperator(c))
         {
             while (!s.isEmpty() && precedence(s.peek()) >= precedence(c))
-            {
                 postfix += s.pop();
-            }
             s.push(c);
         }
     }
     while (!s.isEmpty())
-    {
         postfix += s.pop();
-    }
     return postfix;
 }
 
