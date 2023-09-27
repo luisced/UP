@@ -1,40 +1,41 @@
+#include <iostream> // for std::cout, std::endl
+#include <cstdlib>  // for std::rand, std::srand
+#include <ctime>    // for std::time
+#include <cmath>
+
 #include "list.h"
-#include <iostream>
+#include "bubble_sort.h"
 
 int main()
 {
-    List<int> generic_list;
+    List<int> myList;
 
-    // Insert elements into the list
-    generic_list.insert('a');
-    generic_list.insert(20);
-    generic_list.insert(30);
-    generic_list.insert(40, 1); // Insert 40 at index 1
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
 
-    // Display the elements in the list
-    std::cout << "List contents:\n";
-    for (int i = 0; i < generic_list.size_of_list(); ++i)
+    for (int i = 0; i < 1000; ++i)
     {
-        std::cout << "Element at index " << i << ": " << generic_list.getAt(i) << '\n';
+        int randomNum = std::rand() % 100;
+        myList.insert(randomNum);
     }
 
-    // Remove an element from the list
-    try
+    std::cout << "Unsorted List: " << std::endl;
+    std::cout << '[';
+    for (int i = 0; i < myList.size_of_list(); ++i)
     {
-        int value = generic_list.remove_at(2); // Remove element at index 2
-        std::cout << "\nRemoved Element: " << value << '\n';
+        std::cout << myList.getAt(i) << " ";
     }
-    catch (const std::out_of_range &e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+    std::cout << ']';
+    std::cout << std::endl;
 
-    // Display the elements in the list after removal
-    std::cout << "\nList contents after removal:\n";
-    for (int i = 0; i < generic_list.size_of_list(); ++i)
+    // Now sort the list
+    BubbleSort<int>::sort(myList);
+
+    std::cout << "Sorted List: " << std::endl;
+    for (int i = 0; i < myList.size_of_list(); ++i)
     {
-        std::cout << "Element at index " << i << ": " << generic_list.getAt(i) << '\n';
+        std::cout << myList.getAt(i) << " ";
     }
+    std::cout << std::endl;
 
     return 0;
 }
