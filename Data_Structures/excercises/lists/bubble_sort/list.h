@@ -6,7 +6,7 @@ template <typename T>
 class List
 {
 public:
-    List() : bottom(nullptr), size(0) {}
+    List() : head(nullptr), tail(nullptr), size(0) {}
     ~List();
     void insert(const T &val);
     void insert(const T &val, int index);
@@ -19,20 +19,26 @@ private:
     class Node
     {
     public:
-        Node(const T &val) : value(val), next(nullptr) {}
+        Node(const T &val) : value(val), next(nullptr), prev(nullptr) {}
         T get_value() const { return value; }
         void set_value(const T &val) { value = val; }
         Node *get_next() const { return next; }
         void set_next(Node *n) { next = n; }
+        Node *get_prev() const { return prev; }
+        void set_prev(Node *p) { prev = p; }
 
     private:
         T value;
         Node *next;
+        Node *prev;
     };
 
-    Node *bottom;
+    Node *head;
+    Node *tail;
     int size;
 };
+
+// Definitions for the List methods will be similar but with adjustments for the previous pointers.
 
 // Definitions for the List methods.
 
