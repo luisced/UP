@@ -26,6 +26,7 @@ private:
         void set_next(Node *n) { next = n; }
         Node *get_prev() const { return prev; }
         void set_prev(Node *p) { prev = p; }
+        Node *getHead() const { return head; }
 
     private:
         T value;

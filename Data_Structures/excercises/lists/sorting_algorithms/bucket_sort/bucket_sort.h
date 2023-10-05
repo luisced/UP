@@ -1,62 +1,77 @@
+#include "list.h"
 #include "quick_sort.h"
+#include <vector>
 #include <cmath>
 
 template <typename T>
-class Bucket_Sort
+class BucketSort
 {
-private:
-    // Approximate number of buckets
-    int max_bucket_size = 10;
-    int initial_bucket_count = 0;
-
 public:
-    static void sort(List<T> &list);
-    int bucket_count(int array_length, int max_bucket_size);
-    void divide_elements_by_buckets(List<T> &list, int bucket_count, int max_bucket_size);
-    static int determine_bucket_index(T element, int bucket_count);
-    List<T> create_empty_buckets(int bucket_count);
-    void sort_buckets(List<T> &list, int bucket_count);
+    static void sort(List<T> &list)
+    {
+        std::cout << "Sorting..." << std::endl;
+        int n = list.size_of_list();
+        if (n <= 0)
+            return;
+
+        MinMaxValues minMax = findMinMax(list);
+        std::cout << "Min: " << minMax.minVal << ", Max: " << minMax.maxVal << std::endl;
+
+        std::vector<List<T>> buckets(floor(sqrt(n)));
+
+        std::cout << "Number of buckets: " << buckets.size() << std::endl;
+
+        distributeToBuckets(list, buckets, minMax.minVal, minMax.maxVal);
+        sortBuckets(buckets);
+        concatenateBuckets(list, buckets);
+    }
+
+private:
+    struct MinMaxValues
+    {
+        T minVal;
+        T maxVal;
+    };
+
+    static MinMaxValues findMinMax(const List<T> &list)
+    {
+        MinMaxValues minMax;
+        minMax.maxVal = list.getAt(0);
+        minMax.minVal = list.getAt(0);
+        for (int i = 1; i < list.size_of_list(); i++)
+        {
+            if (list.getAt(i) > minMax.maxVal)
+                minMax.maxVal = list.getAt(i);
+            if (list.getAt(i) < minMax.minVal)
+                minMax.minVal = list.getAt(i);
+        }
+        return minMax;
+    }
+
+    static void distributeToBuckets(const List<T> &list, std::vector<List<T>> &buckets, T minVal, T maxVal)
+    {
+        int n = list.size_of_list();
+        int numBuckets = buckets.size();
+        for (int i = 0; i < n; i++)
+        {
+            int bucketIndex = (list.getAt(i) - minVal) * (numBuckets - 1) / (maxVal - minVal);
+            buckets[bucketIndex].insert(list.getAt(i));
+        }
+    }
+
+    static void sortBuckets(std::vector<List<T>> &buckets)
+    {
+        for (int i = 0; i < buckets.size(); i++)
+            QuickSort<T>::sort(buckets[i]);
+    }
+
+    static void concatenateBuckets(List<T> &list, const std::vector<List<T>> &buckets)
+    {
+        int index = 0;
+        for (int i = 0; i < buckets.size(); i++)
+        {
+            for (int j = 0; j < buckets[i].size_of_list(); j++)
+                list.set_at(buckets[i].getAt(j), index++);
+        }
+    }
 };
-
-template <typename T>
-int Bucket_Sort<T>::bucket_count(int array_length, int max_bucket_size)
-{
-    if (floor(sqrt(array_length)) > max_bucket_size)
-        initial_bucket_count = max_bucket_size;
-    else
-        initial_bucket_count = floor(sqrt(array_length));
-
-    while (array_length / initial_bucket_count > max_bucket_size)
-        initial_bucket_count++;
-
-    return initial_bucket_count;
-}
-
-template <typename T>
-List<T> Bucket_Sort<T>::create_empty_buckets(int bucket_count)
-{
-    List<T> buckets;
-    for (int i = 0; i < bucket_count; i++)
-        buckets.insert(List<T>());
-    return buckets;
-}
-
-template <typename T>
-int Bucket_Sort<T>::determine_bucket_index(T element, int bucket_count)
-{
-    return floor(element * bucket_count);
-}
-
-template <typename T>
-void Bucket_Sort<T>::divide_elements_by_buckets(List<T> &list, int bucket_count, int max_bucket_size)
-{
-    // Implementation here
-}
-
-template <typename T>
-void Bucket_Sort<T>::sort(List<T> &list)
-{
-    int array_length = list.size_of_list();
-    int bucket_count = bucket_count(array_length, max_bucket_size);
-    List<T> buckets = create_empty_buckets(bucket_count);
-}

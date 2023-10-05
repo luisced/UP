@@ -5,16 +5,14 @@ int main()
 {
     // Testing with int
     List<int> intList;
-    intList.insert(3);
-    intList.insert(1);
-    intList.insert(4);
-    intList.insert(1);
-    intList.insert(5);
-    intList.insert(9);
+    for (int i = 0; i < 1000000; i++)
+        intList.insert(rand() % 100);
 
-    Bucket_Sort<int>::sort(intList);
+    std::cout << "Unsorted integers: \n";
 
-    std::cout << "Sorted integers: ";
+    BucketSort<int>::sort(intList);
+
+    std::cout << "Sorted integers: \n";
     for (int i = 0; i < intList.size_of_list(); i++)
         std::cout << intList.getAt(i) << " ";
     std::cout << std::endl;
@@ -28,28 +26,12 @@ int main()
     doubleList.insert(5.5);
     doubleList.insert(9.9);
 
-    Bucket_Sort<double>::sort(doubleList);
+    BucketSort<double>::sort(doubleList);
 
-    std::cout << "Sorted doubles: ";
+    std::cout << "\nSorted doubles: ";
     for (int i = 0; i < doubleList.size_of_list(); i++)
         std::cout << doubleList.getAt(i) << " ";
     std::cout << std::endl;
 
-    // // Testing with std::string
-    // List<std::string> stringList;
-    // stringList.insert("apple");
-    // stringList.insert("orange");
-    // stringList.insert("banana");
-    // stringList.insert("grape");
-    // stringList.insert("pineapple");
-    // stringList.insert("mango");
-
-    // Bucket_Sort<std::string>::sort(stringList);
-
-    // std::cout << "Sorted strings: ";
-    // for (int i = 0; i < stringList.size_of_list(); i++)
-    //     std::cout << stringList.getAt(i) << " ";
-    // std::cout << std::endl;
-
-    // return 0;
+    return 0;
 }
