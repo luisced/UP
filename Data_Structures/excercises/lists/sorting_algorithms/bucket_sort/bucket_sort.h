@@ -15,7 +15,6 @@ public:
             return;
 
         MinMaxValues minMax = findMinMax(list);
-        std::cout << "Min: " << minMax.minVal << ", Max: " << minMax.maxVal << std::endl;
 
         std::vector<List<T>> buckets(floor(sqrt(n)));
 

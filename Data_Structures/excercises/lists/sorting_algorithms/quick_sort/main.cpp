@@ -5,13 +5,8 @@ int main()
 {
     // Testing with int
     List<int> intList;
-    intList.insert(3);
-    intList.insert(1);
-    intList.insert(4);
-    intList.insert(1);
-    intList.insert(5);
-    intList.insert(9);
-
+    for (int i = 0; i < 1000000; i++)
+        intList.insert(rand() % 100);
     QuickSort<int>::sort(intList);
 
     std::cout << "Sorted integers: ";
