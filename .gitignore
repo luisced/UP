@@ -131,3 +131,49 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+# Ignore compiled object files
+*.o
+*.out
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore build directories and files
+/build/
+/bin/
+/Debug/
+/Release/
+/CMakeFiles/
+/CMakeCache.txt
+/CMakeScripts/
+/CMakeDoxyfile.in
+/CMakeTmp/
+
+# Ignore IDE and editor specific files
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln
+*.suo
+*.ncb
+*.aps
+*.swp
+*.swo
+*.dll
+*.exe
+*.pdb
+*.userprefs
+
+# Ignore generated documentation
+/doc/
+/html/
+/man/
+
+# Ignore backup and temporary files
+*~
+*.bak
+*.tmp
+*.log
+
