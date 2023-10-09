@@ -1,0 +1,72 @@
+-- Drop tables if they exist
+
+DROP TABLE IF EXISTS transactions;
+
+DROP TABLE IF EXISTS accounts;
+
+DROP TABLE IF EXISTS clients;
+
+DROP TABLE IF EXISTS suspects;
+
+-- Create Clients Table
+
+CREATE TABLE
+    clients (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        age INTEGER
+    );
+
+-- Create Accounts Table (Related to Clients)
+
+CREATE TABLE
+    accounts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        client_id INTEGER NOT NULL,
+        number_account TEXT NOT NULL,
+        FOREIGN KEY (client_id) REFERENCES clients(id)
+    );
+
+CREATE TABLE
+    transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        account_id INTEGER NOT NULL,
+        id_receiver INT,
+        amount INT,
+        concept TEXT,
+        date DATE DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (account_id) REFERENCES accounts(id),
+        FOREIGN KEY (id_receiver) REFERENCES clients(id)
+    );
+
+-- Insert some clients
+
+-- Insert 10 sample records into the clients table
+
+INSERT INTO clients (name, age)
+VALUES ('John Doe', 35), ('Jane Smith', 28), ('Robert Johnson', 45), ('Emily Davis', 30), ('Michael Wilson', 42), ('Maria Rodriguez', 26), ('David Lee', 55), ('Sophia Martinez', 29), ('Daniel Brown', 38), ('Olivia Taylor', 33);
+
+-- Insert 10 sample records into the accounts table
+
+INSERT INTO
+    accounts (client_id, number_account)
+VALUES (1, '12345678'), (2, '23456789'), (3, '34567890'), (4, '45678901'), (5, '56789012'), (6, '67890123'), (7, '78901234'), (8, '89012345'), (9, '90123456'), (10, '01234567');
+
+-- Insert 10 sample records into the transactions table
+
+INSERT INTO
+    transactions (
+        account_id,
+        id_receiver,
+        amount,
+        concept
+    )
+VALUES (1, 2, 5000, 'Purchase'), (2, 1, 7500, 'Payment'), (3, 4, 12000, 'Transfer'), (4, 3, 8000, 'Withdrawal'), (5, 6, 15000, 'Purchase'), (6, 5, 9500, 'Payment'), (7, 8, 11000, 'Transfer'), (8, 7, 7200, 'Withdrawal'), (9, 10, 13500, 'Purchase'), (10, 9, 8800, 'Payment');
+
+CREATE TABLE suspects AS
+SELECT
+    DISTINCT a.id,
+    a.number_account
+FROM accounts AS a
+    INNER JOIN transactions AS t ON a.id = t.account_id
+WHERE t.amount > 10000;
