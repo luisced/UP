@@ -7,7 +7,7 @@
 #include <thread>
 #include <chrono>
 #include <map>
-#include "../Tree/tree.h" // Include the BinaryTree class header file
+#include "tree.h" // Include the BinaryTree class header file
 
 class Robot
 {

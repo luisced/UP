@@ -1,5 +1,5 @@
-#include "./Player/player.h"
-#include "./Maze/maze.h"
+#include "player.h"
+#include "maze.h"
 #include <vector>
 #include <iostream>
 #include <string>
