@@ -1,34 +1,44 @@
-#include "maze.h"
 #include <iostream>
+#include "./Maze/maze.h" // Adjust the include path as necessary
 
 int main()
 {
-	// Define the size of the maze (rows x columns)
-	int rows = 5;
-	int cols = 5;
+	// Seed for random number generation
+	srand((unsigned int)time(NULL));
 
-	// Create a maze object
-	Maze maze(rows, cols);
+	// Create a maze with width and height
+	int width = 10;
+	int height = 10;
+	Maze maze(width, height);
 
-	// Generate the maze
-	maze.generateMaze();
-
-	// Print the generated maze
-	std::cout << "Generated Maze:" << std::endl;
+	// Print the initial maze
+	std::cout << "Initial Maze:" << std::endl;
 	maze.printMaze();
+	std::cout << std::endl;
 
-	// Solve the maze
-	bool isSolved = maze.solveMaze();
+	// Now, you might want to add some walls manually or perform other operations,
+	// but since your maze is randomly generated, this is optional.
 
-	if (isSolved)
-	{
-		// Print the maze with the solution path
-		std::cout << "\nMaze with Solution:" << std::endl;
-	}
-	else
-	{
-		std::cout << "\nNo solution found." << std::endl;
-	}
+	// Uncomment below if you want to add walls manually
+	/*
+	maze.setWall(1, 1);
+	maze.setWall(2, 2);
+	// ... more walls
+	*/
+
+	// Print the maze after adding walls
+	std::cout << "Maze after adding walls:" << std::endl;
+	maze.printMaze();
+	std::cout << std::endl;
+
+	// If you had a solveMaze function, you would call it here
+	// maze.solveMaze();
+
+	// Uncomment below to print the maze after solving
+	/*
+	std::cout << "Maze after solving:" << std::endl;
+	maze.printMaze();
+	*/
 
 	return 0;
 }

@@ -1,27 +1,4 @@
-#include <iostream>
-#include "node.h"
-template <typename T>
-class List
-{
-public:
-    List() : head(nullptr), tail(nullptr), size(0) {}
-    ~List();
-
-    void insert(const T &val);
-    void insert(const T &val, int index);
-    void set_at(const T &val, int index);
-    T getAt(int index) const;
-    T remove_at(int index);
-    int size_of_list() const { return size; }
-    bool isEmpty() const { return size == 0; }
-
-private:
-    Node<T> *head;
-    Node<T> *tail;
-    int size;
-};
-
-// Definitions for the List methods.
+#include "list.h"
 
 template <typename T>
 List<T>::~List()
@@ -102,17 +79,17 @@ void List<T>::set_at(const T &val, int index)
 }
 
 template <typename T>
-T List<T>::getAt(int index) const
+T &List<T>::getAt(int index)
 {
-    if (index < 0 or index >= size)
+    if (index < 0 || index >= size) // Changed 'or' to '||'
     {
-        std::cout << "Index out of bounds" << std::endl;
-        return T(); // Return default-constructed object of type T
+        std::cerr << "Index out of bounds" << std::endl;
+        throw std::out_of_range("Index out of bounds"); // It's better to throw an exception here
     }
     Node<T> *current = head;
     for (int i = 0; i < index; ++i)
         current = current->next;
-    return current->value;
+    return current->value; // Now returns a reference
 }
 
 template <typename T>
@@ -151,10 +128,4 @@ T List<T>::remove_at(int index)
     }
     --size;
     return value;
-}
-
-template <typename T>
-bool List<T>::isEmpty() const
-{
-    return size == 0;
 }

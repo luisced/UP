@@ -1,5 +1,5 @@
 #include <iostream>
-#include "node.h"
+#include "./node.h"
 template <typename T>
 class BinaryTree
 {
