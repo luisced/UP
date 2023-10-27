@@ -1,0 +1,3 @@
+[submodule "Image_Processing/Image_Processing/mri-image-processing"]
+	path = Image_Processing/Image_Processing/mri-image-processing
+	url = https://github.com/luisced/mri-image-processing
