@@ -54,7 +54,7 @@ def insert_data_from_csv(conn, csv_file_path):
 
 
 def main():
-    database = r"pythonsqlite.db"  # Specify the path to your database here
+    database = r"disneyreviews.db"  # Specify the path to your database here
 
     # Create a database connection
     conn = create_connection(database)
