@@ -1,3 +1,6 @@
 [submodule "Image_Processing/Image_Processing/mri-image-processing"]
 	path = Image_Processing/Image_Processing/mri-image-processing
 	url = https://github.com/luisced/mri-image-processing
+[submodule "OS/Planification_Algorithms"]
+	path = OS/Planification_Algorithms
+	url = git@github.com:luisced/Planification_Algorithms.git
