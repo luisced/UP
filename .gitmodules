@@ -4,3 +4,6 @@
 [submodule "OS/Planification_Algorithms"]
 	path = OS/Planification_Algorithms
 	url = git@github.com:luisced/Planification_Algorithms.git
+[submodule "ProyectoTelematica"]
+	path = ProyectoTelematica
+	url = git@github.com:luisced/ProyectoTelematica.git
